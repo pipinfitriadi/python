@@ -7,8 +7,16 @@
  */
 
 {
+    "csv-preview.lineNumbers": "ordinal",
+    "csv-preview.resizeColumns": "all",
+    "editor.fontFamily": "'JetBrains Mono'",
     "editor.fontLigatures": true,
     "editor.minimap.enabled": false,
+    "notebook.output.scrolling": true,
+    "rainbow_csv.rbql_with_headers_by_default": true,
+    "rainbow_csv.virtual_alignment_mode": "always",
+    "rainbow_csv.virtual_alignment_char": "space",
     "workbench.colorTheme": "Atom One Dark",
+    "workbench.iconTheme": "a-file-icon-vscode",
     "workbench.sideBar.location": "right"
 }
