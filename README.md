@@ -11,4 +11,3 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 22 May 2025
 [![License](https://img.shields.io/badge/license-Proprietary-red)](LICENSE)
 
 This repository serves as a centralized workspace, providing structure and resources to support development activities. It may include configuration files, environment setup, shared utilities, and documentation that help maintain consistency and streamline workflows across projects or teams.
-
