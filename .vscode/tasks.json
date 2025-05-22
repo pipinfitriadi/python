@@ -1,0 +1,25 @@
+/**
+ * Copyright (C) Pipin Fitriadi - All Rights Reserved
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 22 May 2025
+ */
+
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "VS Code: Install Recommended Extensions",
+        "type": "shell",
+        "command": "jq -r '.recommendations[]' .vscode/extensions.json | xargs -L 1 code --install-extension",
+        "runOptions": {
+          "runOn": "folderOpen"
+        },
+        "presentation": {
+          "reveal": "silent"
+        }
+      }
+    ]
+}
+  
