@@ -10,9 +10,13 @@
     "recommendations": [
         "adpyke.codesnap",
         "akamud.vscode-theme-onedark",
+        "atommaterial.a-file-icon-vscode",
         "augustocdias.tasks-shell-input",
         "DavidAnson.vscode-markdownlint",
+        "grapecity.gc-excelviewer",
+        "mechatroner.rainbow-csv",
         "mhutchie.git-graph",
+        "narasimapandiyan.jetbrainsmono",
         "yzhang.markdown-all-in-one"
     ]
 }
