@@ -11,7 +11,12 @@
   channel = "stable-24.05";
   idx = {
     extensions = [
+      "adpyke.codesnap"
+      "akamud.vscode-theme-onedark"
+      "augustocdias.tasks-shell-input"
+      "DavidAnson.vscode-markdownlint"
       "mhutchie.git-graph"
+      "yzhang.markdown-all-in-one"
     ];
   };
 }
