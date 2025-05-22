@@ -7,6 +7,10 @@
  */
 
 {
+    "editor.fontLigatures": true,
+    "editor.minimap.enabled": false,
     "IDX.aI.enableInlineCompletion": true,
-    "IDX.aI.enableCodebaseIndexing": true
+    "IDX.aI.enableCodebaseIndexing": true,
+    "workbench.colorTheme": "Atom One Dark",
+    "workbench.sideBar.location": "right"
 }
