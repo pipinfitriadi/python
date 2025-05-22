@@ -10,13 +10,21 @@
     "version": "2.0.0",
     "tasks": [
       {
+        "label": "Git: Fetch Upstream",
+        "type": "shell",
+        "problemMatcher": [],
+        "options": {
+          "env": {
+            "UPSTREAM": "https://github.com/pipinfitriadi/workspace.git"
+          }
+        },
+        "command": "if [[ $(git remote | grep upstream) != 'upstream' ]]; then git remote add upstream $UPSTREAM && git remote set-url --push upstream DISABLE && git remote -v | grep upstream; fi && git fetch upstream"
+      },
+      {
         "label": "VS Code: Install Recommended Extensions",
         "type": "shell",
-        "command": "jq -r '.recommendations[]' .vscode/extensions.json | xargs -L 1 code --install-extension",
-        "presentation": {
-          "reveal": "silent"
-        }
+        "problemMatcher": [],
+        "command": "jq -r '.recommendations[]' .vscode/extensions.json | xargs -L 1 code --install-extension"
       }
     ]
 }
-  
