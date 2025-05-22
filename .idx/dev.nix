@@ -10,11 +10,14 @@
 {}: {
   channel = "stable-24.05";
   idx = {
+    # Search available extension in here: https://open-vsx.org/
     extensions = [
       "adpyke.codesnap"
       "akamud.vscode-theme-onedark"
       "augustocdias.tasks-shell-input"
       "DavidAnson.vscode-markdownlint"
+      "grapecity.gc-excelviewer"
+      "mechatroner.rainbow-csv"
       "mhutchie.git-graph"
       "yzhang.markdown-all-in-one"
     ];

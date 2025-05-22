@@ -16,8 +16,6 @@
     "IDX.aI.enableCodebaseIndexing": true,
     "notebook.output.scrolling": true,
     "rainbow_csv.rbql_with_headers_by_default": true,
-    "rainbow_csv.virtual_alignment_mode": "always",
-    "rainbow_csv.virtual_alignment_char": "space",
     "workbench.colorTheme": "Atom One Dark",
     "workbench.sideBar.location": "right"
 }
