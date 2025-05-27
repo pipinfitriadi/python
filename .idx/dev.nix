@@ -7,7 +7,7 @@
 # To learn more about how to use Nix to configure your environment
 # see: https://firebase.google.com/docs/studio/customize-workspace
 
-{ pkgs, ...}: {
+{ pkgs, ... }: {
   channel = "stable-24.05";
   # Use https://search.nixos.org/packages to find packages
   packages = [
