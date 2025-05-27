@@ -16,6 +16,14 @@
     "IDX.aI.enableCodebaseIndexing": true,
     "notebook.output.scrolling": true,
     "rainbow_csv.rbql_with_headers_by_default": true,
+    "terminal.integrated.defaultProfile.linux": "bash",
+    "terminal.integrated.profiles.linux": {
+        "bash": {
+            "path": "bash",
+            "icon": "terminal-bash",
+            "args": ["--init-file", "${workspaceFolder}/.bashrc"]
+        }
+    },
     "workbench.colorTheme": "Atom One Dark",
     "workbench.sideBar.location": "right"
 }
