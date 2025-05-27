@@ -7,10 +7,14 @@
 # To learn more about how to use Nix to configure your environment
 # see: https://firebase.google.com/docs/studio/customize-workspace
 
-{}: {
+{ pkgs, ...}: {
   channel = "stable-24.05";
+  # Use https://search.nixos.org/packages to find packages
+  packages = [
+    pkgs.oh-my-posh
+  ];
   idx = {
-    # Search available extension in here: https://open-vsx.org/
+    # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
     extensions = [
       "adpyke.codesnap"
       "akamud.vscode-theme-onedark"
@@ -21,5 +25,5 @@
       "mhutchie.git-graph"
       "yzhang.markdown-all-in-one"
     ];
-  };
+  };  
 }
