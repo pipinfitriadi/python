@@ -23,6 +23,7 @@
       "grapecity.gc-excelviewer"
       "mechatroner.rainbow-csv"
       "mhutchie.git-graph"
+      "waderyan.gitblame"
       "yzhang.markdown-all-in-one"
     ];
   };  
