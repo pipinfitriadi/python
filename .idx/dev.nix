@@ -12,6 +12,7 @@
   # Use https://search.nixos.org/packages to find packages
   packages = [
     pkgs.oh-my-posh
+    pkgs.python313
   ];
   idx = {
     # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
@@ -23,6 +24,7 @@
       "grapecity.gc-excelviewer"
       "mechatroner.rainbow-csv"
       "mhutchie.git-graph"
+      "ms-python.python"
       "waderyan.gitblame"
       "yzhang.markdown-all-in-one"
     ];
