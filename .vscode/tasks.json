@@ -6,25 +6,55 @@
  * Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 22 May 2025
  */
 
-{
-    "version": "2.0.0",
-    "tasks": [
-      {
-        "label": "Git: Fetch Upstream",
-        "type": "shell",
-        "problemMatcher": [],
-        "options": {
-          "env": {
-            "UPSTREAM": "https://github.com/pipinfitriadi/workspace.git"
-          }
-        },
-        "command": "if [[ $(git remote | grep upstream) != 'upstream' ]]; then git remote add upstream $UPSTREAM && git remote set-url --push upstream DISABLE && git remote -v | grep upstream; fi && git fetch upstream"
+ {
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Git: Fetch Upstream",
+      "type": "shell",
+      "problemMatcher": [],
+      "options": {
+        "env": {
+          "UPSTREAM": "https://github.com/pipinfitriadi/workspace.git"
+        }
       },
-      {
-        "label": "VS Code: Install Recommended Extensions",
-        "type": "shell",
-        "problemMatcher": [],
-        "command": "jq -r '.recommendations[]' .vscode/extensions.json | xargs -L 1 code --install-extension"
-      }
-    ]
+      "command": "if [[ $(git remote | grep upstream) != 'upstream' ]]; then git remote add upstream $UPSTREAM && git remote set-url --push upstream DISABLE && git remote -v | grep upstream; fi && git fetch upstream"
+    },
+    {
+      "label": "Install",
+      "type": "shell",
+      "problemMatcher": [],
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Install: jq",
+        "Install: unzip",
+        "Install: oh-my-posh"
+      ],
+      "command": "echo All required applications have been installed"
+    },
+    {
+      "label": "Install: jq",
+      "type": "shell",
+      "problemMatcher": [],
+      "command": "which jq || sudo apt install jq"
+    },
+    {
+      "label": "Install: oh-my-posh",
+      "type": "shell",
+      "problemMatcher": [],
+      "command": "which $HOME/.local/bin/oh-my-posh || curl -s https://ohmyposh.dev/install.sh | bash -s",
+    },
+    {
+      "label": "Install: unzip",
+      "type": "shell",
+      "problemMatcher": [],
+      "command": "which unzip || sudo apt install unzip"
+    },
+    {
+      "label": "VS Code: Install Recommended Extensions",
+      "type": "shell",
+      "problemMatcher": [],
+      "command": "jq -r '.recommendations[]' .vscode/extensions.json | xargs -L 1 code --install-extension"
+    }
+  ]
 }
