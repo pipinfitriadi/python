@@ -11,8 +11,8 @@
   "tasks": [
     {
       "label": "Git: Fetch Upstream",
-      "type": "shell",
       "problemMatcher": [],
+      "type": "shell",
       "options": {
         "env": {
           "UPSTREAM": "https://github.com/pipinfitriadi/workspace.git"
@@ -21,38 +21,40 @@
       "command": "if [[ $(git remote | grep upstream) != 'upstream' ]]; then git remote add upstream $UPSTREAM && git remote set-url --push upstream DISABLE && git remote -v | grep upstream; fi && git fetch upstream"
     },
     {
-      "label": "Install",
-      "type": "shell",
-      "problemMatcher": [],
+      "label": "Preparation",
       "dependsOrder": "sequence",
       "dependsOn": [
-        "Install: jq",
-        "Install: unzip",
-        "Install: oh-my-posh"
+        "Git: Fetch Upstream",
+        "Preparation: VS Code Extensions",
+        "Preparation: oh-my-posh",
       ],
-      "command": "echo All required applications have been installed"
+      "problemMatcher": [],
+      "type": "shell",
+      "command": "Environment preparation is complete"
     },
     {
-      "label": "Install: jq",
-      "type": "shell",
+      "label": "Preparation: jq",
       "problemMatcher": [],
+      "type": "shell",
       "command": "which jq || sudo apt install jq"
     },
     {
-      "label": "Install: oh-my-posh",
+      "label": "Preparation: oh-my-posh",
       "type": "shell",
+      "dependsOn": "Preparation: unzip",
       "problemMatcher": [],
       "command": "which $HOME/.local/bin/oh-my-posh || curl -s https://ohmyposh.dev/install.sh | bash -s",
     },
     {
-      "label": "Install: unzip",
+      "label": "Preparation: unzip",
       "type": "shell",
       "problemMatcher": [],
       "command": "which unzip || sudo apt install unzip"
     },
     {
-      "label": "VS Code: Install Recommended Extensions",
+      "label": "Preparation: VS Code Extensions",
       "type": "shell",
+      "dependsOn": "Preparation: jq",
       "problemMatcher": [],
       "command": "jq -r '.recommendations[]' .vscode/extensions.json | xargs -L 1 code --install-extension"
     }
