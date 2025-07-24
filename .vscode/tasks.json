@@ -25,10 +25,17 @@
       "label": "Preparation",
       "dependsOrder": "sequence",
       "dependsOn": [
-        "Git: Fetch Upstream"
+        "Git: Fetch Upstream",
+        "Python: Create VEnv"
       ],
       "type": "shell",
       "command": "echo Environment preparation is complete"
+    },
+    {
+        "problemMatcher": [],
+        "label": "Python: Create VEnv",
+        "type": "shell",
+        "command": "if [ ! -d .venv/ ]; then ${input:python-app} -m venv .venv/; fi && .venv/bin/python -V"
     },
     {
       "problemMatcher": [],
@@ -37,9 +44,9 @@
       "options": {
           "env": {"PIP_DISABLE_PIP_VERSION_CHECK": "1"}
       },
-      "command": "pip",
+      "command": "${command:python.interpreterPath}",
       "args": [
-          "install",
+          "-m", "pip", "install",
           "-r", "requirements.code-quality.txt",
           "-r", "requirements.code-coverage.txt",
       ]
@@ -49,9 +56,16 @@
         "label": "Python: Preparation",
         "dependsOrder": "sequence",
         "dependsOn": [
+            "Python: Create VEnv",
             "Python: Environment dependencies"
         ],
         "type": "shell"
     }
-  ]
+  ],
+  "inputs": [{
+      "id": "python-app",
+      "type": "promptString",
+      "description": "Python app path for creating virtual environment",
+      "default": "python3"
+  }]
 }
