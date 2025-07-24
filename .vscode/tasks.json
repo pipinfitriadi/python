@@ -63,7 +63,7 @@
         "problemMatcher": [],
         "label": "Python: Create VEnv",
         "type": "shell",
-        "command": "if [ ! -d venv/ ]; then ${input:python-app} -m venv .venv/; fi && .venv/bin/python -V"
+        "command": "if [ ! -d .venv/ ]; then ${input:python-app} -m venv .venv/; fi && .venv/bin/python -V"
     },
     {
       "problemMatcher": [],
