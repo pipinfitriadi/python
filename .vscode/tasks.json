@@ -10,8 +10,8 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Git: Fetch Upstream",
       "problemMatcher": [],
+      "label": "Git: Fetch Upstream",
       "type": "shell",
       "options": {
         "env": {
@@ -21,6 +21,7 @@
       "command": "if [[ $(git remote | grep upstream) != 'upstream' ]]; then git remote add upstream $UPSTREAM && git remote set-url --push upstream DISABLE && git remote -v | grep upstream; fi && git fetch upstream"
     },
     {
+      "problemMatcher": [],
       "label": "Preparation",
       "dependsOrder": "sequence",
       "dependsOn": [
@@ -28,34 +29,33 @@
         "Preparation: VS Code Extensions",
         "Preparation: oh-my-posh",
       ],
-      "problemMatcher": [],
       "type": "shell",
       "command": "echo Environment preparation is complete"
     },
     {
-      "label": "Preparation: jq",
       "problemMatcher": [],
+      "label": "Preparation: jq",
       "type": "shell",
       "command": "which jq || sudo apt install jq"
     },
     {
-      "label": "Preparation: oh-my-posh",
-      "type": "shell",
-      "dependsOn": "Preparation: unzip",
       "problemMatcher": [],
+      "label": "Preparation: oh-my-posh",
+      "dependsOn": "Preparation: unzip",
+      "type": "shell",
       "command": "which $HOME/.local/bin/oh-my-posh || curl -s https://ohmyposh.dev/install.sh | bash -s",
     },
     {
+      "problemMatcher": [],
       "label": "Preparation: unzip",
       "type": "shell",
-      "problemMatcher": [],
       "command": "which unzip || sudo apt install unzip"
     },
     {
-      "label": "Preparation: VS Code Extensions",
-      "type": "shell",
-      "dependsOn": "Preparation: jq",
       "problemMatcher": [],
+      "label": "Preparation: VS Code Extensions",
+      "dependsOn": "Preparation: jq",
+      "type": "shell",
       "command": "jq -r '.recommendations[]' .vscode/extensions.json | xargs -L 1 code --install-extension"
     }
   ]
