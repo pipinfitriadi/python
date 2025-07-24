@@ -6,25 +6,29 @@
  * Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 22 May 2025
  */
 
-{
-    "version": "2.0.0",
-    "tasks": [
-      {
-        "label": "Git: Fetch Upstream",
-        "type": "shell",
-        "problemMatcher": [],
-        "options": {
-          "env": {
-            "UPSTREAM": "https://github.com/pipinfitriadi/workspace.git"
-          }
-        },
-        "command": "if [[ $(git remote | grep upstream) != 'upstream' ]]; then git remote add upstream $UPSTREAM && git remote set-url --push upstream DISABLE && git remote -v | grep upstream; fi && git fetch upstream"
+ {
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Git: Fetch Upstream",
+      "problemMatcher": [],
+      "type": "shell",
+      "options": {
+        "env": {
+          "UPSTREAM": "https://github.com/pipinfitriadi/workspace.git"
+        }
       },
-      {
-        "label": "VS Code: Install Recommended Extensions",
-        "type": "shell",
-        "problemMatcher": [],
-        "command": "jq -r '.recommendations[]' .vscode/extensions.json | xargs -L 1 code --install-extension"
-      }
-    ]
+      "command": "if [[ $(git remote | grep upstream) != 'upstream' ]]; then git remote add upstream $UPSTREAM && git remote set-url --push upstream DISABLE && git remote -v | grep upstream; fi && git fetch upstream"
+    },
+    {
+      "label": "Preparation",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Git: Fetch Upstream"
+      ],
+      "problemMatcher": [],
+      "type": "shell",
+      "command": "echo Environment preparation is complete"
+    }
+  ]
 }
