@@ -78,7 +78,7 @@
           "-r", "requirements.code-quality.txt",
           "-r", "requirements.code-coverage.txt",
       ]
-  },
+    },
     {
       "problemMatcher": [],
       "label": "Python: Preparation",
@@ -88,7 +88,7 @@
           "Python: Environment dependencies"
       ],
       "type": "shell"
-  },
+    },
   ],
   "inputs": [{
       "id": "python-app",
