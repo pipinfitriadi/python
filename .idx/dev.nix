@@ -12,8 +12,7 @@
   # Use https://search.nixos.org/packages to find packages
   packages = [
     pkgs.oh-my-posh
-    pkgs.python312
-    pkgs.python312Packages.pip
+    pkgs.python313
   ];
   idx = {
     # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
