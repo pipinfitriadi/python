@@ -4,13 +4,7 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 24 July 2025
 
-*.egg-info/
-__pycache__/
-.ipynb_checkpoints/
-.venv/
-build/
-
-.coverage
-.env
-*.ipynb
-code-coverage.xml
+flake8-bandit
+flake8-black
+flake8-bugbear
+flake8-isort
