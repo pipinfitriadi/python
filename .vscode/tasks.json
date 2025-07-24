@@ -52,15 +52,15 @@
       ]
     },
     {
-        "problemMatcher": [],
-        "label": "Python: Preparation",
-        "dependsOrder": "sequence",
-        "dependsOn": [
-            "Python: Create VEnv",
-            "Python: Environment dependencies"
-        ],
-        "type": "shell"
-    }
+      "problemMatcher": [],
+      "label": "Python: Preparation",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+          "Python: Create VEnv",
+          "Python: Environment dependencies"
+      ],
+      "type": "shell"
+    },
   ],
   "inputs": [{
       "id": "python-app",
