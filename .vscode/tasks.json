@@ -29,6 +29,29 @@
       ],
       "type": "shell",
       "command": "echo Environment preparation is complete"
+    },
+    {
+      "problemMatcher": [],
+      "label": "Python: Environment dependencies",
+      "type": "shell",
+      "options": {
+          "env": {"PIP_DISABLE_PIP_VERSION_CHECK": "1"}
+      },
+      "command": "pip",
+      "args": [
+          "install",
+          "-r", "requirements.code-quality.txt",
+          "-r", "requirements.code-coverage.txt",
+      ]
+    },
+    {
+        "problemMatcher": [],
+        "label": "Python: Preparation",
+        "dependsOrder": "sequence",
+        "dependsOn": [
+            "Python: Environment dependencies"
+        ],
+        "type": "shell"
     }
   ]
 }
