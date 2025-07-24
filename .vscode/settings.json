@@ -15,6 +15,13 @@
     "IDX.aI.enableInlineCompletion": true,
     "IDX.aI.enableCodebaseIndexing": true,
     "notebook.output.scrolling": true,
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportMissingImports": "none",
+        "reportMissingModuleSource": "none",
+        "reportInvalidTypeForm": "none"
+    },
+    "python.defaultInterpreterPath": "/bin/python",
+    "python.experiments.optOutFrom": ["pythonTerminalEnvVarActivation"],
     "rainbow_csv.rbql_with_headers_by_default": true,
     "terminal.integrated.defaultProfile.linux": "bash",
     "terminal.integrated.profiles.linux": {
