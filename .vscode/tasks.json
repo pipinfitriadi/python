@@ -10,8 +10,8 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Git: Fetch Upstream",
       "problemMatcher": [],
+      "label": "Git: Fetch Upstream",
       "type": "shell",
       "options": {
         "env": {
@@ -21,12 +21,12 @@
       "command": "if [[ $(git remote | grep upstream) != 'upstream' ]]; then git remote add upstream $UPSTREAM && git remote set-url --push upstream DISABLE && git remote -v | grep upstream; fi && git fetch upstream"
     },
     {
+      "problemMatcher": [],
       "label": "Preparation",
       "dependsOrder": "sequence",
       "dependsOn": [
         "Git: Fetch Upstream"
       ],
-      "problemMatcher": [],
       "type": "shell",
       "command": "echo Environment preparation is complete"
     }
