@@ -27,6 +27,6 @@ Follow these steps the first time you use VS Code after cloning this git reposit
 1. Use the command <kbd>command | ctrl</kbd> + <kbd>shift</kbd> + <kbd>P</kbd>,
     select `Tasks: Run Task`, and then choose `Preparation`
 2. Use the command <kbd>command | ctrl</kbd> + <kbd>shift</kbd> + <kbd>P</kbd>
-    select `Python: Select Interpreter`, and then choose _`/bin/python`_
+    select `Python: Select Interpreter`, and then choose _`./.venv/bin/python`_
 3. Use the command <kbd>command | ctrl</kbd> + <kbd>shift</kbd> + <kbd>P</kbd>,
     select `Tasks: Run Task`, and then choose `Python: Preparation`
