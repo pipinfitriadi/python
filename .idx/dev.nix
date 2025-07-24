@@ -12,7 +12,7 @@
   # Use https://search.nixos.org/packages to find packages
   packages = [
     pkgs.oh-my-posh
-    pkgs.python313
+    pkgs.python312
     pkgs.python312Packages.pip
   ];
   idx = {
