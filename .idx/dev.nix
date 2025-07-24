@@ -13,6 +13,7 @@
   packages = [
     pkgs.oh-my-posh
     pkgs.python313
+    pkgs.python312Packages.pip
   ];
   idx = {
     # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
