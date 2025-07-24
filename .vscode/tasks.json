@@ -30,7 +30,7 @@
       ],
       "problemMatcher": [],
       "type": "shell",
-      "command": "Environment preparation is complete"
+      "command": "echo Environment preparation is complete"
     },
     {
       "label": "Preparation: jq",
