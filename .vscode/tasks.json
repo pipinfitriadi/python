@@ -6,7 +6,7 @@
  * Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 22 May 2025
  */
 
- {
+{
   "version": "2.0.0",
   "tasks": [
     {
@@ -28,6 +28,7 @@
         "Git: Fetch Upstream",
         "Preparation: VS Code Extensions",
         "Preparation: oh-my-posh",
+        "Python: Create VEnv"
       ],
       "type": "shell",
       "command": "echo Environment preparation is complete"
@@ -57,6 +58,18 @@
       "dependsOn": "Preparation: jq",
       "type": "shell",
       "command": "jq -r '.recommendations[]' .vscode/extensions.json | xargs -L 1 code --install-extension"
-    }
-  ]
+    },
+    {
+        "problemMatcher": [],
+        "label": "Python: Create VEnv",
+        "type": "shell",
+        "command": "if [ ! -d venv/ ]; then ${input:python-app} -m venv .venv/; fi && .venv/bin/python -V"
+    },
+  ],
+  "inputs": [{
+      "id": "python-app",
+      "type": "promptString",
+      "description": "Python app path for creating virtual environment",
+      "default": "python3"
+  }]
 }

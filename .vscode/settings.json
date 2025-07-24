@@ -14,6 +14,13 @@
     "editor.minimap.enabled": false,
     "git.blame.editorDecoration.enabled": true,
     "notebook.output.scrolling": true,
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportMissingImports": "none",
+        "reportMissingModuleSource": "none",
+        "reportInvalidTypeForm": "none"
+    },
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+    "python.experiments.optOutFrom": ["pythonTerminalEnvVarActivation"],
     "rainbow_csv.rbql_with_headers_by_default": true,
     "rainbow_csv.virtual_alignment_mode": "always",
     "rainbow_csv.virtual_alignment_char": "space",
