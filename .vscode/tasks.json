@@ -44,7 +44,7 @@
       "label": "Preparation: oh-my-posh",
       "dependsOn": "Preparation: unzip",
       "type": "shell",
-      "command": "which $HOME/.local/bin/oh-my-posh || curl -s https://ohmyposh.dev/install.sh | bash -s",
+      "command": "which $HOME/.local/bin/oh-my-posh || curl -s https://ohmyposh.dev/install.sh | bash -s"
     },
     {
       "problemMatcher": [],
@@ -65,6 +65,30 @@
         "type": "shell",
         "command": "if [ ! -d venv/ ]; then ${input:python-app} -m venv .venv/; fi && .venv/bin/python -V"
     },
+    {
+      "problemMatcher": [],
+      "label": "Python: Environment dependencies",
+      "type": "shell",
+      "options": {
+          "env": {"PIP_DISABLE_PIP_VERSION_CHECK": "1"}
+      },
+      "command": "${command:python.interpreterPath}",
+      "args": [
+          "-m", "pip", "install",
+          "-r", "requirements.code-quality.txt",
+          "-r", "requirements.code-coverage.txt",
+      ]
+  },
+    {
+      "problemMatcher": [],
+      "label": "Python: Preparation",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+          "Python: Create VEnv",
+          "Python: Environment dependencies"
+      ],
+      "type": "shell"
+  },
   ],
   "inputs": [{
       "id": "python-app",
