@@ -26,5 +26,8 @@
       "waderyan.gitblame"
       "yzhang.markdown-all-in-one"
     ];
-  };  
+    workspace.onStart.default.openFiles = [
+      "README.md"
+    ];
+  };
 }

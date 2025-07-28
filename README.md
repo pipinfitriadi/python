@@ -23,5 +23,5 @@ across projects or teams.
 
 Follow these steps the first time you use VS Code after cloning this git repository:
 
-1. Use the command <kbd>command | ctrl</kbd> + <kbd>shift</kbd> + <kbd>P</kbd>,
+1. Use the command <kbd>f1</kbd> + <kbd>shift</kbd> + <kbd>P</kbd>,
     select `Tasks: Run Task`, and then choose `Preparation`

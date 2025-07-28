@@ -27,8 +27,7 @@
       "dependsOn": [
         "Git: Fetch Upstream"
       ],
-      "type": "shell",
-      "command": "echo Environment preparation is complete"
+      "type": "shell"
     }
   ]
 }
