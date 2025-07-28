@@ -24,9 +24,9 @@ across projects or teams.
 
 Follow these steps the first time you use VS Code after cloning this git repository:
 
-1. Use the command <kbd>command | ctrl</kbd> + <kbd>shift</kbd> + <kbd>P</kbd>,
+1. Use the command <kbd>f1</kbd> + <kbd>shift</kbd> + <kbd>P</kbd>,
     select `Tasks: Run Task`, and then choose `Preparation`
-2. Use the command <kbd>command | ctrl</kbd> + <kbd>shift</kbd> + <kbd>P</kbd>
+2. Use the command <kbd>f1</kbd> + <kbd>shift</kbd> + <kbd>P</kbd>
     select `Python: Select Interpreter`, and then choose _`./.venv/bin/python`_
-3. Use the command <kbd>command | ctrl</kbd> + <kbd>shift</kbd> + <kbd>P</kbd>,
+3. Use the command <kbd>f1</kbd> + <kbd>shift</kbd> + <kbd>P</kbd>,
     select `Tasks: Run Task`, and then choose `Python: Preparation`

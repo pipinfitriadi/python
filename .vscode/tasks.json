@@ -28,8 +28,7 @@
         "Git: Fetch Upstream",
         "Python: Create VEnv"
       ],
-      "type": "shell",
-      "command": "echo Environment preparation is complete"
+      "type": "shell"
     },
     {
         "problemMatcher": [],
