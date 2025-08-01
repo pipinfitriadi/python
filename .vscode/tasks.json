@@ -11,27 +11,34 @@
   "tasks": [
     {
       "problemMatcher": [],
-      "label": "Git: Fetch Upstream",
+      "label": "Git: Fetch All",
       "type": "shell",
       "options": {
         "env": {
           "UPSTREAM": "https://github.com/pipinfitriadi/workspace.git"
         }
       },
-      "command": "if [[ $(git remote | grep upstream) != 'upstream' ]]; then git remote add upstream $UPSTREAM && git remote set-url --push upstream DISABLE && git remote -v | grep upstream; fi && git fetch upstream"
+      "command": "if [[ $(git remote | grep upstream) != 'upstream' ]]; then git remote add upstream $UPSTREAM && git remote set-url --push upstream DISABLE && git remote -v | grep upstream; fi && git fetch --all"
     },
     {
       "problemMatcher": [],
       "label": "Preparation",
       "dependsOrder": "sequence",
       "dependsOn": [
-        "Git: Fetch Upstream",
+        "Git: Fetch All",
+        "Preparation: Git Flow",
         "Preparation: VS Code Extensions",
         "Preparation: oh-my-posh",
         "Python: Create VEnv"
       ],
       "type": "shell",
       "command": "echo Environment preparation is complete"
+    },
+    {
+      "problemMatcher": [],
+      "label": "Preparation: Git Flow",
+      "type": "shell",
+      "command": "which git-flow || sudo apt install git-flow; git show-branch develop >/dev/null 2>&1 || (git checkout main && git checkout -b develop); git flow config >/dev/null 2>&1 || git flow init -d"
     },
     {
       "problemMatcher": [],
