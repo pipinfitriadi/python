@@ -26,11 +26,18 @@
       "dependsOrder": "sequence",
       "dependsOn": [
         "Git: Fetch All",
+        "Preparation: Git Flow",
         "Preparation: VS Code Extensions",
         "Preparation: oh-my-posh",
       ],
       "type": "shell",
       "command": "echo Environment preparation is complete"
+    },
+    {
+      "problemMatcher": [],
+      "label": "Preparation: Git Flow",
+      "type": "shell",
+      "command": "which git-flow || sudo apt install git-flow; git flow config >/dev/null 2>&1 || git flow init -d"
     },
     {
       "problemMatcher": [],
