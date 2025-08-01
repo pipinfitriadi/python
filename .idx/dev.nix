@@ -11,6 +11,7 @@
   channel = "stable-24.05";
   # Use https://search.nixos.org/packages to find packages
   packages = [
+    pkgs.gitflow
     pkgs.oh-my-posh
   ];
   idx = {
