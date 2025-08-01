@@ -11,21 +11,21 @@
   "tasks": [
     {
       "problemMatcher": [],
-      "label": "Git: Fetch Upstream",
+      "label": "Git: Fetch All",
       "type": "shell",
       "options": {
         "env": {
           "UPSTREAM": "https://github.com/pipinfitriadi/workspace.git"
         }
       },
-      "command": "if [[ $(git remote | grep upstream) != 'upstream' ]]; then git remote add upstream $UPSTREAM && git remote set-url --push upstream DISABLE && git remote -v | grep upstream; fi && git fetch upstream"
+      "command": "if [[ $(git remote | grep upstream) != 'upstream' ]]; then git remote add upstream $UPSTREAM && git remote set-url --push upstream DISABLE && git remote -v | grep upstream; fi && git fetch --all"
     },
     {
       "problemMatcher": [],
       "label": "Preparation",
       "dependsOrder": "sequence",
       "dependsOn": [
-        "Git: Fetch Upstream",
+        "Git: Fetch All",
         "Preparation: VS Code Extensions",
         "Preparation: oh-my-posh",
       ],
