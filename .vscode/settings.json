@@ -13,6 +13,7 @@
     "editor.fontLigatures": true,
     "editor.minimap.enabled": false,
     "git.blame.editorDecoration.enabled": true,
+    "markdownlint.lintWorkspaceGlobs": ["!**/LICENSE"],
     "notebook.output.scrolling": true,
     "rainbow_csv.rbql_with_headers_by_default": true,
     "rainbow_csv.virtual_alignment_mode": "always",
