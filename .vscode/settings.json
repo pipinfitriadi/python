@@ -14,7 +14,6 @@
     "editor.minimap.enabled": false,
     "IDX.aI.enableInlineCompletion": true,
     "IDX.aI.enableCodebaseIndexing": true,
-    "markdownlint.lintWorkspaceGlobs": ["!**/LICENSE"],
     "notebook.output.scrolling": true,
     "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
     "python.experiments.optOutFrom": ["pythonTerminalEnvVarActivation"],
