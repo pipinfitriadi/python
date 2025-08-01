@@ -37,7 +37,7 @@
       "problemMatcher": [],
       "label": "Preparation: Git Flow",
       "type": "shell",
-      "command": "which git-flow || sudo apt install git-flow; git flow config >/dev/null 2>&1 || git flow init -d"
+      "command": "which git-flow || sudo apt install git-flow; git flow config >/dev/null 2>&1 || git flow init"
     },
     {
       "problemMatcher": [],
