@@ -14,7 +14,6 @@
     "editor.minimap.enabled": false,
     "IDX.aI.enableInlineCompletion": true,
     "IDX.aI.enableCodebaseIndexing": true,
-    "markdownlint.lintWorkspaceGlobs": ["!**/LICENSE"],
     "notebook.output.scrolling": true,
     "rainbow_csv.rbql_with_headers_by_default": true,
     "terminal.integrated.defaultProfile.linux": "bash",
