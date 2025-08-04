@@ -4,5 +4,6 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 28 May 2025
 
+. ~/.bashrc
 export PATH=$PATH:$HOME/.local/bin
 eval "$(oh-my-posh init bash --config '.oh-my-posh/robbyrussell.omp.json')"
