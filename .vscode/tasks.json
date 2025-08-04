@@ -79,7 +79,7 @@
       "options": {
           "env": {"PIP_DISABLE_PIP_VERSION_CHECK": "1"}
       },
-      "command": "${command:python.interpreterPath}",
+      "command": "${workspaceFolder}/.venv/bin/python",
       "args": [
           "-m", "pip", "install",
           "--require-virtualenv",
