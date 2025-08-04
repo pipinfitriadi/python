@@ -11,5 +11,4 @@
 *.xlsx
 
 !.oh-my-posh/**/*
-!.vscode/**/*
 !template.env
