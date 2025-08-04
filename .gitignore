@@ -11,6 +11,15 @@ __pycache__/
 build/
 
 .coverage
-.env
+*.env
+*.csv
+*.json
 *.ipynb
+*.txt
+*.xlsx
 code-coverage.xml
+
+!.oh-my-posh/**/*
+!.vscode/**/*
+!requirements*.txt
+!template.env
