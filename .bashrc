@@ -5,4 +5,4 @@
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 28 May 2025
 
 . ~/.bashrc
-eval "$(oh-my-posh init bash --config '.oh-my-posh/robbyrussell.omp.json')"
+eval "$(oh-my-posh init bash --config '.oh-my-posh/spaceship.omp.json')"
