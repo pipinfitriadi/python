@@ -6,4 +6,4 @@
 
 . ~/.bashrc
 export PATH=$PATH:$HOME/.local/bin
-eval "$(oh-my-posh init bash --config '.oh-my-posh/robbyrussell.omp.json')"
+eval "$(oh-my-posh init bash --config '.oh-my-posh/spaceship.omp.json')"
