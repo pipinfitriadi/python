@@ -25,7 +25,7 @@
               "branch_icon": ""
             },
             "style": "plain",
-            "template": "<#5FAAE8>git:(</>{{ .HEAD }}<#5FAAE8>)</>",
+            "template": "{{ if not (and (eq .OS \"windows\") (eq .Shell \"pwsh\") .IsWorkTree) }}<#5FAAE8>git:(</>{{ .HEAD }}<#5FAAE8>)</>{{ end }}",
             "type": "git"
           },
           {
