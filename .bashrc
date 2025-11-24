@@ -6,4 +6,5 @@
 
 . ~/.bashrc
 export PATH=$PATH:$HOME/.local/bin
+. .venv/bin/activate
 eval "$(oh-my-posh init bash --config '.oh-my-posh/spaceship.omp.json')"

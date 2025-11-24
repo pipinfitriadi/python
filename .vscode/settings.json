@@ -20,7 +20,7 @@
         "reportInvalidTypeForm": "none"
     },
     "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
-    "python.experiments.optOutFrom": ["pythonTerminalEnvVarActivation"],
+    "python.terminal.activateEnvironment": false,
     "python-envs.pythonProjects": [],
     "rainbow_csv.rbql_with_headers_by_default": true,
     "rainbow_csv.virtual_alignment_mode": "always",
