@@ -23,6 +23,15 @@
             "path": "bash",
             "icon": "terminal-bash",
             "args": ["--init-file", "${workspaceFolder}/.bashrc"]
+        },
+        "PowerShell": {
+            "path": "powershell.exe",
+            "icon": "terminal-powershell",
+            "args": [
+                "-NoExit",
+                "-ExecutionPolicy", "Bypass",
+                "-File", "${workspaceFolder}/Microsoft.PowerShell_profile.ps1"
+            ]
         }
     },
     "workbench.colorTheme": "Atom One Dark",
