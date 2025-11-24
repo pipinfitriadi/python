@@ -33,6 +33,15 @@
             "style": "plain",
             "template": " \u2717",
             "type": "status"
+          },
+          {
+            "foreground": "#906cff",
+            "style": "plain",
+            "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}{{ .Venv }} {{ end }}{{ .Full }}{{ end }}",
+            "type": "python",
+            "properties": {
+              "folder_name_fallback": false
+            }
           }
         ],
         "type": "prompt"
