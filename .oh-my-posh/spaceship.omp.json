@@ -25,7 +25,7 @@
               "branch_icon": " <#ff94df><b>\ue0a0 </b></>"
             },
             "style": "plain",
-            "template": "<#ffffff>on</> {{ .HEAD }}{{ if gt .StashCount 0 }} \ueb4b {{ .StashCount }}{{ end }} ",
+            "template": "{{ if not (and (eq .OS \"windows\") (eq .Shell \"pwsh\") .IsWorkTree) }}<#ffffff>on</> {{ .HEAD }}{{ if gt .StashCount 0 }} \ueb4b {{ .StashCount }}{{ end }} {{ end }}",
             "type": "git"
           }
         ],
