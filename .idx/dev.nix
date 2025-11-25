@@ -28,6 +28,7 @@
       "mermaidchart.vscode-mermaid-chart"
       "mhutchie.git-graph"
       "ms-python.python"
+      "ms-toolsai.jupyter"
       "waderyan.gitblame"
       "yzhang.markdown-all-in-one"
     ];
