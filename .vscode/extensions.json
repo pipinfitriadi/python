@@ -7,9 +7,12 @@
         "DavidAnson.vscode-markdownlint",
         "eamodio.gitlens",
         "grapecity.gc-excelviewer",
+        "kejun.markdown-alert",
+        "mermaidchart.vscode-mermaid-chart",
         "mechatroner.rainbow-csv",
         "mhutchie.git-graph",
         "ms-python.python",
+        "ms-toolsai.jupyter",
         "narasimapandiyan.jetbrainsmono",
         "yzhang.markdown-all-in-one"
     ]
