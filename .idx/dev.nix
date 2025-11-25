@@ -24,6 +24,7 @@
       "eamodio.gitlens"
       "grapecity.gc-excelviewer"
       "mechatroner.rainbow-csv"
+      "mermaidchart.vscode-mermaid-chart"
       "mhutchie.git-graph"
       "waderyan.gitblame"
       "yzhang.markdown-all-in-one"
