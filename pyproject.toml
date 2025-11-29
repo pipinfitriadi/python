@@ -1,0 +1,26 @@
+# Copyright (C) Pipin Fitriadi - All Rights Reserved
+
+# Unauthorized copying of this file, via any medium is strictly prohibited
+# Proprietary and confidential
+# Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 30 November 2025
+
+[build-system]
+requires = ['setuptools>=61.0', 'setuptools-git-versioning<2']
+build-backend = 'setuptools.build_meta'
+
+[project]
+name = 'template'
+dynamic = ['version']
+
+[project.optional-dependencies]
+code-coverage = [
+    'coverage',
+    'pytest',
+    'toml',
+]
+code-quality = [
+    'flake8-bandit',
+    'flake8-black',
+    'flake8-bugbear',
+    'flake8-isort',
+]
