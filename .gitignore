@@ -20,5 +20,4 @@ build/
 code-coverage.xml
 
 !.oh-my-posh/**/*
-!requirements*.txt
 !template.env
