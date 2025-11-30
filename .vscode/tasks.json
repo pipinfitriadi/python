@@ -11,14 +11,53 @@
   "tasks": [
     {
       "problemMatcher": [],
+      "label": "CI/CD: Code Quality",
+      "type": "shell",
+      "command": "${PYTHON_INTERPRETER_PATH}",
+      "args": ["-m", "flake8"]
+    },
+    {
+      "problemMatcher": [],
+      "label": "CI/CD: Code Quality - Fixing",
+      "type": "shell",
+      "command": "${PYTHON_INTERPRETER_PATH} -m black . && ${PYTHON_INTERPRETER_PATH} -m isort ."
+    },
+    {
+      "problemMatcher": [],
+      "label": "CI/CD: Test",
+      "type": "shell",
+      "command": "${PYTHON_INTERPRETER_PATH}",
+      "args": ["-m", "coverage", "run", "-m", "pytest", "-rfEP", "-q", "--junit-xml=code-coverage.xml"]
+    },
+    {
+      "problemMatcher": [],
+      "label": "CI/CD: Code Coverage",
+      "dependsOn": "CI/CD: Test",
+      "type": "shell",
+      "command": "${PYTHON_INTERPRETER_PATH}",
+      "args": ["-m", "coverage", "report", "-m"]
+    },
+    {
+      "problemMatcher": [],
+      "label": "CI/CD: Code Coverage - Percentage passed",
+      "dependsOn": "CI/CD: Code Coverage",
+      "type": "shell",
+      "command": "if [ $(printf '%.0f' $(${PYTHON_INTERPRETER_PATH} -m coverage report | awk '$1 == \"TOTAL\" {print $NF+0}')) -ge ${input:codecoverage-percentage-passed} ]; then exit; else exit 1; fi",
+    },
+    {
+      "problemMatcher": [],
+      "label": "CI/CD",
+      "dependsOrder": "parallel",
+      "dependsOn": [
+          "CI/CD: Code Quality",
+          "CI/CD: Code Coverage - Percentage passed",
+      ]
+    },
+    {
+      "problemMatcher": [],
       "label": "Git: Fetch All",
       "type": "shell",
-      "options": {
-        "env": {
-          "UPSTREAM": "https://github.com/pipinfitriadi/workspace.git"
-        }
-      },
-      "command": "if [[ $(git remote | grep upstream) != 'upstream' ]]; then git remote add upstream $UPSTREAM && git remote set-url --push upstream DISABLE && git remote -v | grep upstream; fi && git fetch --all"
+      "command": "if [[ $(git remote | grep upstream) != 'upstream' ]]; then git remote add upstream $UPSTREAM && git remote set-url --push upstream DISABLE && git remote -v | grep upstream; fi && git fetch --all --prune"
     },
     {
       "problemMatcher": [],
@@ -76,10 +115,7 @@
       "problemMatcher": [],
       "label": "Python: Environment dependencies",
       "type": "shell",
-      "options": {
-          "env": {"PIP_DISABLE_PIP_VERSION_CHECK": "1"}
-      },
-      "command": "${workspaceFolder}/.venv/bin/python",
+      "command": "${PYTHON_INTERPRETER_PATH}",
       "args": [
           "-m", "pip", "install",
           "--require-virtualenv",
@@ -98,10 +134,25 @@
       "type": "shell"
     },
   ],
-  "inputs": [{
+  "inputs": [
+    {
+      "id": "codecoverage-percentage-passed",
+      "type": "promptString",
+      "description": "Percentage as an integer for passing code coverage",
+      "default": "100"
+    },
+    {
       "id": "python-app",
       "type": "promptString",
       "description": "Python app path for creating virtual environment",
       "default": "python3"
-  }]
+    }
+  ],
+  "options": {
+    "env": {
+      "PIP_DISABLE_PIP_VERSION_CHECK": "1",
+      "PYTHON_INTERPRETER_PATH": "${workspaceFolder}/.venv/bin/python",
+      "UPSTREAM": "https://github.com/pipinfitriadi/workspace.git",
+    }
+  }
 }
