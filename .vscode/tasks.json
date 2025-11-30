@@ -55,8 +55,7 @@
       "args": [
           "-m", "pip", "install",
           "--require-virtualenv",
-          "-r", "requirements.code-quality.txt",
-          "-r", "requirements.code-coverage.txt"
+          "${workspaceFolder}[code-quality, code-coverage]"
       ]
     },
     {
