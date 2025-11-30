@@ -3,3 +3,66 @@
 # Unauthorized copying of this file, via any medium is strictly prohibited
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 22 May 2025
+
+stages: [Test, Release]
+.pip-variables:
+  variables:
+    PIP_ROOT_USER_ACTION: ignore
+    PIP_DISABLE_PIP_VERSION_CHECK: 1
+.python-paths: &python-paths
+  - tests/**/*
+  - pyproject.toml
+.pypi-rule: &pypi-rule
+  if: $CI_COMMIT_TAG =~ /(?i)\A(?:v?(?:([0-9]+)!)?([0-9]+(?:\.[0-9]+)*)([-_.]?((a|b|c|rc|alpha|beta|pre|preview))[-_.]?([0-9]+)?)?((?:-([0-9]+))|(?:[-_.]?(post|rev|r)[-_.]?([0-9]+)?))?([-_.]?(dev)[-_.]?([0-9]+)?)?(?:\+([a-z0-9]+(?:[-_.][a-z0-9]+)*))?)\z/
+  exists: *python-paths
+default:
+  tags:
+    - gitlab-runner-docker
+Code Quality:
+  stage: Test
+  extends: .pip-variables
+  rules:
+    - changes: ['**/*.py']
+  image: pipelinecomponents/flake8
+  before_script:
+    - pip install --editable ".[code-quality]"
+  script:
+    - flake8
+Code Coverage:
+  stage: Test
+  extends: .pip-variables
+  rules:
+    - if: |
+        $CI_COMMIT_BRANCH == 'main' ||
+        $CI_COMMIT_BRANCH =~ /^hotfix\/.*/ ||
+        $CI_COMMIT_BRANCH =~ /^release\/.*/
+      changes: *python-paths
+    - <<: *pypi-rule
+  image: python:3.13-slim-bookworm
+  before_script:
+    - pip install --editable ".[code-coverage]"
+  script:
+    - coverage run -m pytest -rfEP -q --junit-xml=code-coverage.xml
+    - coverage report -m
+  coverage: /TOTAL.*\s+(\d+%)/
+  artifacts:
+    when: always
+    reports:
+      junit: code-coverage.xml
+PyPI:
+  stage: Release
+  needs: [Code Quality, Code Coverage]
+  extends: .pip-variables
+  rules:
+    - <<: *pypi-rule
+  image: python:3.13-slim-bookworm
+  variables:
+    TWINE_USERNAME: gitlab-ci-token
+    TWINE_PASSWORD: $CI_JOB_TOKEN
+  before_script:
+    - apt-get update
+    - apt-get install -y git
+    - pip install build twine
+  script:
+    - python -m build
+    - twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi dist/*
