@@ -23,7 +23,7 @@ Code Quality:
   extends: .pip-variables
   rules:
     - changes: ['**/*.py']
-  image: pipelinecomponents/flake8
+  image: python:3.9-slim-bookworm
   before_script:
     - pip install --editable ".[code-quality]"
   script:
