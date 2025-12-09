@@ -32,6 +32,21 @@
       "waderyan.gitblame"
       "yzhang.markdown-all-in-one"
     ];
+    previews = {
+      enable = true;
+      previews = {
+        web = {
+          command = [
+            ".venv/bin/fastapi"
+            "dev"
+            "--port"
+            "$PORT"
+            "voxrow/web"
+          ];
+          manager = "web";
+        };
+      };
+    };
     workspace.onStart.default.openFiles = [
       "README.md"
     ];
