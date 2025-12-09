@@ -10,6 +10,7 @@ build-backend = 'setuptools.build_meta'
 
 [project]
 name = 'voxrow.web'
+description = "VOXROW's Web"
 readme = 'README.md'
 requires-python = '>=3.13'
 license = {text = 'Proprietary'}
@@ -49,6 +50,9 @@ code-quality = [
     'flake8-bugbear',
     'flake8-isort',
 ]
+
+[project.urls]
+Repository = 'https://github.com/pipinfitriadi/web'
 
 [tool.setuptools.packages.find]
 include = ['voxrow.*']
