@@ -6,7 +6,6 @@
 
 name: CI / CD
 on:
-  pull_request:
   push:
     branches: ['**']
     tags:
@@ -32,6 +31,11 @@ jobs:
         run: flake8
   code-coverage:
     name: Code Coverage
+    if:
+      github.ref_type == 'tag' ||
+      contains('refs/heads/main', github.ref) ||
+      startsWith(github.ref, 'refs/heads/release/') ||
+      startsWith(github.ref, 'refs/heads/hotfix/')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -48,19 +52,10 @@ jobs:
         run: coverage run -m pytest -rfEP -q --junit-xml=code-coverage.xml
       - name: Display coverage
         run: coverage report -m
-      - name: Publish coverage to a PR
-        if: github.event_name == 'pull_request'
-        uses: orgoro/coverage@v3.2
-        with:
-          coverageFile: code-coverage.xml
-          token: ${{ github.token }}
       - name: Test coverage must be 100% passed!
-        # if:
-        #   github.ref_type == 'tag' ||
-        #   github.event_name == 'pull_request' ||
-        #   contains('refs/heads/main refs/heads/develop', github.ref) ||
-        #   startsWith(github.ref, 'refs/heads/release/') ||
-        #   startsWith(github.ref, 'refs/heads/hotfix/')
+        if:
+          github.ref_type == 'tag' ||
+          contains('refs/heads/main', github.ref)
         run: if [ $(printf '%.0f' $(coverage report | awk '$1 == "TOTAL" {print $NF+0}')) -ge 100 ]; then exit; else exit 1; fi
   # pypi:
   #   name: PyPI
