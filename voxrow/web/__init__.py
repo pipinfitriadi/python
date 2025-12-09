@@ -8,7 +8,10 @@
 
 from fastapi import FastAPI
 
-app: FastAPI = FastAPI()
+app: FastAPI = FastAPI(
+    docs_url=None,
+    redoc_url=None,
+)
 
 
 @app.get("/")
