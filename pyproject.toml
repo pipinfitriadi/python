@@ -10,6 +10,23 @@ build-backend = 'setuptools.build_meta'
 
 [project]
 name = 'template'
+readme = 'README.md'
+requires-python = '>=3.13'
+license = {text = 'Proprietary'}
+authors = [{name = 'Pipin Fitriadi', email = 'pipinfitriadi@gmail.com'}]
+maintainers = [{name = 'Pipin Fitriadi', email = 'pipinfitriadi@gmail.com'}]
+classifiers = [
+    'Development Status :: 2 - Pre-Alpha',
+    'Intended Audience :: Developers',
+    'Intended Audience :: Information Technology',
+    'License :: Other/Proprietary License',
+    'Natural Language :: English',
+    'Natural Language :: Indonesian',
+    'Operating System :: OS Independent',
+    'Programming Language :: Python :: 3.13',
+    'Topic :: Software Development :: Libraries :: Python Modules',
+    'Topic :: Utilities',
+]
 dynamic = ['version']
 
 [project.optional-dependencies]
@@ -24,3 +41,10 @@ code-quality = [
     'flake8-bugbear',
     'flake8-isort',
 ]
+
+[tool.setuptools-git-versioning]
+enabled = true
+template = '{tag}'
+dev_template = '{tag}'
+dirty_template = '{tag}'
+tag_filter = '^\d+\.\d+\.\d+(-[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*)?(\+[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*)?$'
