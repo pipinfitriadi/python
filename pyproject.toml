@@ -9,10 +9,14 @@ requires = ['setuptools>=61.0', 'setuptools-git-versioning<2']
 build-backend = 'setuptools.build_meta'
 
 [project]
-name = 'web'
+name = 'voxrow.web'
 readme = 'README.md'
 requires-python = '>=3.13'
 license = {text = 'Proprietary'}
+keywords = [
+    'VOXROW',
+    'web',
+]
 authors = [{name = 'Pipin Fitriadi', email = 'pipinfitriadi@gmail.com'}]
 maintainers = [{name = 'Pipin Fitriadi', email = 'pipinfitriadi@gmail.com'}]
 classifiers = [
@@ -24,6 +28,7 @@ classifiers = [
     'Natural Language :: Indonesian',
     'Operating System :: OS Independent',
     'Programming Language :: Python :: 3.13',
+    'Topic :: Internet :: WWW/HTTP :: HTTP Servers',
     'Topic :: Software Development :: Libraries :: Python Modules',
     'Topic :: Utilities',
 ]
@@ -44,6 +49,9 @@ code-quality = [
     'flake8-bugbear',
     'flake8-isort',
 ]
+
+[tool.setuptools.packages.find]
+include = ['voxrow.*']
 
 [tool.setuptools-git-versioning]
 enabled = true
