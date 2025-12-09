@@ -18,7 +18,7 @@ keywords = [
     'VOXROW',
     'web',
 ]
-authors = [{name = 'Pipin Fitriadi', email = 'pipinfitriadi@gmail.com'}]
+authors = [{name = 'Pipin Fitriadi'}, {email = 'pipinfitriadi@gmail.com'}]
 maintainers = [{name = 'Pipin Fitriadi', email = 'pipinfitriadi@gmail.com'}]
 classifiers = [
     'Development Status :: 2 - Pre-Alpha',
@@ -52,6 +52,7 @@ code-quality = [
 ]
 
 [project.urls]
+Homepage = 'https://github.com/pipinfitriadi/web'
 Repository = 'https://github.com/pipinfitriadi/web'
 
 [tool.setuptools.packages.find]
