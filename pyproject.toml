@@ -11,6 +11,9 @@ build-backend = 'setuptools.build_meta'
 [project]
 name = 'web'
 dynamic = ['version']
+dependencies = [
+    'fastapi[standard]'
+]
 
 [project.optional-dependencies]
 code-coverage = [
