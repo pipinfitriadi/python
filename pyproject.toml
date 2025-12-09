@@ -13,7 +13,7 @@ name = 'template'
 readme = 'README.md'
 requires-python = '>=3.13'
 license = {text = 'Proprietary'}
-authors = [{name = 'Pipin Fitriadi', email = 'pipinfitriadi@gmail.com'}]
+authors = [{name = 'Pipin Fitriadi'}, {email = 'pipinfitriadi@gmail.com'}]
 maintainers = [{name = 'Pipin Fitriadi', email = 'pipinfitriadi@gmail.com'}]
 classifiers = [
     'Development Status :: 2 - Pre-Alpha',
