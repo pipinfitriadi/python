@@ -1,0 +1,36 @@
+# Copyright (C) Pipin Fitriadi - All Rights Reserved
+
+# Unauthorized copying of this file, via any medium is strictly prohibited
+# Proprietary and confidential
+# Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 9 December 2025
+
+name: CI / CD
+on:
+  push:
+    branches: ['**']
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+      - '[0-9]+.[0-9]+.[0-9]+-[a-z]+'
+      - '[0-9]+.[0-9]+.[0-9]+-[a-z]+.[0-9]+'
+jobs:
+  code-quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install dependencies
+        run: pip install --editable ".[code-quality]"
+      - name: Test
+        run: flake8
+  # code-coverage:
+  #   name: Code Coverage
+  # pypi:
+  #   name: PyPI
+  #   needs: [code-quality, code-coverage]
