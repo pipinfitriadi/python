@@ -15,5 +15,5 @@ app: FastAPI = FastAPI(
 
 
 @app.get("/")
-async def read_root() -> dict:
+async def root() -> dict:
     return {"Hello": "World"}
