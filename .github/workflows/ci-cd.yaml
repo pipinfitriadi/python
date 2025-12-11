@@ -16,6 +16,7 @@ on:
       - '**/*.py'
       - tests/**/*
       - pyproject.toml
+      - vercel.json
   workflow_dispatch:
     inputs:
       codecoverage-percentage-passed:
