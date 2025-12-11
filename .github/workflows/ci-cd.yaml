@@ -41,11 +41,11 @@ jobs:
         run: flake8
   code-coverage:
     name: Code Coverage
-    if:
-      github.ref_type == 'tag' ||
-      contains('refs/heads/main', github.ref) ||
-      startsWith(github.ref, 'refs/heads/release/') ||
-      startsWith(github.ref, 'refs/heads/hotfix/')
+    # if:
+    #   github.ref_type == 'tag' ||
+    #   contains('refs/heads/main', github.ref) ||
+    #   startsWith(github.ref, 'refs/heads/release/') ||
+    #   startsWith(github.ref, 'refs/heads/hotfix/')
     runs-on: ubuntu-latest
     env:
       PIP_ROOT_USER_ACTION: ignore
