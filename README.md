@@ -26,11 +26,10 @@ across projects or teams.
 
 Follow these steps the first time you use VS Code after cloning this git repository:
 
-1. Change `name` value in [pyproject.toml](pyproject.toml) to your project name
-2. Use the command <kbd>f1</kbd>, select `Tasks: Run Task`, and then choose `Preparation`
-3. Use the command <kbd>f1</kbd>, select `Python: Select Interpreter`,
+1. Use the command <kbd>f1</kbd>, select `Tasks: Run Task`, and then choose `Preparation`
+2. Use the command <kbd>f1</kbd>, select `Python: Select Interpreter`,
     and then choose _`./.venv/bin/python`_
-4. Use the command <kbd>f1</kbd>, select `Tasks: Run Task`,
+3. Use the command <kbd>f1</kbd>, select `Tasks: Run Task`,
     and then choose `Python: Preparation`
 
 ## CI/CD
