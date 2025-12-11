@@ -27,11 +27,27 @@
       "mechatroner.rainbow-csv"
       "mermaidchart.vscode-mermaid-chart"
       "mhutchie.git-graph"
+      "ms-python.flake8"
       "ms-python.python"
       "ms-toolsai.jupyter"
       "waderyan.gitblame"
       "yzhang.markdown-all-in-one"
     ];
+    previews = {
+      enable = true;
+      previews = {
+        web = {
+          command = [
+            ".venv/bin/fastapi"
+            "dev"
+            "--port"
+            "$PORT"
+            "voxrow/web"
+          ];
+          manager = "web";
+        };
+      };
+    };
     workspace.onStart.default.openFiles = [
       "README.md"
     ];
