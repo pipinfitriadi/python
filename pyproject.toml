@@ -12,7 +12,7 @@ build-backend = 'setuptools.build_meta'
 name = 'voxrow.web'
 description = "VOXROW's Web"
 readme = 'README.md'
-requires-python = '>=3.13'
+requires-python = '>=3.12, <3.13'
 license = {text = 'Proprietary'}
 keywords = [
     'VOXROW',
@@ -28,14 +28,14 @@ classifiers = [
     'Natural Language :: English',
     'Natural Language :: Indonesian',
     'Operating System :: OS Independent',
-    'Programming Language :: Python :: 3.13',
+    'Programming Language :: Python :: 3.12',
     'Topic :: Internet :: WWW/HTTP :: HTTP Servers',
     'Topic :: Software Development :: Libraries :: Python Modules',
     'Topic :: Utilities',
 ]
 dynamic = ['version']
 dependencies = [
-    'fastapi[standard]'
+    'fastapi[standard]==0.124.2'
 ]
 
 [project.optional-dependencies]
