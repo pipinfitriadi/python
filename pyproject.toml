@@ -12,7 +12,7 @@ build-backend = 'setuptools.build_meta'
 name = 'voxrow.web'
 description = "VOXROW's Web"
 readme = 'README.md'
-requires-python = '>=3.13'
+requires-python = '>=3.12, <3.13'
 license = {text = 'Proprietary'}
 keywords = [
     'VOXROW',
@@ -28,15 +28,18 @@ classifiers = [
     'Natural Language :: English',
     'Natural Language :: Indonesian',
     'Operating System :: OS Independent',
-    'Programming Language :: Python :: 3.13',
+    'Programming Language :: Python :: 3.12',
     'Topic :: Internet :: WWW/HTTP :: HTTP Servers',
     'Topic :: Software Development :: Libraries :: Python Modules',
     'Topic :: Utilities',
 ]
-dynamic = ['version']
 dependencies = [
-    'fastapi[standard]'
+    'fastapi[standard]',
 ]
+dynamic = ['version']
+
+[project.scripts]
+app = 'voxrow.web:app'
 
 [project.optional-dependencies]
 code-coverage = [
@@ -56,7 +59,7 @@ Homepage = 'https://github.com/pipinfitriadi/web'
 Repository = 'https://github.com/pipinfitriadi/web'
 
 [tool.setuptools.packages.find]
-include = ['voxrow.*']
+include = ['voxrow.web']
 
 [tool.setuptools-git-versioning]
 enabled = true

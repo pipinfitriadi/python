@@ -10,10 +10,11 @@
 { pkgs, ... }: {
   channel = "stable-24.05";
   # Use https://search.nixos.org/packages to find packages
-  packages = [
-    pkgs.gitflow
-    pkgs.oh-my-posh
-    pkgs.python313
+  packages = with pkgs; [
+    gitflow
+    oh-my-posh
+    python312
+    nodePackages.vercel
   ];
   idx = {
     # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
@@ -38,11 +39,10 @@
       previews = {
         web = {
           command = [
-            ".venv/bin/fastapi"
+            "vercel"
             "dev"
-            "--port"
-            "$PORT"
-            "voxrow/web"
+            "--listen"
+            "127.0.0.1:$PORT"
           ];
           manager = "web";
         };
