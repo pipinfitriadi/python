@@ -11,6 +11,7 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 22 May 2025
 
 [![License](https://img.shields.io/badge/license-Proprietary-red)](LICENSE)
 [![PyPI - Python Version](https://img.shields.io/badge/python-3.13.1-blue)](https://www.python.org/downloads/release/python-3131/)
+[![Codecov](https://codecov.io/gh/pipinfitriadi/web/graph/badge.svg?token=M05vBxiEzt)](https://codecov.io/gh/pipinfitriadi/web)
 
 - [Setup](#setup)
 
