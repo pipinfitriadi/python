@@ -10,9 +10,9 @@
 { pkgs, ... }: {
   channel = "stable-24.05";
   # Use https://search.nixos.org/packages to find packages
-  packages = [
-    pkgs.gitflow
-    pkgs.oh-my-posh
+  packages = with pkgs; [
+    gitflow
+    oh-my-posh
   ];
   idx = {
     # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
