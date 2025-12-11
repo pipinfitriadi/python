@@ -8,6 +8,7 @@
 __pycache__/
 .ipynb_checkpoints/
 .venv/
+.vercel/
 build/
 
 .coverage
@@ -22,3 +23,4 @@ code-coverage.xml
 !.oh-my-posh/**/*
 !.vscode/**/*
 !template.env
+!vercel.json
