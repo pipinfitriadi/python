@@ -85,6 +85,8 @@ jobs:
         run: if [ $(printf '%.0f' $(coverage report | awk '$1 == "TOTAL" {print $NF+0}')) -ge ${{ github.event.inputs.codecoverage-percentage-passed || 100 }} ]; then exit; else exit 1; fi
   deploy:
     name: Deployment
+    needs: [code-quality, code-coverage]
+    if: github.ref_type == 'tag'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
