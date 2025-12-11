@@ -1,0 +1,3 @@
+{
+    "devCommand": ".venv/bin/fastapi dev --entrypoint voxrow.web:app"
+}
