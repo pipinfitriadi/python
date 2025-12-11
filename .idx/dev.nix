@@ -43,7 +43,8 @@
             "dev"
             "--port"
             "$PORT"
-            "voxrow/web"
+            "--entrypoint"
+            "voxrow.web:app"
           ];
           manager = "web";
         };
