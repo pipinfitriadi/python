@@ -39,12 +39,10 @@
       previews = {
         web = {
           command = [
-            ".venv/bin/fastapi"
+            "vercel"
             "dev"
-            "--port"
-            "$PORT"
-            "--entrypoint"
-            "voxrow.web:app"
+            "--listen"
+            "127.0.0.1:$PORT"
           ];
           manager = "web";
         };

@@ -33,10 +33,13 @@ classifiers = [
     'Topic :: Software Development :: Libraries :: Python Modules',
     'Topic :: Utilities',
 ]
-dynamic = ['version']
 dependencies = [
-    'fastapi[standard]==0.124.2'
+    'fastapi[standard]',
 ]
+dynamic = ['version']
+
+[project.scripts]
+app = 'voxrow.web:app'
 
 [project.optional-dependencies]
 code-coverage = [
@@ -56,7 +59,7 @@ Homepage = 'https://github.com/pipinfitriadi/web'
 Repository = 'https://github.com/pipinfitriadi/web'
 
 [tool.setuptools.packages.find]
-include = ['voxrow.*']
+include = ['voxrow.web']
 
 [tool.setuptools-git-versioning]
 enabled = true
