@@ -82,3 +82,18 @@ jobs:
           annotate_only: true
       - name: Percentage passed
         run: if [ $(printf '%.0f' $(coverage report | awk '$1 == "TOTAL" {print $NF+0}')) -ge ${{ github.event.inputs.codecoverage-percentage-passed || 100 }} ]; then exit; else exit 1; fi
+  deploy:
+    name: Deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-args: --prod

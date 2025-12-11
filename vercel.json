@@ -1,3 +1,6 @@
 {
-    "devCommand": ".venv/bin/fastapi dev --entrypoint voxrow.web:app"
+    "devCommand": ".venv/bin/fastapi dev --entrypoint voxrow.web:app",
+    "github": {
+        "enabled": false
+    }
 }
