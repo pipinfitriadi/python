@@ -9,8 +9,37 @@ requires = ['setuptools>=61.0', 'setuptools-git-versioning<2']
 build-backend = 'setuptools.build_meta'
 
 [project]
-name = 'template'
+name = 'voxrow.web'
+description = "VOXROW's Web"
+readme = 'README.md'
+requires-python = '>=3.12, <3.13'
+license = {text = 'Proprietary'}
+keywords = [
+    'VOXROW',
+    'web',
+]
+authors = [{name = 'Pipin Fitriadi'}, {email = 'pipinfitriadi@gmail.com'}]
+maintainers = [{name = 'Pipin Fitriadi', email = 'pipinfitriadi@gmail.com'}]
+classifiers = [
+    'Development Status :: 2 - Pre-Alpha',
+    'Intended Audience :: Developers',
+    'Intended Audience :: Information Technology',
+    'License :: Other/Proprietary License',
+    'Natural Language :: English',
+    'Natural Language :: Indonesian',
+    'Operating System :: OS Independent',
+    'Programming Language :: Python :: 3.12',
+    'Topic :: Internet :: WWW/HTTP :: HTTP Servers',
+    'Topic :: Software Development :: Libraries :: Python Modules',
+    'Topic :: Utilities',
+]
+dependencies = [
+    'fastapi[standard]',
+]
 dynamic = ['version']
+
+[project.scripts]
+app = 'voxrow.web:app'
 
 [project.optional-dependencies]
 code-coverage = [
@@ -24,3 +53,17 @@ code-quality = [
     'flake8-bugbear',
     'flake8-isort',
 ]
+
+[project.urls]
+Homepage = 'https://github.com/pipinfitriadi/web'
+Repository = 'https://github.com/pipinfitriadi/web'
+
+[tool.setuptools.packages.find]
+include = ['voxrow.web']
+
+[tool.setuptools-git-versioning]
+enabled = true
+template = '{tag}'
+dev_template = '{tag}'
+dirty_template = '{tag}'
+tag_filter = '^\d+\.\d+\.\d+(-[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*)?(\+[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*)?$'

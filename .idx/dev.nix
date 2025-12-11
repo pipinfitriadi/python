@@ -10,10 +10,11 @@
 { pkgs, ... }: {
   channel = "stable-24.05";
   # Use https://search.nixos.org/packages to find packages
-  packages = [
-    pkgs.gitflow
-    pkgs.oh-my-posh
-    pkgs.python313
+  packages = with pkgs; [
+    gitflow
+    oh-my-posh
+    python312
+    nodePackages.vercel
   ];
   idx = {
     # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
@@ -27,11 +28,26 @@
       "mechatroner.rainbow-csv"
       "mermaidchart.vscode-mermaid-chart"
       "mhutchie.git-graph"
+      "ms-python.flake8"
       "ms-python.python"
       "ms-toolsai.jupyter"
       "waderyan.gitblame"
       "yzhang.markdown-all-in-one"
     ];
+    previews = {
+      enable = true;
+      previews = {
+        web = {
+          command = [
+            "vercel"
+            "dev"
+            "--listen"
+            "127.0.0.1:$PORT"
+          ];
+          manager = "web";
+        };
+      };
+    };
     workspace.onStart.default.openFiles = [
       "README.md"
     ];
