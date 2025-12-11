@@ -13,6 +13,7 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 22 May 2025
 [![PyPI - Python Version](https://img.shields.io/badge/python-3.13.1-blue)](https://www.python.org/downloads/release/python-3131/)
 
 - [Setup](#setup)
+- [CI/CD](#cicd)
 
 This repository serves as a centralized Python's workspace,
 providing structure and resources to support development activities.
@@ -30,3 +31,9 @@ Follow these steps the first time you use VS Code after cloning this git reposit
     and then choose _`./.venv/bin/python`_
 4. Use the command <kbd>f1</kbd>, select `Tasks: Run Task`,
     and then choose `Python: Preparation`
+
+## CI/CD
+
+If you encounter a Code Quality error during the CI/CD process,
+use the command <kbd>f1</kbd>, select `Tasks: Run Task`,
+choose `CI/CD: Code Quality - Fixing`, and then run `git commit` and `git push`.
