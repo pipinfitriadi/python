@@ -13,12 +13,7 @@
       "problemMatcher": [],
       "label": "Git: Fetch All",
       "type": "shell",
-      "options": {
-        "env": {
-          "UPSTREAM": "https://github.com/pipinfitriadi/workspace.git"
-        }
-      },
-      "command": "if [[ $(git remote | grep upstream) != 'upstream' ]]; then git remote add upstream $UPSTREAM && git remote set-url --push upstream DISABLE && git remote -v | grep upstream; fi && git fetch --all"
+      "command": "if [[ $(git remote | grep upstream) != 'upstream' ]]; then git remote add upstream $UPSTREAM && git remote set-url --push upstream DISABLE && git remote -v | grep upstream; fi && git fetch --all --prune"
     },
     {
       "problemMatcher": [],
@@ -37,5 +32,10 @@
       "type": "shell",
       "command": "git show-branch develop >/dev/null 2>&1 || (git checkout main && git checkout -b develop); git flow config >/dev/null 2>&1 || git flow init -d"
     },
-  ]
+  ],
+  "options": {
+    "env": {
+      "UPSTREAM": "https://github.com/pipinfitriadi/workspace.git",
+    }
+  }
 }
