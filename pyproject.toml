@@ -35,6 +35,8 @@ classifiers = [
 ]
 dependencies = [
     'fastapi[standard]',
+    'pandas',
+    'lxml',
 ]
 dynamic = ['version']
 
