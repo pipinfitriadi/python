@@ -5,7 +5,7 @@
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 24 July 2025
 
 [flake8]
-exclude = .vercel/,.venv/,build/
+exclude = .venv/,.vercel/,build/
 extend-ignore = E203,E501,E701
 extend-select = B950
 max-line-length = 80
