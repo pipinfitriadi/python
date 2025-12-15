@@ -53,6 +53,9 @@ code-quality = [
     'flake8-bugbear',
     'flake8-isort',
 ]
+dev = [
+    'httpx[cli]',
+]
 
 [project.urls]
 Homepage = 'https://github.com/pipinfitriadi/web'
