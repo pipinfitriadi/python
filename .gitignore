@@ -15,7 +15,6 @@ build/
 *.env
 *.csv
 *.json
-*.ipynb
 *.txt
 *.xlsx
 code-coverage.xml
