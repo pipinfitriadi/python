@@ -37,6 +37,7 @@ dependencies = [
     'fastapi[standard]',
     'pandas',
     'lxml',
+    'jinja2',
 ]
 dynamic = ['version']
 

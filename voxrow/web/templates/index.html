@@ -1,0 +1,81 @@
+<!-- Copyright (C) Pipin Fitriadi - All Rights Reserved
+
+Unauthorized copying of this file, via any medium is strictly prohibited
+Proprietary and confidential
+Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 27 December 2025 -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VOXROW</title>
+</head>
+<body>
+    <div>
+        <canvas id="inflation"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+      
+    <script>
+        fetch('/files/datamart.inflation.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                // Returns a promise for the JSON data
+                return response.json();
+            })
+            .then(jsonResponse => {
+                // The actual data is available here
+                new Chart(
+                    document.getElementById('inflation'),
+                    {
+                        type: 'line',
+                        data: {
+                            datasets: [{
+                                label: jsonResponse['title'],
+                                data: jsonResponse['data'],
+                                pointStyle: false,
+                                tension: 1
+                            }]
+                        },
+                        options: {
+                            parsing: {
+                                xAxisKey: 'date',
+                                yAxisKey: 'inflation'
+                            },
+                            plugins: {
+                                legend: {
+                                    position: 'bottom'
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            return `Inflasi: ${context.parsed.y}%`;
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    ticks: {
+                                        callback: function(value) {
+                                            return value + '%';
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                );
+            })
+            .catch(error => {
+                // Handles any errors in the chain
+                console.error('Fetch error:', error);
+            });
+    </script>
+</body>
+</html>
