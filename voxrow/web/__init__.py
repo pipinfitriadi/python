@@ -6,14 +6,34 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 9 December 2025
 
-from fastapi import FastAPI
+from pathlib import Path
 
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+
+ROOT_DIR: Path = Path("voxrow") / "web"
 app: FastAPI = FastAPI(
     docs_url=None,
     redoc_url=None,
 )
+templates: Jinja2Templates = Jinja2Templates(
+    directory=ROOT_DIR / "templates",
+)
+
+app.mount(
+    "/files",
+    StaticFiles(
+        directory=ROOT_DIR / "static",
+    ),
+    name="static",
+)
 
 
-@app.get("/")
-async def root() -> dict:
-    return {"Hello": "World"}
+@app.get("/", response_class=HTMLResponse)
+async def root(request: Request) -> dict:
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+    )
