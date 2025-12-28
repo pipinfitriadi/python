@@ -28,6 +28,7 @@ def test_favicon() -> None:
 
     assert response.status_code == 200
     assert response.headers["content-type"] == "image/svg+xml"
+    assert response.text != ""
 
 
 def test_root(mocker: MockerFixture) -> None:
@@ -46,3 +47,5 @@ def test_root(mocker: MockerFixture) -> None:
     response: Response = client.get("/")
 
     assert response.status_code == 200
+    assert "text/html" in response.headers["content-type"]
+    assert response.text != ""
