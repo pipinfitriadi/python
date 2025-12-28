@@ -40,9 +40,9 @@ def test_root(mocker: MockerFixture) -> None:
 
     mocker_response: mocker.Mock = mocker.Mock()
     mocker_response.json.return_value = json.loads(TEST_FILE_INFLATION.read_text())
-    mocker.patch("voxrow.web.httpx.get", return_value=mocker_response)
+    mocker.patch("httpx.get", return_value=mocker_response)
 
-    mocker.patch("voxrow.web.open", mocker.mock_open())
+    mocker.patch.object(Path, "write_text", side_effect=None)
 
     response: Response = client.get("/")
 
