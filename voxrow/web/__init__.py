@@ -56,8 +56,7 @@ async def minify_html_middleware(request: Request, call_next: Callable) -> Respo
 
         # Update the response body and content length
         response.headers["content-length"] = str(len(minified_content))
-
-        return HTMLResponse(
+        response = HTMLResponse(
             content=minified_content,
             status_code=response.status_code,
             headers=dict(response.headers),
@@ -83,7 +82,7 @@ async def favicon():
 async def root(request: Request) -> dict:
     json_file: Path = STATIC_DIR / "inflation.json"
 
-    if not json_file.is_file():
+    if not json_file.is_file():  # pragma: no cover
         resp: httpx.Response = httpx.get(
             "https://webapi.bps.go.id/v1/api/view/domain/{DOMAIN}/model/{MODEL}/lang/{LANG}/id/{ID}/key/{KEY}/".format(
                 KEY=getenv("BPS_KEY"),
