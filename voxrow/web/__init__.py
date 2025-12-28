@@ -11,13 +11,14 @@ from typing import Callable
 
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.gzip import GZipMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from minify_html import minify
 
 ENCODING: str = "utf-8"
 ROOT_DIR: Path = Path("voxrow") / "web"
+TITLE: str = "VOXROW"
 app: FastAPI = FastAPI(
     docs_url=None,
     redoc_url=None,
@@ -65,9 +66,15 @@ app.mount(
 )
 
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    return FileResponse(ROOT_DIR / "static" / "favicon.svg")
+
+
+@app.get("/", response_class=HTMLResponse, include_in_schema=False)
 async def root(request: Request) -> dict:
     return templates.TemplateResponse(
         request=request,
         name="index.html",
+        context=dict(title=TITLE),
     )
