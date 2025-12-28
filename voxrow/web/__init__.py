@@ -16,6 +16,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from minify_html import minify
 
+ENCODING: str = "utf-8"
 ROOT_DIR: Path = Path("voxrow") / "web"
 app: FastAPI = FastAPI(
     docs_url=None,
@@ -37,11 +38,10 @@ async def minify_html_middleware(request: Request, call_next: Callable) -> Respo
             response_body += chunk
 
         minified_content: bytes = minify(
-            response_body.decode("utf-8"),
-            allow_noncompliant_unquoted_attribute_values=True,
+            response_body.decode(ENCODING),
             minify_css=True,
             minify_js=True,
-        ).encode("utf-8")
+        ).encode(ENCODING)
 
         # Update the response body and content length
         response.headers["content-length"] = str(len(minified_content))
