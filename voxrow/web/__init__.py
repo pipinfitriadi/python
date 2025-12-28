@@ -27,8 +27,8 @@ from minify_html import minify
 
 # Constants
 ENCODING: str = "utf-8"
-PUBLIC_DIR: Path = Path("public")
 ROOT_DIR: Path = Path("voxrow") / "web"
+STATIC_DIR: Path = ROOT_DIR / "static"
 TITLE: str = "VOXROW"
 
 # Variables
@@ -71,19 +71,19 @@ async def minify_html_middleware(request: Request, call_next: Callable) -> Respo
 app.add_middleware(GZipMiddleware)
 app.mount(
     "/files",
-    StaticFiles(directory=PUBLIC_DIR),
+    StaticFiles(directory=STATIC_DIR),
     name="static",
 )
 
 
 @app.get("/favicon.ico", include_in_schema=False)
 async def favicon():
-    return FileResponse(PUBLIC_DIR / "favicon.svg")
+    return FileResponse(STATIC_DIR / "favicon.svg")
 
 
 @app.get("/", response_class=HTMLResponse, include_in_schema=False)
 async def root(request: Request) -> dict:
-    json_file: Path = PUBLIC_DIR / "inflation.json"
+    json_file: Path = STATIC_DIR / "inflation.json"
 
     if not json_file.is_file():
         resp: httpx.Response = httpx.get(
