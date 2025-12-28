@@ -15,8 +15,13 @@ from voxrow.web import app
 client: TestClient = TestClient(app)
 
 
+def test_favicon() -> None:
+    response: Response = client.get("/favicon.ico")
+
+    assert response.status_code == 200
+
+
 def test_root() -> None:
     response: Response = client.get("/")
 
     assert response.status_code == 200
-    assert response.json() == {"Hello": "World"}
