@@ -100,4 +100,6 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-args: --prod -e ${{ secrets.BPS_KEY }}
+          vercel-args: |
+            --prod
+            -e BPS_KEY=${{ secrets.BPS_KEY }}
