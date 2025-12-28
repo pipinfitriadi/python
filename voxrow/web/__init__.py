@@ -25,10 +25,13 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from minify_html import minify
 
+# Constants
 ENCODING: str = "utf-8"
 ROOT_DIR: Path = Path("voxrow") / "web"
 STATIC_DIR: Path = ROOT_DIR / "static"
 TITLE: str = "VOXROW"
+
+# Variables
 app: FastAPI = FastAPI(
     docs_url=None,
     redoc_url=None,
@@ -82,7 +85,7 @@ async def favicon():
 async def root(request: Request) -> dict:
     json_file: Path = STATIC_DIR / "inflation.json"
 
-    if not json_file.is_file():  # pragma: no cover
+    if not json_file.is_file():
         resp: httpx.Response = httpx.get(
             "https://webapi.bps.go.id/v1/api/view/domain/{DOMAIN}/model/{MODEL}/lang/{LANG}/id/{ID}/key/{KEY}/".format(
                 KEY=getenv("BPS_KEY"),
