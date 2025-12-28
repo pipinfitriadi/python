@@ -38,6 +38,7 @@ dependencies = [
     'pandas',
     'lxml',
     'jinja2',
+    'minify-html',
 ]
 dynamic = ['version']
 
