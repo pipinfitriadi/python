@@ -49,6 +49,7 @@ app = 'voxrow.web:app'
 code-coverage = [
     'coverage',
     'pytest',
+    'pytest-mock',
     'toml',
 ]
 code-quality = [
