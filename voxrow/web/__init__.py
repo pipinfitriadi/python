@@ -156,8 +156,8 @@ async def root(request: Request) -> dict:
 
         df_flat_table.set_index("date", inplace=True)
 
-        with open(json_file, "w") as file:
-            json.dump(
+        json_file.write_text(
+            json.dumps(
                 dict(
                     title=title,
                     data=(
@@ -166,9 +166,9 @@ async def root(request: Request) -> dict:
                         .to_dict("records")
                     ),
                 ),
-                file,
                 default=str,
             )
+        )
 
     return templates.TemplateResponse(
         request=request,

@@ -12,6 +12,7 @@
   # Use https://search.nixos.org/packages to find packages
   packages = with pkgs; [
     gitflow
+    git-lfs
     oh-my-posh
     python312
     nodePackages.vercel
