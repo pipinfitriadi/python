@@ -21,5 +21,6 @@ code-coverage.xml
 
 !.oh-my-posh/**/*
 !.vscode/**/*
+!tests/files/**/*
 !template.env
 !vercel.json
