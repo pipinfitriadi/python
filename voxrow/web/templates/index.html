@@ -22,8 +22,6 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 27 December 2025 -->
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1/dist/chartjs-adapter-luxon.umd.min.js"></script>
 
     <script>
-        let chart;
-
         fetch('{{ url_for("static", path="/datamart.inflation.json").path }}')
             .then(response => {
                 if (!response.ok) {
@@ -35,6 +33,18 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 27 December 2025 -->
             })
             .then(jsonResponse => {
                 // The actual data is available here
+                function yGridColor(context) {
+                    if (context.tick.value < 0) {
+                        return RED;
+                    }
+                    else if (context.tick.value == 0) {
+                        return YELLOW;
+                    }
+                    else {
+                        return GREEN;
+                    }
+                }
+
                 const
                     BLUE = '#1790D4',
                     GREEN = '#ADCC36',
@@ -44,7 +54,7 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 27 December 2025 -->
                     YELLOW = '#FECB2F',
                     DASH = [3, 3];
 
-                chart = new Chart(
+                new Chart(
                     document.getElementById('inflation'),
                     {
                         type: 'line',
@@ -52,7 +62,7 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 27 December 2025 -->
                             datasets: [{
                                 data: jsonResponse['data'],
                                 pointStyle: false,
-                                tension: 1,
+                                tension: .5,
                                 borderColor: BLUE
                             }]
                         },
@@ -95,7 +105,7 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 27 December 2025 -->
                                         display: false
                                     },
                                     ticks: {
-                                        color: GREEN,
+                                        color: BLUE,
                                         maxRotation: 0,
                                         minRotation: 0
                                     },
@@ -110,14 +120,14 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 27 December 2025 -->
                                         display: false
                                     },
                                     grid: {
-                                        color: GREEN,
+                                        color: yGridColor,
                                         tickBorderDash: DASH
                                     },
                                     ticks: {
                                         callback: function(value) {
                                             return value + '%';
                                         },
-                                        color: GREEN
+                                        color: yGridColor
                                     }
                                 }
                             }
