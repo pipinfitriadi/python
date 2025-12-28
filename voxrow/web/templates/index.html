@@ -9,7 +9,7 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 27 December 2025 -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VOXROW</title>
+    <title>Inflasi | VOXROW</title>
 </head>
 <body>
     <div>
@@ -17,9 +17,11 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 27 December 2025 -->
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
-      
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.7.2/build/global/luxon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1/dist/chartjs-adapter-luxon.umd.min.js"></script>
+
     <script>
-        fetch('/files/datamart.inflation.json')
+        fetch('{{ url_for("static", path="/datamart.inflation.json").path }}')
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -30,16 +32,25 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 27 December 2025 -->
             })
             .then(jsonResponse => {
                 // The actual data is available here
+                const
+                    BLUE = '#1790D4',
+                    GREEN = '#ADCC36',
+                    PURPLE = '#971497',
+                    ORANGE = '#FC6621',
+                    RED = '#97040C',
+                    YELLOW = '#FECB2F',
+                    DASH = [3, 3];
+
                 new Chart(
                     document.getElementById('inflation'),
                     {
                         type: 'line',
                         data: {
                             datasets: [{
-                                label: jsonResponse['title'],
                                 data: jsonResponse['data'],
                                 pointStyle: false,
-                                tension: 1
+                                tension: 1,
+                                borderColor: BLUE
                             }]
                         },
                         options: {
@@ -49,22 +60,61 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 27 December 2025 -->
                             },
                             plugins: {
                                 legend: {
-                                    position: 'bottom'
+                                    display: false
+                                },
+                                title: {
+                                    display: true,
+                                    text: jsonResponse['title'],
+                                    color: BLUE
                                 },
                                 tooltip: {
+                                    backgroundColor: GREEN,
                                     callbacks: {
                                         label: function(context) {
                                             return `Inflasi: ${context.parsed.y}%`;
                                         }
-                                    }
+                                    },
+                                    displayColors: false,
+                                    titleColor: BLUE
                                 }
                             },
                             scales: {
+                                x: {
+                                    adapters: {
+                                        date: {
+                                            locale: 'id'
+                                        }
+                                    },
+                                    border: {
+                                        display: false
+                                    },
+                                    grid: {
+                                        display: false
+                                    },
+                                    ticks: {
+                                        color: GREEN,
+                                        maxRotation: 0,
+                                        minRotation: 0
+                                    },
+                                    type: 'time',
+                                    time: {
+                                        tooltipFormat: 'd MMMM yyyy'
+                                    }
+                                },
                                 y: {
+                                    border: {
+                                        dash: DASH,
+                                        display: false
+                                    },
+                                    grid: {
+                                        color: GREEN,
+                                        tickBorderDash: DASH
+                                    },
                                     ticks: {
                                         callback: function(value) {
                                             return value + '%';
-                                        }
+                                        },
+                                        color: GREEN
                                     }
                                 }
                             }
