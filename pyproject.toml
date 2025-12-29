@@ -70,7 +70,11 @@ Homepage = 'https://github.com/pipinfitriadi/web'
 Repository = 'https://github.com/pipinfitriadi/web'
 
 [tool.setuptools.packages.find]
-include = ['voxrow.web']
+include = [
+    'voxrow.core',
+    'voxrow.data',
+    'voxrow.web',
+]
 
 [tool.setuptools-git-versioning]
 enabled = true
