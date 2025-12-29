@@ -120,7 +120,9 @@
           "-m", "pip", "install",
           "--require-virtualenv",
           "--editable",
-          "${workspaceFolder}[code-quality, code-coverage]"
+          "${workspaceFolder}",
+          "--group",
+          "dev"
       ]
     },
     {
