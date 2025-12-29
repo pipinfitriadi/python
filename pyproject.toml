@@ -45,7 +45,7 @@ dynamic = ['version']
 [project.scripts]
 app = 'voxrow.web:app'
 
-[project.optional-dependencies]
+[dependency-groups]
 code-coverage = [
     'coverage',
     'pytest',
@@ -61,6 +61,8 @@ code-quality = [
 dev = [
     'httpx[cli]',
     'matplotlib',
+    {include-group = "code-coverage"},
+    {include-group = "code-quality"},
 ]
 
 [project.urls]
