@@ -41,7 +41,7 @@ dynamic = ['version']
 [project.scripts]
 app = 'voxrow.web:app'
 
-[project.optional-dependencies]
+[dependency-groups]
 code-coverage = [
     'coverage',
     'pytest',
@@ -52,6 +52,10 @@ code-quality = [
     'flake8-black',
     'flake8-bugbear',
     'flake8-isort',
+]
+dev = [
+    {include-group = "code-coverage"},
+    {include-group = "code-quality"},
 ]
 
 [project.urls]
