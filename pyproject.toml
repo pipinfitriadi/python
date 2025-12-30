@@ -35,6 +35,7 @@ classifiers = [
 ]
 dependencies = [
     'fastapi[standard]',
+    'fasthx[jinja]',
     'pandas',
     'lxml',
     'minify-html',
