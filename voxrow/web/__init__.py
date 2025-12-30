@@ -80,7 +80,7 @@ async def favicon():
 
 
 @app.get("/", include_in_schema=False)
-@jinja.page("inflation.html")
+@jinja.page("inflation.html.j2")
 async def root() -> dict:
     json_file: Path = STATIC_DIR / "inflation.json"
 

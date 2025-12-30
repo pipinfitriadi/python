@@ -32,6 +32,7 @@
       "ms-python.flake8"
       "ms-python.python"
       "ms-toolsai.jupyter"
+      "samuelcolvin.jinjahtml"
       "waderyan.gitblame"
       "yzhang.markdown-all-in-one"
     ];

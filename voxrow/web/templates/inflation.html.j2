@@ -4,7 +4,7 @@ Unauthorized copying of this file, via any medium is strictly prohibited
 Proprietary and confidential
 Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 30 December 2025 #}
 
-{% extends "BASE.html" %}
+{% extends "BASE.html.j2" %}
 {% block body %}
     <div 
         class="
@@ -20,7 +20,7 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 30 December 2025 #}
         hx-swap="none"
         hx-on::after-request="displayChart(event)"
     >
-        {% include 'logo.html' %}
+        {% include 'logo.html.j2' %}
         <canvas id="inflation"></canvas>
     </div>
 {% endblock %}
