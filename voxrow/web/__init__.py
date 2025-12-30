@@ -23,6 +23,7 @@ from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from fasthx.jinja import Jinja
 from minify_html import minify
 
 # Constants
@@ -35,9 +36,7 @@ app: FastAPI = FastAPI(
     docs_url=None,
     redoc_url=None,
 )
-templates: Jinja2Templates = Jinja2Templates(
-    directory=ROOT_DIR / "templates",
-)
+jinja: Jinja = Jinja(Jinja2Templates(directory=ROOT_DIR / "templates"))
 
 
 @app.middleware("http")
@@ -80,8 +79,9 @@ async def favicon():
     return FileResponse(STATIC_DIR / "favicon.svg")
 
 
-@app.get("/", response_class=HTMLResponse, include_in_schema=False)
-async def root(request: Request) -> dict:
+@app.get("/", include_in_schema=False)
+@jinja.page("inflation.html")
+async def root() -> dict:
     json_file: Path = STATIC_DIR / "inflation.json"
 
     if not json_file.is_file():
@@ -169,8 +169,4 @@ async def root(request: Request) -> dict:
             )
         )
 
-    return templates.TemplateResponse(
-        request=request,
-        name="inflation.html",
-        context=dict(title="Inflasi"),
-    )
+    return dict(title="Inflasi")
