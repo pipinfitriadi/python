@@ -6,7 +6,8 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 30 December 2025 #}
 
 {% extends "BASE.html" %}
 {% block body %}
-    <div class="
+    <div 
+        class="
             p-6
             h-screen
             flex
@@ -14,6 +15,10 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 30 December 2025 #}
                 items-center
                 justify-center
         "
+        hx-get="{{ url_for('static', path='/inflation.json').path }}"
+        hx-trigger="load"
+        hx-swap="none"
+        hx-on::after-request="displayChart(event)"
     >
         {% include 'logo.html' %}
         <canvas id="inflation"></canvas>
@@ -23,121 +28,110 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 30 December 2025 #}
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/luxon@3.7.2/build/global/luxon.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1/dist/chartjs-adapter-luxon.umd.min.js"></script>
-
     <script>
-        fetch('{{ url_for("static", path="/inflation.json").path }}')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+        function displayChart(event) {
+            function yGridColor(context) {
+                if (context.tick.value < 0) {
+                    return RED;
                 }
-
-                return response.json(); // Returns a promise for the JSON data
-            })
-            .then(jsonResponse => { // The actual data is available here
-                function yGridColor(context) {
-                    if (context.tick.value < 0) {
-                        return RED;
-                    }
-                    else if (context.tick.value == 0) {
-                        return YELLOW;
-                    }
-                    else {
-                        return GREEN;
-                    }
+                else if (context.tick.value == 0) {
+                    return YELLOW;
                 }
+                else {
+                    return GREEN;
+                }
+            }
 
-                const
-                    BLUE = '#1790D4',
-                    GREEN = '#ADCC36',
-                    PURPLE = '#971497',
-                    ORANGE = '#FC6621',
-                    RED = '#97040C',
-                    YELLOW = '#FECB2F',
-                    DASH = [3, 3];
+            const
+                BLUE = '#1790D4',
+                GREEN = '#ADCC36',
+                PURPLE = '#971497',
+                ORANGE = '#FC6621',
+                RED = '#97040C',
+                YELLOW = '#FECB2F',
+                DASH = [3, 3],
+                response = JSON.parse(event.detail.xhr.responseText);
 
-                new Chart(
-                    document.getElementById('inflation'),
-                    {
-                        type: 'line',
-                        data: {
-                            datasets: [{
-                                data: jsonResponse['data'],
-                                pointStyle: false,
-                                tension: .5,
-                                borderColor: BLUE
-                            }]
+            new Chart(
+                document.getElementById('inflation'),
+                {
+                    type: 'line',
+                    data: {
+                        datasets: [{
+                            data: response['data'],
+                            pointStyle: false,
+                            tension: .5,
+                            borderColor: BLUE
+                        }]
+                    },
+                    options: {
+                        parsing: {
+                            xAxisKey: 'date',
+                            yAxisKey: 'inflation'
                         },
-                        options: {
-                            parsing: {
-                                xAxisKey: 'date',
-                                yAxisKey: 'inflation'
+                        plugins: {
+                            legend: {
+                                display: false
                             },
-                            plugins: {
-                                legend: {
+                            title: {
+                                display: true,
+                                text: response['title'],
+                                color: BLUE
+                            },
+                            tooltip: {
+                                backgroundColor: GREEN,
+                                callbacks: {
+                                    label: function(context) {
+                                        return `Inflasi: ${context.parsed.y.toLocaleString('id-ID')}%`;
+                                    }
+                                },
+                                displayColors: false,
+                                titleColor: BLUE
+                            }
+                        },
+                        scales: {
+                            x: {
+                                adapters: {
+                                    date: {
+                                        locale: 'id'
+                                    }
+                                },
+                                border: {
                                     display: false
                                 },
-                                title: {
-                                    display: true,
-                                    text: jsonResponse['title'],
-                                    color: BLUE
+                                grid: {
+                                    display: false
                                 },
-                                tooltip: {
-                                    backgroundColor: GREEN,
-                                    callbacks: {
-                                        label: function(context) {
-                                            return `Inflasi: ${context.parsed.y.toLocaleString('id-ID')}%`;
-                                        }
-                                    },
-                                    displayColors: false,
-                                    titleColor: BLUE
+                                ticks: {
+                                    color: BLUE,
+                                    maxRotation: 0,
+                                    minRotation: 0
+                                },
+                                type: 'time',
+                                time: {
+                                    tooltipFormat: 'd MMMM yyyy'
                                 }
                             },
-                            scales: {
-                                x: {
-                                    adapters: {
-                                        date: {
-                                            locale: 'id'
-                                        }
-                                    },
-                                    border: {
-                                        display: false
-                                    },
-                                    grid: {
-                                        display: false
-                                    },
-                                    ticks: {
-                                        color: BLUE,
-                                        maxRotation: 0,
-                                        minRotation: 0
-                                    },
-                                    type: 'time',
-                                    time: {
-                                        tooltipFormat: 'd MMMM yyyy'
-                                    }
+                            y: {
+                                border: {
+                                    dash: DASH,
+                                    display: false
                                 },
-                                y: {
-                                    border: {
-                                        dash: DASH,
-                                        display: false
+                                grid: {
+                                    color: yGridColor,
+                                    tickBorderDash: DASH
+                                },
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
                                     },
-                                    grid: {
-                                        color: yGridColor,
-                                        tickBorderDash: DASH
-                                    },
-                                    ticks: {
-                                        callback: function(value) {
-                                            return value + '%';
-                                        },
-                                        color: yGridColor
-                                    }
+                                    color: yGridColor
                                 }
                             }
                         }
                     }
-                );
-            })
-            .catch(error => { // Handles any errors in the chain
-                console.error('Fetch error:', error);
-            });
+                }
+            );
+        }
     </script>
 {% endblock %}
