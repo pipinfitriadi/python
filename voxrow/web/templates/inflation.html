@@ -1,39 +1,11 @@
-<!-- Copyright (C) Pipin Fitriadi - All Rights Reserved
+{# Copyright (C) Pipin Fitriadi - All Rights Reserved
 
 Unauthorized copying of this file, via any medium is strictly prohibited
 Proprietary and confidential
-Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 27 December 2025 -->
+Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 30 December 2025 #}
 
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8"/>
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    />
-    <title>Inflasi | {{ title }}</title>
-
-    <!-- Google tag (gtag.js) -->
-    <script
-        async
-        src="https://www.googletagmanager.com/gtag/js?id=G-DJE4CN0PPC"
-    ></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
-
-        gtag('config', 'G-DJE4CN0PPC', {
-            cookie_domain: 'voxrow.com',
-            cookie_flags: 'SameSite=None;Secure'
-        });
-    </script>
-</head>
-<body>
-    <!-- from-[#ff0000] via-[#00ff00] to-[#0000ff] bg-clip-text -->
+{% extends "BASE.html" %}
+{% block body %}
     <div class="
             p-6
             h-screen
@@ -43,31 +15,7 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 27 December 2025 -->
                 justify-center
         "
     >
-        <img
-            src="{{ url_for('static', path='/logo.svg').path }}"
-            alt="{{ title }}"
-            class="
-                h-1/10
-                flex
-                    items-center
-                    justify-center
-                italic
-                bg-gradient-to-r
-                    from-[#ADCC36]
-                        via-[#1790D4]
-                        via-[#971497]
-                        via-[#97040C]
-                        via-[#FC6621]
-                        to-[#FECB2F]
-                    text-transparent
-                    bg-clip-text
-                font-sans
-                font-extrabold
-                text-shadow-md
-                text-5xl
-                animate-pulse
-            "
-        />
+        {% include 'logo.html' %}
         <canvas id="inflation"></canvas>
     </div>
 
@@ -83,11 +31,9 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 27 December 2025 -->
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
 
-                // Returns a promise for the JSON data
-                return response.json();
+                return response.json(); // Returns a promise for the JSON data
             })
-            .then(jsonResponse => {
-                // The actual data is available here
+            .then(jsonResponse => { // The actual data is available here
                 function yGridColor(context) {
                     if (context.tick.value < 0) {
                         return RED;
@@ -190,10 +136,8 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 27 December 2025 -->
                     }
                 );
             })
-            .catch(error => {
-                // Handles any errors in the chain
+            .catch(error => { // Handles any errors in the chain
                 console.error('Fetch error:', error);
             });
     </script>
-</body>
-</html>
+{% endblock %}

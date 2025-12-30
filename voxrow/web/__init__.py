@@ -29,7 +29,6 @@ from minify_html import minify
 ENCODING: str = "utf-8"
 ROOT_DIR: Path = Path("voxrow") / "web"
 STATIC_DIR: Path = ROOT_DIR / "static"
-TITLE: str = "VOXROW"
 
 # Variables
 app: FastAPI = FastAPI(
@@ -70,7 +69,7 @@ async def minify_html_middleware(request: Request, call_next: Callable) -> Respo
 
 app.add_middleware(GZipMiddleware)
 app.mount(
-    "/files",
+    "/static",
     StaticFiles(directory=STATIC_DIR),
     name="static",
 )
@@ -172,6 +171,6 @@ async def root(request: Request) -> dict:
 
     return templates.TemplateResponse(
         request=request,
-        name="index.html",
-        context=dict(title=TITLE),
+        name="inflation.html",
+        context=dict(title="Inflasi"),
     )

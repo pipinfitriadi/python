@@ -1,0 +1,41 @@
+{# Copyright (C) Pipin Fitriadi - All Rights Reserved
+
+Unauthorized copying of this file, via any medium is strictly prohibited
+Proprietary and confidential
+Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 27 December 2025 #}
+
+{% set TITLE = TITLE|default('VOXROW') %}
+{% set domain = "voxrow.com" %}
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8"/>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    />
+    <title>{% if title %}{{ title }} | {% endif %}{{ TITLE }}</title>
+
+    <!-- Google tag (gtag.js) -->
+    <script
+        async
+        src="https://www.googletagmanager.com/gtag/js?id=G-DJE4CN0PPC"
+    ></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'G-DJE4CN0PPC', {
+            cookie_domain: '{{ domain }}',
+            cookie_flags: 'SameSite=None;Secure'
+        });
+    </script>
+</head>
+<body>
+    {% block body %}{% endblock %}
+</body>
+</html>
