@@ -9,6 +9,7 @@
 import html
 import json
 from calendar import monthrange
+from enum import StrEnum
 from io import StringIO
 from os import getenv
 from pathlib import Path
@@ -24,6 +25,7 @@ from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fasthx.jinja import Jinja
+from lxml import etree
 from minify_html import minify
 
 # Constants
@@ -39,21 +41,42 @@ app: FastAPI = FastAPI(
 jinja: Jinja = Jinja(Jinja2Templates(directory=ROOT_DIR / "templates"))
 
 
-@app.middleware("http")
-async def minify_html_middleware(request: Request, call_next: Callable) -> Response:
-    response: Response = await call_next(request)
+# Value Objects
+class ContentType(StrEnum):
+    html = "text/html"
+    svg = "image/svg+xml"
+    xml = "application/xml"
 
-    if "text/html" in response.headers.get("content-type", ""):
+
+@app.middleware("http")
+async def minify_middleware(request: Request, call_next: Callable) -> Response:
+    SVG_OR_XML: tuple = (ContentType.svg, ContentType.xml)
+    response: Response = await call_next(request)
+    content_type: str = response.headers.get("content-type", "")
+
+    if any(ct in content_type for ct in (ContentType.html, *SVG_OR_XML)):
         response_body: bytes = b""
+        minified_content: bytes = b""
 
         async for chunk in response.body_iterator:
             response_body += chunk
 
-        minified_content: bytes = minify(
-            response_body.decode(ENCODING),
-            minify_css=True,
-            minify_js=True,
-        ).encode(ENCODING)
+        response_body_decoded: str = response_body.decode(ENCODING)
+
+        if ContentType.html in content_type:
+            minified_content = minify(
+                response_body_decoded,
+                minify_css=True,
+                minify_js=True,
+            ).encode(ENCODING)
+        elif any(ct in content_type for ct in SVG_OR_XML):
+            minified_content = etree.tostring(
+                element_or_tree=etree.XML(
+                    text=response_body_decoded,
+                    parser=etree.XMLParser(remove_blank_text=True),
+                ),
+                encoding=ENCODING,
+            )
 
         # Update the response body and content length
         response.headers["content-length"] = str(len(minified_content))

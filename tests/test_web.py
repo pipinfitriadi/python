@@ -13,7 +13,7 @@ from fastapi.testclient import TestClient
 from httpx import Response
 from pytest_mock import MockerFixture
 
-from voxrow.web import app
+from voxrow.web import ContentType, app
 
 # Constants
 TEST_FILES_DIR: Path = Path("tests") / "files"
@@ -27,7 +27,7 @@ def test_favicon() -> None:
     response: Response = client.get("/favicon.ico")
 
     assert response.status_code == 200
-    assert response.headers["content-type"] == "image/svg+xml"
+    assert response.headers["content-type"] == ContentType.svg
     assert response.text != ""
 
 
@@ -47,5 +47,5 @@ def test_root(mocker: MockerFixture) -> None:
     response: Response = client.get("/")
 
     assert response.status_code == 200
-    assert "text/html" in response.headers["content-type"]
+    assert ContentType.html in response.headers["content-type"]
     assert response.text != ""
