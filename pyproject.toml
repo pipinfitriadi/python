@@ -43,7 +43,7 @@ dependencies = [
 dynamic = ['version']
 
 [project.scripts]
-app = 'voxrow.web:app'
+app = 'voxrow.web.entrypoint:app'
 
 [dependency-groups]
 code-coverage = [

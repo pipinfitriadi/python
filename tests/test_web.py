@@ -13,8 +13,8 @@ from fastapi.testclient import TestClient
 from httpx import Response
 from pytest_mock import MockerFixture
 
-from voxrow.web import app
 from voxrow.web.domain.value_objects import ContentType
+from voxrow.web.entrypoint import app
 
 # Constants
 TEST_FILES_DIR: Path = Path("tests") / "files"
