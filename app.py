@@ -6,6 +6,6 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 30 December 2025
 
-from voxrow.web import app
+from voxrow.web.entrypoint import app
 
 app
