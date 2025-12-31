@@ -43,7 +43,7 @@ dependencies = [
 dynamic = ['version']
 
 [project.scripts]
-app = 'voxrow.web.entrypoint:app'
+'voxrow.web' = 'voxrow.web.entrypoint:app'
 
 [dependency-groups]
 code-coverage = [
@@ -75,6 +75,9 @@ include = [
     'voxrow.data',
     'voxrow.web',
 ]
+
+[tool.setuptools.package-data]
+'voxrow.web' = ['static/*', 'templates/*']
 
 [tool.setuptools-git-versioning]
 enabled = true
