@@ -9,7 +9,6 @@
 import html
 import json
 from calendar import monthrange
-from enum import StrEnum
 from io import StringIO
 from os import getenv
 from pathlib import Path
@@ -28,10 +27,12 @@ from fasthx.jinja import Jinja
 from lxml import etree
 from minify_html import minify
 
-# Constants
-ENCODING: str = "utf-8"
-ROOT_DIR: Path = Path("voxrow") / "web"
-STATIC_DIR: Path = ROOT_DIR / "static"
+from .domain.value_objects import (
+    ENCODING,
+    ROOT_DIR,
+    STATIC_DIR,
+    ContentType,
+)
 
 # Variables
 app: FastAPI = FastAPI(
@@ -39,13 +40,6 @@ app: FastAPI = FastAPI(
     redoc_url=None,
 )
 jinja: Jinja = Jinja(Jinja2Templates(directory=ROOT_DIR / "templates"))
-
-
-# Value Objects
-class ContentType(StrEnum):
-    html = "text/html"
-    svg = "image/svg+xml"
-    xml = "application/xml"
 
 
 @app.middleware("http")
@@ -97,6 +91,7 @@ app.mount(
 )
 
 
+# Routes
 @app.get("/favicon.ico", include_in_schema=False)
 async def favicon():
     return FileResponse(STATIC_DIR / "favicon.svg")
