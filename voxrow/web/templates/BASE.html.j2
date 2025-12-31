@@ -4,8 +4,10 @@ Unauthorized copying of this file, via any medium is strictly prohibited
 Proprietary and confidential
 Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 27 December 2025 #}
 
+{# Constants #}
+{% set DOMAIN = "voxrow.com" %}
+{% set GTAG_ID = "G-DJE4CN0PPC" %}
 {% set TITLE = TITLE|default('VOXROW') %}
-{% set domain = "voxrow.com" %}
 
 <!DOCTYPE html>
 <html lang="id">
@@ -20,7 +22,7 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 27 December 2025 #}
     <!-- Google tag (gtag.js) -->
     <script
         async
-        src="https://www.googletagmanager.com/gtag/js?id=G-DJE4CN0PPC"
+        src="https://www.googletagmanager.com/gtag/js?id={{ GTAG_ID }}"
     ></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -29,8 +31,8 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 27 December 2025 #}
         }
         gtag('js', new Date());
 
-        gtag('config', 'G-DJE4CN0PPC', {
-            cookie_domain: '{{ domain }}',
+        gtag('config', '{{ GTAG_ID }}', {
+            cookie_domain: '{{ DOMAIN }}',
             cookie_flags: 'SameSite=None;Secure'
         });
     </script>
