@@ -23,7 +23,7 @@ Code Quality:
   extends: .pip-variables
   rules:
     - changes: ['**/*.py']
-  image: python:3.9-slim-bookworm
+  image: python:3.13-slim-bookworm
   before_script:
     - pip install --editable . --group code-quality
   script:
