@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+
+# Copyright (C) Pipin Fitriadi - All Rights Reserved
+
+# Unauthorized copying of this file, via any medium is strictly prohibited
+# Proprietary and confidential
+# Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 13 January 2026
+
+from abc import ABC, abstractmethod
+from typing import Iterator
+
+from pydantic import validate_call
+
+
+class AbstractAddRepository(ABC):
+    @abstractmethod
+    @validate_call
+    def add(self, value: any) -> None:
+        pass
+
+
+class AbstractAllRepository(ABC):
+    @abstractmethod
+    def all(self) -> Iterator[any]:
+        pass
+
+
+class AbstractGetRepository(ABC):
+    @abstractmethod
+    @validate_call
+    def get(self, id: any) -> any:
+        pass
