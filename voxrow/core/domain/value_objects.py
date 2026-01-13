@@ -21,7 +21,12 @@ class Rows(Iterator[Row]):
         source_type: any,
         handler: GetCoreSchemaHandler,
     ) -> CoreSchema:
-        return core_schema.generator_schema(handler.generate_schema(Row))
+        return core_schema.chain_schema(
+            [
+                core_schema.is_instance_schema(Iterator),
+                core_schema.generator_schema(handler.generate_schema(Row)),
+            ]
+        )
 
 
 Data: TypeAlias = Union[Rows, Any]

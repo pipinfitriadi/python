@@ -6,20 +6,20 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 13 January 2026
 
-from httpx import Response, get
-from pydantic import HttpUrl, validate_call
+import json
+from pathlib import Path
+
+from pydantic import validate_call
 from pydantic.dataclasses import dataclass
 
 from ...domain.value_objects import Data
-from . import AbstractSourcePort
+from . import AbstractDestinationPort
 
 
 @dataclass(frozen=True)
-class HttpxSourcePort(AbstractSourcePort):
-    url: HttpUrl
+class PathDestinationPort(AbstractDestinationPort):
+    file: Path
 
     @validate_call
-    def fetch(self) -> Data:
-        resp: Response = get(url=str(self.url))
-
-        return resp.json()
+    def load(self, data: Data) -> None:
+        self.file.write_text(json.dumps(data, default=str))
