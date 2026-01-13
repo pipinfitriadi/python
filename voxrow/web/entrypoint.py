@@ -7,14 +7,12 @@
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 31 December 2025
 
 import html
-import json
 from calendar import monthrange
 from io import StringIO
 from os import getenv
 from pathlib import Path
 from typing import Callable
 
-import httpx
 import lxml.html
 import numpy as np
 import pandas as pd
@@ -27,6 +25,7 @@ from fasthx.jinja import Jinja
 from lxml import etree
 from minify_html import minify
 
+from ..core.adapters.ports import httpx, pathlib
 from .domain.value_objects import (
     ENCODING,
     ROOT_DIR,
@@ -103,16 +102,15 @@ async def root() -> dict:
     json_file: Path = STATIC_DIR / "inflation.json"
 
     if not json_file.is_file():
-        resp: httpx.Response = httpx.get(
-            "https://webapi.bps.go.id/v1/api/view/domain/{DOMAIN}/model/{MODEL}/lang/{LANG}/id/{ID}/key/{KEY}/".format(
+        data: dict = httpx.HttpxSourcePort(
+            url="https://webapi.bps.go.id/v1/api/view/domain/{DOMAIN}/model/{MODEL}/lang/{LANG}/id/{ID}/key/{KEY}/".format(
                 KEY=getenv("BPS_KEY"),
                 LANG="ind",
                 DOMAIN="0000",  # Pusat
                 MODEL="statictable",  # Static Table
                 ID=915,  # Tingkat Inflasi Harga Konsumen Nasional Tahunan (Y-on-Y)
             )
-        )
-        data: dict = resp.json()["data"]
+        ).fetch()["data"]
         title: str = lxml.html.fromstring(data["title"]).text.strip()
         df: pd.DataFrame = pd.read_html(
             io=StringIO(html.unescape(data["table"])),
@@ -173,17 +171,14 @@ async def root() -> dict:
 
         df_flat_table.set_index("date", inplace=True)
 
-        json_file.write_text(
-            json.dumps(
-                dict(
-                    title=title,
-                    data=(
-                        df_flat_table.replace({np.nan: None})
-                        .reset_index()
-                        .to_dict("records")
-                    ),
+        pathlib.PathDestinationPort(file=json_file).load(
+            data=dict(
+                title=title,
+                data=(
+                    df_flat_table.replace({np.nan: None})
+                    .reset_index()
+                    .to_dict("records")
                 ),
-                default=str,
             )
         )
 
