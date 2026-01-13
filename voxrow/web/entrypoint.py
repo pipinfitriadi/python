@@ -6,16 +6,10 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 31 December 2025
 
-import html
-from calendar import monthrange
-from io import StringIO
 from os import getenv
 from pathlib import Path
 from typing import Callable
 
-import lxml.html
-import numpy as np
-import pandas as pd
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
@@ -26,6 +20,8 @@ from lxml import etree
 from minify_html import minify
 
 from ..core.adapters.ports import httpx, pathlib
+from ..data.adapters import ports
+from ..data.services import handlers
 from .domain.value_objects import (
     ENCODING,
     ROOT_DIR,
@@ -102,84 +98,18 @@ async def root() -> dict:
     json_file: Path = STATIC_DIR / "inflation.json"
 
     if not json_file.is_file():
-        data: dict = httpx.HttpxSourcePort(
-            url="https://webapi.bps.go.id/v1/api/view/domain/{DOMAIN}/model/{MODEL}/lang/{LANG}/id/{ID}/key/{KEY}/".format(
-                KEY=getenv("BPS_KEY"),
-                LANG="ind",
-                DOMAIN="0000",  # Pusat
-                MODEL="statictable",  # Static Table
-                ID=915,  # Tingkat Inflasi Harga Konsumen Nasional Tahunan (Y-on-Y)
-            )
-        ).fetch()["data"]
-        title: str = lxml.html.fromstring(data["title"]).text.strip()
-        df: pd.DataFrame = pd.read_html(
-            io=StringIO(html.unescape(data["table"])),
-            header=2,
-            index_col=0,
-            decimal=",",
-            thousands=".",
-            flavor="lxml",
-        )[0][:12]
-        df_flat_table: pd.DataFrame = (
-            df.reset_index()
-            .rename(columns={"index": "Bulan"})
-            .melt(
-                id_vars="Bulan",
-                var_name="Tahun",
-                value_name="inflation",
-            )
-        )
-        df_flat_table["date"] = (
-            pd.concat(
-                [
-                    df_flat_table["Tahun"].astype(int),
-                    df_flat_table["Bulan"].map(
-                        {
-                            "Januari": 1,
-                            "Februari": 2,
-                            "Maret": 3,
-                            "April": 4,
-                            "Mei": 5,
-                            "Juni": 6,
-                            "Juli": 7,
-                            "Agustus": 8,
-                            "September": 9,
-                            "Oktober": 10,
-                            "November": 11,
-                            "Desember": 12,
-                        }
-                    ),
-                ],
-                axis=1,
-            )
-            .apply(
-                lambda row: pd.to_datetime(
-                    "{year}-{month}-{day}".format(
-                        year=row["Tahun"],
-                        month=row["Bulan"],
-                        day=monthrange(row["Tahun"], row["Bulan"])[1],
-                    )
-                ),
-                axis=1,
-            )
-            .dt.date
-        )
-        df_flat_table["inflation"] = df_flat_table["inflation"].astype(float)
-
-        del df_flat_table["Bulan"]
-        del df_flat_table["Tahun"]
-
-        df_flat_table.set_index("date", inplace=True)
-
-        pathlib.PathDestinationPort(file=json_file).load(
-            data=dict(
-                title=title,
-                data=(
-                    df_flat_table.replace({np.nan: None})
-                    .reset_index()
-                    .to_dict("records")
-                ),
-            )
+        handlers.data_mart(
+            source=httpx.HttpxSourcePort(
+                url="https://webapi.bps.go.id/v1/api/view/domain/{DOMAIN}/model/{MODEL}/lang/{LANG}/id/{ID}/key/{KEY}/".format(
+                    KEY=getenv("BPS_KEY"),
+                    LANG="ind",
+                    DOMAIN="0000",  # Pusat
+                    MODEL="statictable",  # Static Table
+                    ID=915,  # Tingkat Inflasi Harga Konsumen Nasional Tahunan (Y-on-Y)
+                )
+            ),
+            transform=ports.InflationTransformPort(),
+            destination=pathlib.PathDestinationPort(file=json_file),
         )
 
     return dict(title="Inflasi")
