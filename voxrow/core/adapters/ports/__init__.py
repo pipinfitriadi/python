@@ -13,14 +13,14 @@ from pydantic import validate_call
 from ...domain.value_objects import Data
 
 
-class AbstractSourcePort(ABC):
+class AbstractSourcePort(ABC):  # pragma: no cover
     @abstractmethod
     @validate_call
     def extract(self) -> Data:
         pass
 
 
-class AbstractDestinationPort(ABC):
+class AbstractDestinationPort(ABC):  # pragma: no cover
     @abstractmethod
     @validate_call
     def loads(self, *args: Data) -> None:

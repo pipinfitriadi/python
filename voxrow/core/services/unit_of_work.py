@@ -17,7 +17,7 @@ from ..domain.value_objects import CONFIG_DICT
 
 
 # Abstracts
-class AbstractUnitOfWork:
+class AbstractUnitOfWork:  # pragma: no cover
     def __enter__(self) -> Self:
         return self
 
