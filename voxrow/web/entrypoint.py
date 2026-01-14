@@ -112,7 +112,7 @@ async def root() -> dict:
                 ),
             ),
             destination=pathlib.PathDestinationPort(files=(json_file,)),
-            transform=domain_services.inflation_bps_transform,
+            transform=domain_services.inflation_bps_to_datamart,
         ) as uow:
             handlers.etl(uow)
 
