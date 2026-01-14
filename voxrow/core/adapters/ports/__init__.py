@@ -16,19 +16,12 @@ from ...domain.value_objects import Data
 class AbstractSourcePort(ABC):
     @abstractmethod
     @validate_call
-    def fetch(self) -> Data:
-        pass
-
-
-class AbstractTransformPort(ABC):
-    @abstractmethod
-    @validate_call
-    def enrich(self, data: Data) -> Data:
+    def extract(self) -> Data:
         pass
 
 
 class AbstractDestinationPort(ABC):
     @abstractmethod
     @validate_call
-    def load(self, data: Data) -> None:
+    def loads(self, *args: Data) -> None:
         pass
