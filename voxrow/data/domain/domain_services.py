@@ -20,7 +20,7 @@ from ...core.domain.value_objects import Data
 
 
 @validate_call
-def inflation_bps_transform(*args: Data) -> Tuple[Data, ...]:
+def inflation_bps_to_datamart(*args: Data) -> Tuple[Data, ...]:
     data: Data = args[0]["data"]
     title: str = lxml.html.fromstring(data["title"]).text.strip()
     df: pd.DataFrame = pd.read_html(
