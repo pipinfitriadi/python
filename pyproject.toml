@@ -36,11 +36,19 @@ classifiers = [
 dependencies = [
     'fastapi[standard]',
     'fasthx[jinja]',
-    'pandas',
-    'lxml',
     'minify-html',
 ]
 dynamic = ['version']
+
+[project.optional-dependencies]
+core = [
+    'pydantic',
+    'httpx',
+]
+data = [
+    'lxml',
+    'pandas',
+]
 
 [project.scripts]
 'voxrow.web' = 'voxrow.web.entrypoint:app'
