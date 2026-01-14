@@ -25,7 +25,7 @@ Code Quality:
     - changes: ['**/*.py']
   image: python:3.13-slim-bookworm
   before_script:
-    - pip install . --group code-quality
+    - pip install --editable . --group code-quality
   script:
     - flake8
 Code Coverage:
@@ -40,7 +40,7 @@ Code Coverage:
     - <<: *pypi-rule
   image: python:3.13-slim-bookworm
   before_script:
-    - pip install . --group code-coverage
+    - pip install --editable . --group code-coverage
   script:
     - coverage run -m pytest -rfEP -q --junit-xml=code-coverage.xml
     - coverage report -m
