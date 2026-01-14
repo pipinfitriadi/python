@@ -13,14 +13,28 @@ from fastapi.testclient import TestClient
 from httpx import Response
 from pytest_mock import MockerFixture
 
-from voxrow.web.domain.value_objects import ContentType
-from voxrow.web.entrypoint import app
+from voxrow.data.domain.value_objects import Boto3Credential
+from voxrow.web.domain.value_objects import ContentType, Settings
+from voxrow.web.entrypoint import app, get_settings
 
 # Constants
 TEST_FILES_DIR: Path = Path("tests") / "files"
 TEST_FILE_INFLATION: Path = TEST_FILES_DIR / "datalake" / "bps" / "inflation.json"
 
+
+def get_test_settings() -> Settings:
+    return Settings(
+        bps_key="123",
+        cloudflare_r2=Boto3Credential(  # noqa: S106
+            endpoint_url="https://123.r2.cloudflarestorage.com",
+            aws_access_key_id="123",
+            aws_secret_access_key="123",
+        ),
+    )
+
+
 # Variables
+app.dependency_overrides[get_settings] = get_test_settings
 client: TestClient = TestClient(app)
 
 

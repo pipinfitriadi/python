@@ -9,7 +9,7 @@
 from types import TracebackType
 from typing import Optional, Self, Tuple
 
-from pydantic import BaseModel, validate_call
+from pydantic import BaseModel, ConfigDict, validate_call
 
 from ..adapters import ports
 from ..domain.domain_services import Transform
@@ -57,7 +57,7 @@ class AbstractUnitOfWork:  # pragma: no cover
 
 # Implementations
 class EtlUnitOfWork(BaseModel, AbstractUnitOfWork):
-    model_config = CONFIG_DICT
+    model_config: ConfigDict = CONFIG_DICT
 
     sources: Tuple[ports.AbstractSourcePort, ...]
     destination: ports.AbstractDestinationPort
