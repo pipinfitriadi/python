@@ -8,8 +8,11 @@
 
 from typing import Any, Dict, Iterator, TypeAlias, Union
 
-from pydantic import GetCoreSchemaHandler
+from pydantic import ConfigDict, GetCoreSchemaHandler
 from pydantic_core import CoreSchema, core_schema
+
+# Constants
+CONFIG_DICT = ConfigDict(arbitrary_types_allowed=True)
 
 Row: TypeAlias = Dict[str, Any]
 

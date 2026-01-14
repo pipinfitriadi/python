@@ -19,7 +19,7 @@ class HttpxSourcePort(AbstractSourcePort):
     url: HttpUrl
 
     @validate_call
-    def fetch(self) -> Data:
+    def extract(self) -> Data:
         resp: Response = get(url=str(self.url))
 
         return resp.json()

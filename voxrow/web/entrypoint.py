@@ -20,8 +20,8 @@ from lxml import etree
 from minify_html import minify
 
 from ..core.adapters.ports import httpx, pathlib
-from ..data.adapters import ports
-from ..data.services import handlers
+from ..core.services import handlers, unit_of_work
+from ..data.domain import domain_services
 from .domain.value_objects import (
     ENCODING,
     ROOT_DIR,
@@ -98,18 +98,22 @@ async def root() -> dict:
     json_file: Path = STATIC_DIR / "inflation.json"
 
     if not json_file.is_file():
-        handlers.data_mart(
-            source=httpx.HttpxSourcePort(
-                url="https://webapi.bps.go.id/v1/api/view/domain/{DOMAIN}/model/{MODEL}/lang/{LANG}/id/{ID}/key/{KEY}/".format(
-                    KEY=getenv("BPS_KEY"),
-                    LANG="ind",
-                    DOMAIN="0000",  # Pusat
-                    MODEL="statictable",  # Static Table
-                    ID=915,  # Tingkat Inflasi Harga Konsumen Nasional Tahunan (Y-on-Y)
-                )
+        with unit_of_work.EtlUnitOfWork(
+            sources=(
+                httpx.HttpxSourcePort(
+                    url="https://webapi.bps.go.id/v1/api/view/domain/{DOMAIN}/model/{MODEL}/lang/{LANG}/id/{ID}/key/{KEY}/".format(
+                        KEY=getenv("BPS_KEY"),
+                        LANG="ind",
+                        DOMAIN="0000",  # Pusat
+                        MODEL="statictable",  # Static Table
+                        # Tingkat Inflasi Harga Konsumen Nasional Tahunan (Y-on-Y)
+                        ID=915,
+                    )
+                ),
             ),
-            transform=ports.InflationTransformPort(),
-            destination=pathlib.PathDestinationPort(file=json_file),
-        )
+            destination=pathlib.PathDestinationPort(files=(json_file,)),
+            transform=domain_services.inflation_bps_transform,
+        ) as uow:
+            handlers.etl(uow)
 
     return dict(title="Inflasi")
