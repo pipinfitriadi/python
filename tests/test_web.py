@@ -24,6 +24,7 @@ TEST_FILE_INFLATION: Path = TEST_FILES_DIR / "datalake" / "bps" / "inflation.jso
 client: TestClient = TestClient(app)
 
 
+# Tests
 def test_favicon() -> None:
     response: Response = client.get("/favicon.ico")
 
@@ -41,7 +42,7 @@ def test_root(mocker: MockerFixture) -> None:
 
     mocker_response: mocker.Mock = mocker.Mock()
     mocker_response.json.return_value = json.loads(TEST_FILE_INFLATION.read_text())
-    mocker.patch("httpx.get", return_value=mocker_response)
+    mocker.patch("voxrow.core.adapters.ports.httpx.get", return_value=mocker_response)
 
     mocker.patch.object(Path, "write_text", side_effect=None)
 
