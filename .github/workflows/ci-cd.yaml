@@ -41,7 +41,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install dependencies
-        run: pip install --editable . --group code-quality
+        run: pip install --editable '.[core, data]' --group code-quality
       - name: Test
         run: flake8
   code-coverage:
@@ -66,7 +66,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install dependencies
-        run: pip install --editable . --group code-coverage
+        run: pip install --editable '.[core, data]' --group code-coverage
       - name: Test
         run: coverage run -m pytest -rfEP -q --junit-xml=code-coverage.xml
       - name: Display coverage
