@@ -6,11 +6,11 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 31 December 2025
 
-from os import getenv
+from functools import lru_cache
 from pathlib import Path
 from typing import Callable
 
-from fastapi import FastAPI, Request, Response
+from fastapi import Depends, FastAPI, Request, Response
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -21,12 +21,12 @@ from minify_html import minify
 
 from ..core.adapters.ports import httpx, pathlib
 from ..core.services import handlers, unit_of_work
-from ..data.domain import domain_services
+from ..data.domain import domain_services, value_objects
 from .domain.value_objects import (
-    ENCODING,
     ROOT_DIR,
     STATIC_DIR,
     ContentType,
+    Settings,
 )
 
 # Variables
@@ -35,6 +35,11 @@ app: FastAPI = FastAPI(
     redoc_url=None,
 )
 jinja: Jinja = Jinja(Jinja2Templates(directory=ROOT_DIR / "templates"))
+
+
+@lru_cache()
+def get_settings() -> Settings:  # pragma: no cover
+    return Settings()
 
 
 @app.middleware("http")
@@ -50,21 +55,21 @@ async def minify_middleware(request: Request, call_next: Callable) -> Response:
         async for chunk in response.body_iterator:
             response_body += chunk
 
-        response_body_decoded: str = response_body.decode(ENCODING)
+        response_body_decoded: str = response_body.decode(value_objects.ENCODING)
 
         if ContentType.html in content_type:
             minified_content = minify(
                 response_body_decoded,
                 minify_css=True,
                 minify_js=True,
-            ).encode(ENCODING)
+            ).encode(value_objects.ENCODING)
         elif any(ct in content_type for ct in SVG_OR_XML):
             minified_content = etree.tostring(
                 element_or_tree=etree.XML(
                     text=response_body_decoded,
                     parser=etree.XMLParser(remove_blank_text=True),
                 ),
-                encoding=ENCODING,
+                encoding=value_objects.ENCODING,
             )
 
         # Update the response body and content length
@@ -94,7 +99,9 @@ async def favicon():
 
 @app.get("/", include_in_schema=False)
 @jinja.page("inflation.html.j2")
-async def root() -> dict:
+async def root(
+    settings: Settings = Depends(get_settings),  # noqa: B008
+) -> dict:
     json_file: Path = STATIC_DIR / "inflation.json"
 
     if not json_file.is_file():
@@ -102,7 +109,7 @@ async def root() -> dict:
             sources=(
                 httpx.HttpxSourcePort(
                     url="https://webapi.bps.go.id/v1/api/view/domain/{DOMAIN}/model/{MODEL}/lang/{LANG}/id/{ID}/key/{KEY}/".format(
-                        KEY=getenv("BPS_KEY"),
+                        KEY=settings.bps_key.get_secret_value(),
                         LANG="ind",
                         DOMAIN="0000",  # Pusat
                         MODEL="statictable",  # Static Table

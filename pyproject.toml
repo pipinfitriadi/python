@@ -48,6 +48,7 @@ core = [
 data = [
     'lxml',
     'pandas',
+    'boto3',
 ]
 
 [project.scripts]
