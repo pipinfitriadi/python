@@ -23,5 +23,5 @@ class AbstractSourcePort(ABC):  # pragma: no cover
 class AbstractDestinationPort(ABC):  # pragma: no cover
     @abstractmethod
     @validate_call
-    def loads(self, *args: Data) -> None:
+    def load(self, data: Data) -> None:
         pass
