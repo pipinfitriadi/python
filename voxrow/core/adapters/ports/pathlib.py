@@ -12,7 +12,7 @@ from pathlib import Path
 from pydantic import validate_call
 from pydantic.dataclasses import dataclass
 
-from ...domain.value_objects import Data
+from ...domain.value_objects import Data, ResourceLocation
 from . import AbstractDestinationPort
 
 
@@ -21,5 +21,7 @@ class PathDestinationPort(AbstractDestinationPort):
     file: Path
 
     @validate_call
-    def load(self, data: Data) -> None:
+    def load(self, data: Data) -> ResourceLocation:
         self.file.write_text(json.dumps(data, default=str))
+
+        return self.file
