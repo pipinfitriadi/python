@@ -7,13 +7,13 @@
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 14 January 2026
 
 from types import TracebackType
-from typing import Optional, Self, Tuple
+from typing import Optional, Self, Tuple, Union
 
 from pydantic import BaseModel, ConfigDict, validate_call
 
 from ..adapters import ports
 from ..domain.domain_services import Transform
-from ..domain.value_objects import CONFIG_DICT
+from ..domain.value_objects import CONFIG_DICT, Data
 
 
 # Abstracts
@@ -59,6 +59,6 @@ class AbstractUnitOfWork:  # pragma: no cover
 class EtlUnitOfWork(BaseModel, AbstractUnitOfWork):
     model_config: ConfigDict = CONFIG_DICT
 
-    sources: Tuple[ports.AbstractSourcePort, ...]
+    sources: Tuple[Union[Data, ports.AbstractSourcePort], ...]
     destination: ports.AbstractDestinationPort
     transform: Optional[Transform]
