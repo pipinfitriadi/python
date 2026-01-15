@@ -129,10 +129,8 @@ async def extract_inflation_bps(
         destination=boto3.Boto3DestinationPort(
             credential=settings.cloudflare_r2,
             bucket=bucket,
-            boto3_object=value_objects.Boto3Object(
-                key=f"bps/inflation/{filename}.json",
-                content_type=ContentType.json,
-            ),
+            key=f"bps/inflation/{filename}.json",
+            content_type=ContentType.json,
         ),
     ) as uow:
         datalake_key: Path = handlers.etl(uow)
@@ -148,10 +146,8 @@ async def extract_inflation_bps(
         destination=boto3.Boto3DestinationPort(
             credential=settings.cloudflare_r2,
             bucket="web",
-            boto3_object=value_objects.Boto3Object(
-                key="inflation.json",
-                content_type=ContentType.json,
-            ),
+            key="inflation.json",
+            content_type=ContentType.json,
         ),
         transform=domain_services.inflation_bps_to_datamart,
     ) as uow:
