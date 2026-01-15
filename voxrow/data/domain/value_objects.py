@@ -6,12 +6,8 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 14 January 2026
 
-from pathlib import Path
-
 from pydantic import HttpUrl, SecretStr
 from pydantic.dataclasses import dataclass
-
-from ...core.domain import value_objects
 
 # Constants
 ENCODING: str = "utf-8"
@@ -25,9 +21,3 @@ class Boto3Credential:
     aws_secret_access_key: SecretStr
     region_name: str = "auto"
     service_name: str = "s3"
-
-
-@dataclass
-class Boto3Object:
-    key: Path
-    content_type: value_objects.ContentType
