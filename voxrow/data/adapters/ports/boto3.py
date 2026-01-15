@@ -13,7 +13,7 @@ from botocore.client import BaseClient
 from pydantic import validate_call
 
 from ....core.adapters import ports
-from ....core.domain.value_objects import Data
+from ....core.domain.value_objects import Data, ResourceLocation
 from ...domain.value_objects import ENCODING, Boto3Credential, Boto3Object
 
 
@@ -80,10 +80,12 @@ class Boto3DestinationPort(AbstractBoto3, ports.AbstractDestinationPort):
         self.boto3_object = boto3_object
 
     @validate_call
-    def load(self, data: Data) -> None:
+    def load(self, data: Data) -> ResourceLocation:
         self.client.put_object(
             Bucket=self.bucket,
             Key=str(self.boto3_object.key),
             Body=data,
             ContentType=self.boto3_object.content_type,
         )
+
+        return self.boto3_object.key

@@ -6,6 +6,7 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 13 January 2026
 
+from pathlib import Path
 from typing import Any, Dict, Iterator, TypeAlias, Union
 
 from pydantic import ConfigDict, GetCoreSchemaHandler
@@ -14,6 +15,7 @@ from pydantic_core import CoreSchema, core_schema
 # Constants
 CONFIG_DICT = ConfigDict(arbitrary_types_allowed=True)
 
+ResourceLocation: TypeAlias = Path
 Row: TypeAlias = Dict[str, Any]
 
 
