@@ -6,7 +6,6 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 31 December 2025
 
-import json
 from calendar import monthrange
 from datetime import date, datetime
 from functools import lru_cache
@@ -135,7 +134,6 @@ async def extract_inflation_bps(
                 content_type=ContentType.json,
             ),
         ),
-        transform=lambda *args: json.dumps(args[0]),
     ) as uow:
         datalake_key: Path = handlers.etl(uow)
 
@@ -155,17 +153,12 @@ async def extract_inflation_bps(
                 content_type=ContentType.json,
             ),
         ),
-        transform=lambda *args: json.dumps(
-            domain_services.inflation_bps_to_datamart(json.loads(args[0])),
-            default=str,
-        ),
+        transform=domain_services.inflation_bps_to_datamart,
     ) as uow:
         handlers.etl(uow)
 
 
 @app.get("/", include_in_schema=False)
 @jinja.page("inflation.html.j2")
-async def root(
-    settings: Settings = Depends(get_settings),  # noqa: B008
-) -> dict:
+async def root() -> dict:
     return dict(title="Inflasi")
