@@ -6,7 +6,7 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 9 December 2025
 
-import json
+# import json
 from pathlib import Path
 
 from fastapi.testclient import TestClient
@@ -23,7 +23,7 @@ TEST_FILES_DIR: Path = Path("tests") / "files"
 TEST_FILE_INFLATION: Path = TEST_FILES_DIR / "datalake" / "bps" / "inflation.json"
 
 
-def get_test_settings() -> Settings:
+def fake_get_settings() -> Settings:
     return Settings(
         bps_key="123",
         cloudflare_r2=Boto3Credential(  # noqa: S106
@@ -35,7 +35,7 @@ def get_test_settings() -> Settings:
 
 
 # Variables
-app.dependency_overrides[get_settings] = get_test_settings
+app.dependency_overrides[get_settings] = fake_get_settings
 client: TestClient = TestClient(app)
 
 
@@ -49,17 +49,11 @@ def test_favicon() -> None:
 
 
 def test_root(mocker: MockerFixture) -> None:
-    mocker.patch.object(
-        Path,
-        "is_file",
-        return_value=False,
-    )
+    # mocker_response: mocker.Mock = mocker.Mock()
+    # mocker_response.json.return_value = json.loads(TEST_FILE_INFLATION.read_text())
+    # mocker.patch("voxrow.core.adapters.ports.httpx.get", return_value=mocker_response)
 
-    mocker_response: mocker.Mock = mocker.Mock()
-    mocker_response.json.return_value = json.loads(TEST_FILE_INFLATION.read_text())
-    mocker.patch("voxrow.core.adapters.ports.httpx.get", return_value=mocker_response)
-
-    mocker.patch.object(Path, "write_text", side_effect=None)
+    # mocker.patch.object(Path, "write_text", side_effect=None)
 
     response: Response = client.get("/")
 
