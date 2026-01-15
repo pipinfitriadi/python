@@ -6,6 +6,7 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 13 January 2026
 
+from enum import StrEnum
 from pathlib import Path
 from typing import Any, Dict, Iterator, TypeAlias, Union
 
@@ -35,3 +36,10 @@ class Rows(Iterator[Row]):
 
 
 Data: TypeAlias = Union[Rows, Any]
+
+
+class ContentType(StrEnum):
+    html = "text/html"
+    json = "application/json"
+    svg = "image/svg+xml"
+    xml = "application/xml"

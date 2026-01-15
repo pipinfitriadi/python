@@ -13,8 +13,9 @@ from fastapi.testclient import TestClient
 from httpx import Response
 from pytest_mock import MockerFixture
 
+from voxrow.core.domain.value_objects import ContentType
 from voxrow.data.domain.value_objects import Boto3Credential
-from voxrow.web.domain.value_objects import ContentType, Settings
+from voxrow.web.domain.value_objects import Settings
 from voxrow.web.entrypoint import app, get_settings
 
 # Constants
