@@ -8,7 +8,6 @@
 
 import json
 from pathlib import Path
-from typing import Tuple
 
 from pydantic import validate_call
 from pydantic.dataclasses import dataclass
@@ -19,9 +18,8 @@ from . import AbstractDestinationPort
 
 @dataclass(frozen=True)
 class PathDestinationPort(AbstractDestinationPort):
-    files: Tuple[Path, ...]
+    file: Path
 
     @validate_call
-    def loads(self, *args: Data) -> None:
-        for file, data in zip(self.files, args):
-            file.write_text(json.dumps(data, default=str))
+    def load(self, data: Data) -> None:
+        self.file.write_text(json.dumps(data, default=str))

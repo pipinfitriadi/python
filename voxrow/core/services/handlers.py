@@ -15,6 +15,6 @@ def etl(uow: unit_of_work.EtlUnitOfWork) -> None:
 
     sources: tuple[Data, ...] = tuple(source.extract() for source in uow.sources)
 
-    uow.destination.loads(
-        *(sources if uow.transform is None else uow.transform(*sources))
+    uow.destination.load(
+        sources[0] if uow.transform is None else uow.transform(*sources)
     )

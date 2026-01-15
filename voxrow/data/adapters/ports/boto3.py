@@ -7,7 +7,6 @@
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 14 January 2026
 
 from pathlib import Path
-from typing import Tuple
 
 from boto3 import client
 from botocore.client import BaseClient
@@ -67,25 +66,24 @@ class Boto3SourcePort(AbstractBoto3, ports.AbstractSourcePort):
 
 
 class Boto3DestinationPort(AbstractBoto3, ports.AbstractDestinationPort):
-    objects: Tuple[Boto3Object, ...]
+    boto3_object: Boto3Object
 
     @validate_call
     def __init__(
         self,
         credential: Boto3Credential,
         bucket: str,
-        objects: Tuple[Boto3Object, ...],
+        boto3_object: Boto3Object,
     ) -> None:
         super().__init__(credential, bucket)
 
-        self.objects = objects
+        self.boto3_object = boto3_object
 
     @validate_call
-    def loads(self, *args: Data) -> None:
-        for boto3_object, data in zip(self.objects, args):
-            self.client.put_object(
-                Bucket=self.bucket,
-                Key=str(boto3_object.key),
-                Body=data,
-                ContentType=boto3_object.content_type,
-            )
+    def load(self, data: Data) -> None:
+        self.client.put_object(
+            Bucket=self.bucket,
+            Key=str(self.boto3_object.key),
+            Body=data,
+            ContentType=self.boto3_object.content_type,
+        )
