@@ -7,6 +7,7 @@
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 9 December 2025
 
 # import json
+from http import HTTPStatus
 from pathlib import Path
 
 from fastapi.testclient import TestClient
@@ -43,7 +44,7 @@ client: TestClient = TestClient(app)
 def test_favicon() -> None:
     response: Response = client.get("/favicon.ico")
 
-    assert response.status_code == 200
+    assert response.status_code == HTTPStatus.OK
     assert response.headers["content-type"] == ContentType.svg
     assert response.text != ""
 
@@ -57,6 +58,6 @@ def test_root(mocker: MockerFixture) -> None:
 
     response: Response = client.get("/")
 
-    assert response.status_code == 200
+    assert response.status_code == HTTPStatus.OK
     assert ContentType.html in response.headers["content-type"]
     assert response.text != ""
