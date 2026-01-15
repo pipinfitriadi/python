@@ -61,4 +61,4 @@ class EtlUnitOfWork(BaseModel, AbstractUnitOfWork):
 
     sources: Tuple[Union[Data, ports.AbstractSourcePort], ...]
     destination: ports.AbstractDestinationPort
-    transform: Optional[Transform]
+    transform: Optional[Transform] = None
