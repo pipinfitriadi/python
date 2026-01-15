@@ -6,7 +6,6 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 31 December 2025
 
-from enum import StrEnum
 from pathlib import Path
 
 from pydantic import SecretStr
@@ -17,12 +16,6 @@ from ...data.domain import value_objects
 # Constants
 ROOT_DIR: Path = Path("voxrow") / "web"
 STATIC_DIR: Path = ROOT_DIR / "static"
-
-
-class ContentType(StrEnum):
-    html = "text/html"
-    svg = "image/svg+xml"
-    xml = "application/xml"
 
 
 class Settings(BaseSettings):

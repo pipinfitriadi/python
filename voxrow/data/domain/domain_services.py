@@ -82,9 +82,7 @@ def inflation_bps_to_datamart(*args: Data) -> Tuple[Data, ...]:
 
     df_flat_table.set_index("date", inplace=True)
 
-    return (
-        dict(
-            title=title,
-            data=df_flat_table.replace({np.nan: None}).reset_index().to_dict("records"),
-        ),
+    return dict(
+        title=title,
+        data=df_flat_table.replace({np.nan: None}).reset_index().to_dict("records"),
     )

@@ -15,7 +15,7 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 30 December 2025 #}
                 items-center
                 justify-center
         "
-        hx-get="{{ url_for('static', path='/inflation.json').path }}"
+        hx-get="https://static.{{ DOMAIN }}/inflation.json"
         hx-trigger="load"
         hx-swap="none"
         hx-on::after-request="displayChart(event)"
@@ -49,6 +49,8 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 30 December 2025 #}
                 DASH = [3, 3],
                 response = JSON.parse(event.detail.xhr.responseText);
 
+            console.log(response);
+            console.log(response['title']);
             new Chart(
                 document.getElementById('inflation'),
                 {

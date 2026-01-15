@@ -11,8 +11,11 @@ from pathlib import Path
 from pydantic import HttpUrl, SecretStr
 from pydantic.dataclasses import dataclass
 
+from ...core.domain import value_objects
+
 # Constants
 ENCODING: str = "utf-8"
+TIME_ZONE: str = "Asia/Jakarta"
 
 
 @dataclass
@@ -27,4 +30,4 @@ class Boto3Credential:
 @dataclass
 class Boto3Object:
     key: Path
-    content_type: str
+    content_type: value_objects.ContentType
