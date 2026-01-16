@@ -58,7 +58,6 @@ data = [
 code-coverage = [
     'coverage',
     'pytest',
-    'pytest-mock',
     'toml',
 ]
 code-quality = [
