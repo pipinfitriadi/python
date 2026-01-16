@@ -12,6 +12,7 @@
   # Use https://search.nixos.org/packages to find packages
   packages = with pkgs; [
     gitflow
+    git-lfs
     oh-my-posh
     python312
     nodePackages.vercel
@@ -31,6 +32,7 @@
       "ms-python.flake8"
       "ms-python.python"
       "ms-toolsai.jupyter"
+      "samuelcolvin.jinjahtml"
       "waderyan.gitblame"
       "yzhang.markdown-all-in-one"
     ];
