@@ -86,9 +86,8 @@ def test_favicon() -> None:
 def test_extract_inflation_bps(mock_extract_inflation_bps: Callable) -> None:
     response: Response = client.post("/bps/inflation")
 
-    assert response.status_code == HTTPStatus.OK
-    assert response.headers["content-type"] == ContentType.json
-    assert response.text == "null"
+    assert response.status_code == HTTPStatus.NO_CONTENT
+    assert response.text == ""
 
 
 def test_root() -> None:
