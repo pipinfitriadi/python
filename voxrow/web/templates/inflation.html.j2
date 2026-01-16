@@ -1,0 +1,134 @@
+{# Copyright (C) Pipin Fitriadi - All Rights Reserved
+
+Unauthorized copying of this file, via any medium is strictly prohibited
+Proprietary and confidential
+Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 30 December 2025 #}
+
+{% extends "BASE.html.j2" %}
+{% block body %}
+    <div 
+        class="
+            p-6
+            h-screen
+            flex
+                flex-col
+                items-center
+                justify-center
+        "
+        hx-get="https://static.{{ DOMAIN }}/inflation.json"
+        hx-trigger="load"
+        hx-swap="none"
+        hx-on::after-request="displayChart(event)"
+    >
+        {% include 'logo.html.j2' %}
+        <canvas id="inflation"></canvas>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        function displayChart(event) {
+            function yGridColor(context) {
+                if (context.tick.value < 0) {
+                    return RED;
+                }
+                else if (context.tick.value == 0) {
+                    return YELLOW;
+                }
+                else {
+                    return GREEN;
+                }
+            }
+
+            const
+                BLUE = '#1790D4',
+                GREEN = '#ADCC36',
+                PURPLE = '#971497',
+                ORANGE = '#FC6621',
+                RED = '#97040C',
+                YELLOW = '#FECB2F',
+                DASH = [3, 3],
+                response = JSON.parse(event.detail.xhr.responseText);
+
+            new Chart(
+                document.getElementById('inflation'),
+                {
+                    type: 'line',
+                    data: {
+                        datasets: [{
+                            data: response['data'],
+                            pointStyle: false,
+                            tension: .5,
+                            borderColor: BLUE
+                        }]
+                    },
+                    options: {
+                        parsing: {
+                            xAxisKey: 'date',
+                            yAxisKey: 'inflation'
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            title: {
+                                display: true,
+                                text: response['title'],
+                                color: BLUE
+                            },
+                            tooltip: {
+                                backgroundColor: GREEN,
+                                callbacks: {
+                                    label: function(context) {
+                                        return `Inflasi: ${context.parsed.y.toLocaleString('id-ID')}%`;
+                                    }
+                                },
+                                displayColors: false,
+                                titleColor: BLUE
+                            }
+                        },
+                        scales: {
+                            x: {
+                                adapters: {
+                                    date: {
+                                        locale: 'id'
+                                    }
+                                },
+                                border: {
+                                    display: false
+                                },
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    color: BLUE,
+                                    maxRotation: 0,
+                                    minRotation: 0
+                                },
+                                type: 'time',
+                                time: {
+                                    tooltipFormat: 'd MMMM yyyy'
+                                }
+                            },
+                            y: {
+                                border: {
+                                    dash: DASH,
+                                    display: false
+                                },
+                                grid: {
+                                    color: yGridColor,
+                                    tickBorderDash: DASH
+                                },
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
+                                    },
+                                    color: yGridColor
+                                }
+                            }
+                        }
+                    }
+                }
+            );
+        }
+    </script>
+{% endblock %}

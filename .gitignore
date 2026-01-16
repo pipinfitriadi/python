@@ -15,12 +15,12 @@ build/
 *.env
 *.csv
 *.json
-*.ipynb
 *.txt
 *.xlsx
 code-coverage.xml
 
 !.oh-my-posh/**/*
 !.vscode/**/*
+!tests/files/**/*
 !template.env
 !vercel.json

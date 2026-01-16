@@ -35,11 +35,24 @@ classifiers = [
 ]
 dependencies = [
     'fastapi[standard]',
+    'fasthx[jinja]',
+    'minify-html',
 ]
 dynamic = ['version']
 
+[project.optional-dependencies]
+core = [
+    'pydantic',
+    'httpx',
+]
+data = [
+    'lxml',
+    'pandas',
+    'boto3',
+]
+
 [project.scripts]
-app = 'voxrow.web:app'
+'voxrow.web' = 'voxrow.web.entrypoint:app'
 
 [dependency-groups]
 code-coverage = [
@@ -54,6 +67,8 @@ code-quality = [
     'flake8-isort',
 ]
 dev = [
+    'httpx[cli]',
+    'matplotlib',
     {include-group = "code-coverage"},
     {include-group = "code-quality"},
 ]
@@ -63,7 +78,11 @@ Homepage = 'https://github.com/pipinfitriadi/web'
 Repository = 'https://github.com/pipinfitriadi/web'
 
 [tool.setuptools.packages.find]
-include = ['voxrow.web']
+include = [
+    'voxrow.core.*',
+    'voxrow.data.*',
+    'voxrow.web.*',
+]
 
 [tool.setuptools-git-versioning]
 enabled = true
