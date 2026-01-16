@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Callable
 from zoneinfo import ZoneInfo
 
-from fastapi import Depends, FastAPI, Request, Response
+from fastapi import Depends, FastAPI, Request, Response, status
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -104,7 +104,7 @@ async def favicon():
 @app.post("/bps/inflation", include_in_schema=False)
 async def extract_inflation_bps(
     settings: Settings = Depends(get_settings),  # noqa: B008
-) -> None:
+) -> Response:
     bucket: str = "datalake"
     now: datetime = datetime.now(tz=ZoneInfo(value_objects.TIME_ZONE))
     filename: date = date(
@@ -152,6 +152,8 @@ async def extract_inflation_bps(
         transform=domain_services.inflation_bps_to_datamart,
     ) as uow:
         handlers.etl(uow)
+
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @app.get("/", include_in_schema=False)
