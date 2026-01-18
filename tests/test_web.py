@@ -26,16 +26,18 @@ TEST_FILES_DIR: Path = Path("tests") / "files"
 TEST_FILE_INFLATION: str = (
     TEST_FILES_DIR / "datalake" / "bps" / "inflation.json"
 ).read_text()
+TEST_KEY: str = "123"
 
 
 def fake_get_settings() -> Settings:
-    return Settings(
-        bps_key="123",
+    return Settings(  # noqa: S106
+        bps_key=TEST_KEY,
         cloudflare_r2=Boto3Credential(  # noqa: S106
-            endpoint_url="https://123.r2.cloudflarestorage.com",
-            aws_access_key_id="123",
-            aws_secret_access_key="123",
+            endpoint_url=f"https://{TEST_KEY}.r2.cloudflarestorage.com",
+            aws_access_key_id=TEST_KEY,
+            aws_secret_access_key=TEST_KEY,
         ),
+        cron_secret=TEST_KEY,
     )
 
 
@@ -84,7 +86,17 @@ def test_favicon() -> None:
 
 
 def test_extract_inflation_bps(mock_extract_inflation_bps: Callable) -> None:
-    response: Response = client.post("/bps/inflation")
+    assert (
+        client.get(
+            "/bps/inflation",
+            headers=dict(Authorization="Bearer abc"),
+        ).status_code
+    ) == HTTPStatus.UNAUTHORIZED
+
+    response: Response = client.get(
+        "/bps/inflation",
+        headers=dict(Authorization=f"Bearer {TEST_KEY}"),
+    )
 
     assert response.status_code == HTTPStatus.NO_CONTENT
     assert response.text == ""

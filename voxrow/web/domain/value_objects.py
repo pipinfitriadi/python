@@ -23,3 +23,4 @@ class Settings(BaseSettings):
 
     bps_key: SecretStr
     cloudflare_r2: value_objects.Boto3Credential
+    cron_secret: SecretStr

@@ -3,5 +3,11 @@
     "installCommand": "pip install '.[core, data]'",
     "github": {
         "enabled": false
-    }
+    },
+    "crons": [
+        {
+            "path": "/bps/inflation",
+            "schedule": "0 0 15 * *"
+        }
+    ]
 }

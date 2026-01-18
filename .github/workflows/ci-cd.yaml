@@ -100,9 +100,4 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-args: |
-            --prod
-            -e BPS_KEY=${{ secrets.BPS_KEY }}
-            -e CLOUDFLARE_R2__ENDPOINT_URL=${{ secrets.CLOUDFLARE_R2__ENDPOINT_URL }}
-            -e CLOUDFLARE_R2__AWS_ACCESS_KEY_ID=${{ secrets.CLOUDFLARE_R2__AWS_ACCESS_KEY_ID }}
-            -e CLOUDFLARE_R2__AWS_SECRET_ACCESS_KEY=${{ secrets.CLOUDFLARE_R2__AWS_SECRET_ACCESS_KEY }}
+          vercel-args: --prod
