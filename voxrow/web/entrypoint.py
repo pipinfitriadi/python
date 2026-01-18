@@ -10,17 +10,19 @@ from calendar import monthrange
 from datetime import date, datetime
 from functools import lru_cache
 from pathlib import Path
-from typing import Callable
+from typing import Annotated, Callable
 from zoneinfo import ZoneInfo
 
-from fastapi import Depends, FastAPI, Request, Response, status
+from fastapi import Depends, FastAPI, HTTPException, Request, Response, status
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fasthx.jinja import Jinja
 from lxml import etree
 from minify_html import minify
+from pydantic import validate_call
 
 from ..core.adapters.ports import httpx
 from ..core.domain.value_objects import ContentType
@@ -39,11 +41,27 @@ app: FastAPI = FastAPI(
     redoc_url=None,
 )
 jinja: Jinja = Jinja(Jinja2Templates(directory=ROOT_DIR / "templates"))
+bearer_scheme: HTTPBearer = HTTPBearer()
 
 
 @lru_cache()
 def get_settings() -> Settings:  # pragma: no cover
     return Settings()
+
+
+@validate_call
+async def validate_token(
+    settings: Settings = Depends(get_settings),  # noqa: B008
+    credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),  # noqa: B008
+) -> str:
+    if credentials.credentials != settings.cron_secret.get_secret_value():
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Ivalid or expired token",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    return credentials.credentials
 
 
 @app.middleware("http")
@@ -101,9 +119,10 @@ async def favicon():
     return FileResponse(STATIC_DIR / "favicon.svg")
 
 
-@app.post("/bps/inflation", include_in_schema=False)
+@app.get("/bps/inflation", include_in_schema=False)
 async def extract_inflation_bps(
     settings: Settings = Depends(get_settings),  # noqa: B008
+    token: Annotated = Depends(validate_token),  # noqa: B008
 ) -> Response:
     bucket: str = "datalake"
     now: datetime = datetime.now(tz=ZoneInfo(value_objects.TIME_ZONE))
@@ -129,7 +148,7 @@ async def extract_inflation_bps(
         destination=boto3.Boto3DestinationPort(
             credential=settings.cloudflare_r2,
             bucket=bucket,
-            key=f"bps/inflation/{filename}.json",
+            key=f"webapi.bps.go.id/inflation/{filename}.json",
             content_type=ContentType.json,
         ),
     ) as uow:
