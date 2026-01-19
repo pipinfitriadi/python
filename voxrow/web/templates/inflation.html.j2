@@ -25,6 +25,7 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 30 December 2025 #}
     </div>
 {% endblock %}
 {% block scripts %}
+    {% include 'chartjs.html.j2' %}
     <script>
         function displayChart(event) {
             function yGridColor(context) {

@@ -43,7 +43,14 @@ def fake_get_settings() -> Settings:
 
 # Variables
 app.dependency_overrides[get_settings] = fake_get_settings
-client: TestClient = TestClient(app)
+
+
+@app.get("/test")
+async def trigger_http_500() -> int:
+    return 1 / 0
+
+
+client: TestClient = TestClient(app, raise_server_exceptions=False)
 
 
 # Mocks
@@ -77,6 +84,16 @@ def mock_extract_inflation_bps(monkeypatch: MonkeyPatch) -> None:
 
 
 # Tests
+def test_trigger_http_500() -> None:
+    response: Response = client.get("/test")
+    text: str = response.text
+
+    assert response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
+    assert ContentType.html in response.headers["content-type"]
+    assert "Internal Server Error" in text
+    assert str(HTTPStatus.INTERNAL_SERVER_ERROR) in text
+
+
 def test_favicon() -> None:
     response: Response = client.get("/favicon.ico")
 
@@ -86,14 +103,18 @@ def test_favicon() -> None:
 
 
 def test_extract_inflation_bps(mock_extract_inflation_bps: Callable) -> None:
-    assert (
-        client.get(
-            "/bps/inflation",
-            headers=dict(Authorization="Bearer abc"),
-        ).status_code
-    ) == HTTPStatus.UNAUTHORIZED
-
     response: Response = client.get(
+        "/bps/inflation",
+        headers=dict(Authorization="Bearer abc"),
+    )
+    text: str = response.text
+
+    assert response.status_code == HTTPStatus.UNAUTHORIZED
+    assert ContentType.html in response.headers["content-type"]
+    assert "Ivalid or expired token" in text
+    assert str(HTTPStatus.UNAUTHORIZED) in text
+
+    response = client.get(
         "/bps/inflation",
         headers=dict(Authorization=f"Bearer {TEST_KEY}"),
     )
