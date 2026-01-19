@@ -23,6 +23,7 @@ from fasthx.jinja import Jinja
 from lxml import etree
 from minify_html import minify
 from pydantic import validate_call
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from ..core.adapters.ports import httpx
 from ..core.domain.value_objects import ContentType
@@ -40,7 +41,8 @@ app: FastAPI = FastAPI(
     docs_url=None,
     redoc_url=None,
 )
-jinja: Jinja = Jinja(Jinja2Templates(directory=ROOT_DIR / "templates"))
+templates: Jinja2Templates = Jinja2Templates(directory=ROOT_DIR / "templates")
+jinja: Jinja = Jinja(templates)
 bearer_scheme: HTTPBearer = HTTPBearer()
 
 
@@ -113,9 +115,43 @@ app.mount(
 )
 
 
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(
+    request: Request,
+    exc: StarletteHTTPException,
+) -> HTMLResponse:
+    return templates.TemplateResponse(
+        request=request,
+        name="error.html.j2",
+        status_code=exc.status_code,
+        context=dict(
+            title=exc.detail,
+            status_code=exc.status_code,
+        ),
+    )
+
+
+@app.exception_handler(Exception)
+async def exception_handler(
+    request: Request,
+    exc: Exception,
+) -> HTMLResponse:
+    status_code: int = status.HTTP_500_INTERNAL_SERVER_ERROR
+
+    return templates.TemplateResponse(
+        request=request,
+        name="error.html.j2",
+        status_code=status_code,
+        context=dict(
+            title="Internal Server Error",
+            status_code=status_code,
+        ),
+    )
+
+
 # Routes
 @app.get("/favicon.ico", include_in_schema=False)
-async def favicon():
+async def favicon() -> FileResponse:
     return FileResponse(STATIC_DIR / "favicon.svg")
 
 
@@ -124,7 +160,8 @@ async def extract_inflation_bps(
     settings: Settings = Depends(get_settings),  # noqa: B008
     token: Annotated = Depends(validate_token),  # noqa: B008
 ) -> Response:
-    bucket: str = "datalake"
+    BUCKET: str = "datalake"
+    WEB_DOMAIN: str = "webapi.bps.go.id"
     now: datetime = datetime.now(tz=ZoneInfo(value_objects.TIME_ZONE))
     filename: date = date(
         year=now.year,
@@ -135,7 +172,8 @@ async def extract_inflation_bps(
     with unit_of_work.EtlUnitOfWork(
         sources=(
             httpx.HttpxSourcePort(
-                url="https://webapi.bps.go.id/v1/api/view/domain/{DOMAIN}/model/{MODEL}/lang/{LANG}/id/{ID}/key/{KEY}/".format(
+                url="https://{WEB_DOMAIN}/v1/api/view/domain/{DOMAIN}/model/{MODEL}/lang/{LANG}/id/{ID}/key/{KEY}/".format(
+                    WEB_DOMAIN=WEB_DOMAIN,
                     KEY=settings.bps_key.get_secret_value(),
                     LANG="ind",
                     DOMAIN="0000",  # Pusat
@@ -147,8 +185,8 @@ async def extract_inflation_bps(
         ),
         destination=boto3.Boto3DestinationPort(
             credential=settings.cloudflare_r2,
-            bucket=bucket,
-            key=f"webapi.bps.go.id/inflation/{filename}.json",
+            bucket=BUCKET,
+            key=f"{WEB_DOMAIN}/inflation/{filename}.json",
             content_type=ContentType.json,
         ),
     ) as uow:
@@ -158,7 +196,7 @@ async def extract_inflation_bps(
         sources=(
             boto3.Boto3SourcePort(
                 credential=settings.cloudflare_r2,
-                bucket=bucket,
+                bucket=BUCKET,
                 key=datalake_key,
             ),
         ),
