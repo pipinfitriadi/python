@@ -78,14 +78,7 @@ jobs:
         with:
           disable_search: true
           files: ./code-coverage.xml
-      - name: Upload test results to Codecov
-        if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v5
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        with:
           report-type: test_results
-          file: ./code-coverage.xml
       - name: Publish coverage report
         uses: mikepenz/action-junit-report@v4
         if: success() || failure() # always run even if the previous step fails
