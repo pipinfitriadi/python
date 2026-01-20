@@ -1,0 +1,119 @@
+{# Copyright (C) Pipin Fitriadi - All Rights Reserved
+
+Unauthorized copying of this file, via any medium is strictly prohibited
+Proprietary and confidential
+Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 19 January 2026 #}
+
+{% extends "BASE.html.j2" %}
+{% block style %}
+<link
+    rel="stylesheet"
+    type="text/css"
+    href="https://fonts.googleapis.com/css?family=Arvo"
+/>
+<style>
+    /**
+     * 404 page
+     * https://codepen.io/Navedkhan012/pen/vrWQMY
+     */
+
+    .page_404 {
+        padding: 40px 0;
+        background: #fff;
+        font-family: 'Arvo', serif;
+        display: flex;
+        justify-content: center; /* Centers horizontally */
+        align-items: center;     /* Centers vertically */
+        height: 100vh;           /* Takes up full viewport height for demonstration */
+        width: 100%;
+    }
+
+    /** .page_404 img {width: 100%;} */
+
+    .container {
+        width: 100%;
+        max-height: 100%;
+    }
+
+    .four_zero_four_bg {
+        background-image: url(https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif);
+        background-repeat: no-repeat;
+        height: 400px;
+        background-position: center;
+    }
+
+    /**
+    .four_zero_four_bg h1, .four_zero_four_bg p {
+        text-shadow:
+            #fff 0px 0px 2px,
+            #fff 0px 0px 2px,
+            #fff 0px 0px 2px,
+            #fff 0px 0px 2px,
+            #fff 0px 0px 2px,
+            #fff 0px 0px 2px;
+    }
+    */
+ 
+ 
+    .four_zero_four_bg h1 {
+        font-size: 80px;
+        line-height: 100%;
+    }
+
+    /** .four_zero_four_bg h3 {font-size: 80px;} */
+            
+    .link_404 {
+        color: #fff !important;
+        padding: 10px 20px;
+        background: #39ac31;
+        border-color: #39ac31;
+        border-style: solid;
+        border-width: thin;
+        margin: 20px 0;
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+    }
+
+    .link_404:hover,
+    .link_404:focus,
+    .link_404:active {
+        color: #39ac31 !important;
+        background: #fff;
+    }
+
+    .link_404 img {
+        vertical-align: middle;
+        max-height: 30pt;
+        margin-left: 3px;
+        filter: brightness(0) invert(1);
+    }
+
+    .link_404:hover img,
+    .link_404:focus img,
+    .link_404:active img {
+        filter: none;
+    }
+
+    .contant_box_404 {
+        margin-top: -50px;
+    }
+</style>
+{% endblock %}
+{% block body %}
+    <section class="page_404">
+        <div class="container">
+            <div class="four_zero_four_bg">
+                <h1 class="text-center">{{ status_code }}</h1>
+                <p class="text-center">{{ title }}</p>
+            </div>
+            <div class="contant_box_404 text-center">
+                <h3 class="h2">Look like you're lost</h3>
+                <p>the page you are looking for not avaible!</p>
+                <a href="{{ url_for('root').path }}" class="link_404">
+                    Go to {% include 'logo.html.j2' %}
+                </a>
+            </div>
+        </div>
+    </section>
+{% endblock %}

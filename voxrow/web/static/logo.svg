@@ -1,0 +1,52 @@
+<!--
+Copyright (C) Pipin Fitriadi - All Rights Reserved
+
+Unauthorized copying of this file, via any medium is strictly prohibited
+Proprietary and confidential
+Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 17 July 2024
+-->
+
+<svg width="282"
+    height="192"
+    viewBox="0 0 282 192"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg">
+    <g id="VOXROW">
+        <path id="W"
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M192.818 159.364V103.263L211.519 121.969L230.22 103.266L248.922 121.969L267.623 103.263V159.364L248.922 178.072L230.22 159.367L211.519 178.072L192.818 159.364Z"
+            fill="#FECB2F"
+        />
+        <path id="O2"
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M122.188 103.263H159.579L178.287 121.964V159.367L159.579 178.068H122.188L103.481 159.367V121.964L122.188 103.263Z"
+            fill="#FC6621"
+        />
+        <path id="R"
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M70.2425 103.263H14.1414L14.1435 159.364L33.4932 178.068L51.5463 159.367L70.2477 178.072L88.9491 159.367L70.2456 140.666L88.9491 121.964L70.2425 103.263Z"
+            fill="#97040C"
+        />
+        <path id="X"
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M192.818 13.9262L230.22 32.6245L267.626 13.9262L248.925 51.329L267.626 88.7318L230.22 70.0273L192.818 88.7318L211.522 51.329L192.818 13.9262Z"
+            fill="#971497"
+        />
+        <path id="O1"
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M122.188 13.9262H159.579L178.287 32.6276V70.0304L159.579 88.7318H122.188L103.481 70.0304V32.6276L122.188 13.9262Z"
+            fill="#1790D4"
+        />
+        <path id="V"
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M14.1434 70.0305V13.9232L51.5462 32.6246L88.949 13.9232V70.0305L51.5462 88.7319L14.1434 70.0305Z"
+            fill="#ADCC36"
+        />
+    </g>
+</svg>

@@ -1,6 +1,17 @@
 {
-    "devCommand": ".venv/bin/fastapi dev --entrypoint voxrow.web:app",
+    "devCommand": ".venv/bin/fastapi dev --entrypoint voxrow.web.entrypoint:app",
+    "installCommand": "pip install '.[core, data]'",
     "github": {
         "enabled": false
-    }
+    },
+    "crons": [
+        {
+            "path": "/bps/inflation",
+            "schedule": "0 0 15 * *"
+        },
+        {
+            "path": "/idx/stock-summary",
+            "schedule": "0 11 * * 1-5"
+        }
+    ]
 }
