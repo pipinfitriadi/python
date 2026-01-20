@@ -219,41 +219,43 @@ async def extract_stock_summary_idx(
     token: Annotated = Depends(validate_token),  # noqa: B008
     date: date = None,
 ) -> Response:
-    WEB_DOMAIN: str = "idx.co.id"
     date = date or datetime.now(tz=value_objects.TIME_ZONE).date()
-    data: Data = domain_services.decodo_web_scraping_parsed(
-        httpx.HttpxSourcePort(
-            url="https://scraper-api.decodo.com/v2/scrape",
-            method=HTTPMethod.POST,
-            headers={
-                "Authorization": (
-                    f"Basic {settings.decodo_web_scraping_token.get_secret_value()}"
-                ),
-                "Accept": ContentType.json,
-                "Content-Type": ContentType.json,
-            },
-            json=dict(
-                url="https://{WEB_DOMAIN}/primary/TradingSummary/GetStockSummary?date={DATE}".format(
-                    WEB_DOMAIN=WEB_DOMAIN,
-                    DATE=date.strftime("%Y%m%d"),
-                ),
-                successful_status_codes=[200],
-            ),
-            timeout=60,
-        ).extract()
-    )
 
-    if data["data"]:
-        with unit_of_work.EtlUnitOfWork(
-            sources=(data,),
-            destination=boto3.Boto3DestinationPort(
-                credential=settings.cloudflare_r2,
-                bucket="datalake",
-                key=f"{WEB_DOMAIN}/GetStockSummary/{date}.json",
-                content_type=ContentType.json,
-            ),
-        ) as uow:
-            handlers.etl(uow)
+    if date.strftime("%a") not in ("Sat", "Sun"):
+        WEB_DOMAIN: str = "idx.co.id"
+        data: Data = domain_services.decodo_web_scraping_parsed(
+            httpx.HttpxSourcePort(
+                url="https://scraper-api.decodo.com/v2/scrape",
+                method=HTTPMethod.POST,
+                headers={
+                    "Authorization": (
+                        f"Basic {settings.decodo_web_scraping_token.get_secret_value()}"
+                    ),
+                    "Accept": ContentType.json,
+                    "Content-Type": ContentType.json,
+                },
+                json=dict(
+                    url="https://{WEB_DOMAIN}/primary/TradingSummary/GetStockSummary?date={DATE}".format(
+                        WEB_DOMAIN=WEB_DOMAIN,
+                        DATE=date.strftime("%Y%m%d"),
+                    ),
+                    successful_status_codes=[200],
+                ),
+                timeout=60,
+            ).extract()
+        )
+
+        if data["data"]:
+            with unit_of_work.EtlUnitOfWork(
+                sources=(data,),
+                destination=boto3.Boto3DestinationPort(
+                    credential=settings.cloudflare_r2,
+                    bucket="datalake",
+                    key=f"{WEB_DOMAIN}/GetStockSummary/{date}.json",
+                    content_type=ContentType.json,
+                ),
+            ) as uow:
+                handlers.etl(uow)
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
