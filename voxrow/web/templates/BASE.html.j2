@@ -1,0 +1,50 @@
+{# Copyright (C) Pipin Fitriadi - All Rights Reserved
+
+Unauthorized copying of this file, via any medium is strictly prohibited
+Proprietary and confidential
+Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 27 December 2025 #}
+
+{# Constants #}
+{% set DOMAIN = "voxrow.com" %}
+{% set GTAG_ID = "G-DJE4CN0PPC" %}
+{% set TITLE = TITLE|default('VOXROW') %}
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8"/>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    />
+    <meta
+        name="htmx-config"
+        content='{"selfRequestsOnly":false}'
+    />
+    <title>{% if title %}{{ title }} | {% endif %}{{ TITLE }}</title>
+    {% block style %}{% endblock %}
+    <!-- Google tag (gtag.js) -->
+    <script
+        async
+        src="https://www.googletagmanager.com/gtag/js?id={{ GTAG_ID }}"
+    ></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', '{{ GTAG_ID }}', {
+            cookie_domain: '{{ DOMAIN }}',
+            cookie_flags: 'SameSite=None;Secure'
+        });
+    </script>
+</head>
+<body>
+    {% block body %}{% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

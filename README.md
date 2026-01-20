@@ -10,7 +10,7 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 22 May 2025
 # Web
 
 [![License](https://img.shields.io/badge/license-Proprietary-red)](LICENSE)
-[![PyPI - Python Version](https://img.shields.io/badge/python-3.12.7-blue)](https://www.python.org/downloads/release/python-3127/)
+[![PyPI - Python Version](https://img.shields.io/badge/python-3.12%2B-blue?logo=Python&logoColor=white)](https://www.python.org/downloads/release/python-3127/)
 [![Codecov](https://codecov.io/gh/pipinfitriadi/web/graph/badge.svg?token=M05vBxiEzt)](https://codecov.io/gh/pipinfitriadi/web)
 
 - [Setup](#setup)
@@ -26,10 +26,12 @@ across projects or teams.
 
 Follow these steps the first time you use VS Code after cloning this git repository:
 
-1. Use the command <kbd>f1</kbd>, select `Tasks: Run Task`, and then choose `Preparation`
-2. Use the command <kbd>f1</kbd>, select `Python: Select Interpreter`,
+1. Create a _`.env`_ file based on [_`template.env`_](template.env)
+   and set your environment values
+2. Use the command <kbd>f1</kbd>, select `Tasks: Run Task`, and then choose `Preparation`
+3. Use the command <kbd>f1</kbd>, select `Python: Select Interpreter`,
     and then choose _`./.venv/bin/python`_
-3. Use the command <kbd>f1</kbd>, select `Tasks: Run Task`,
+4. Use the command <kbd>f1</kbd>, select `Tasks: Run Task`,
     and then choose `Python: Preparation`
 
 ## CI/CD

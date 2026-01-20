@@ -41,7 +41,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install dependencies
-        run: pip install --editable . --group code-quality
+        run: pip install --editable '.[core, data]' --group code-quality
       - name: Test
         run: flake8
   code-coverage:
@@ -60,21 +60,24 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          lfs: true
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - name: Install dependencies
-        run: pip install --editable . --group code-coverage
+        run: pip install --editable '.[core, data]' --group code-coverage
       - name: Test
-        run: coverage run -m pytest -rfEP -q --junit-xml=code-coverage.xml
+        run: coverage run -m pytest -rfEP -q --junit-xml=code-coverage.xml -o junit_family=legacy
       - name: Display coverage
         run: coverage report -m
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4.0.1
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-          slug: ${{ github.repository }}
+        with:
+          disable_search: true
+          files: ./code-coverage.xml
       - name: Publish coverage report
         uses: mikepenz/action-junit-report@v4
         if: success() || failure() # always run even if the previous step fails
