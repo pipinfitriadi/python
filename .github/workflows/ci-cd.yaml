@@ -78,7 +78,6 @@ jobs:
         with:
           disable_search: true
           files: ./code-coverage.xml
-          report-type: test_results
       - name: Publish coverage report
         uses: mikepenz/action-junit-report@v4
         if: success() || failure() # always run even if the previous step fails
