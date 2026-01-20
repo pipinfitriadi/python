@@ -9,9 +9,9 @@
 from calendar import monthrange
 from datetime import date, datetime
 from functools import lru_cache
+from http import HTTPMethod
 from pathlib import Path
 from typing import Annotated, Callable
-from zoneinfo import ZoneInfo
 
 from fastapi import Depends, FastAPI, HTTPException, Request, Response, status
 from fastapi.middleware.gzip import GZipMiddleware
@@ -26,7 +26,7 @@ from pydantic import validate_call
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from ..core.adapters.ports import httpx
-from ..core.domain.value_objects import ContentType
+from ..core.domain.value_objects import ContentType, Data
 from ..core.services import handlers, unit_of_work
 from ..data.adapters.ports import boto3
 from ..data.domain import domain_services, value_objects
@@ -162,7 +162,7 @@ async def extract_inflation_bps(
 ) -> Response:
     BUCKET: str = "datalake"
     WEB_DOMAIN: str = "webapi.bps.go.id"
-    now: datetime = datetime.now(tz=ZoneInfo(value_objects.TIME_ZONE))
+    now: datetime = datetime.now(tz=value_objects.TIME_ZONE)
     filename: date = date(
         year=now.year,
         month=now.month,
@@ -209,6 +209,51 @@ async def extract_inflation_bps(
         transform=domain_services.inflation_bps_to_datamart,
     ) as uow:
         handlers.etl(uow)
+
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@app.get("/idx/stock-summary", include_in_schema=False)
+async def extract_stock_summary_idx(
+    settings: Settings = Depends(get_settings),  # noqa: B008
+    token: Annotated = Depends(validate_token),  # noqa: B008
+    date: date = None,
+) -> Response:
+    WEB_DOMAIN: str = "idx.co.id"
+    date = date or datetime.now(tz=value_objects.TIME_ZONE).date()
+    data: Data = domain_services.decodo_web_scraping_parsed(
+        httpx.HttpxSourcePort(
+            url="https://scraper-api.decodo.com/v2/scrape",
+            method=HTTPMethod.POST,
+            headers={
+                "Authorization": (
+                    f"Basic {settings.decodo_web_scraping_token.get_secret_value()}"
+                ),
+                "Accept": ContentType.json,
+                "Content-Type": ContentType.json,
+            },
+            json=dict(
+                url="https://{WEB_DOMAIN}/primary/TradingSummary/GetStockSummary?date={DATE}".format(
+                    WEB_DOMAIN=WEB_DOMAIN,
+                    DATE=date.strftime("%Y%m%d"),
+                ),
+                successful_status_codes=[200],
+            ),
+            timeout=60,
+        ).extract()
+    )
+
+    if data["data"]:
+        with unit_of_work.EtlUnitOfWork(
+            sources=(data,),
+            destination=boto3.Boto3DestinationPort(
+                credential=settings.cloudflare_r2,
+                bucket="datalake",
+                key=f"{WEB_DOMAIN}/GetStockSummary/{date}.json",
+                content_type=ContentType.json,
+            ),
+        ) as uow:
+            handlers.etl(uow)
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
