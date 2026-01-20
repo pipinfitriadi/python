@@ -7,6 +7,7 @@
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 14 January 2026
 
 import html
+import json
 from calendar import monthrange
 from io import StringIO
 from typing import Tuple
@@ -86,3 +87,8 @@ def inflation_bps_to_datamart(*args: Data) -> Tuple[Data, ...]:
         title=title,
         data=df_flat_table.replace({np.nan: None}).reset_index().to_dict("records"),
     )
+
+
+@validate_call
+def decodo_web_scraping_parsed(*args: Data) -> Tuple[Data, ...]:
+    return json.loads(args[0]["results"][0]["content"])

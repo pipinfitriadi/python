@@ -23,8 +23,9 @@ from voxrow.web.entrypoint import app, get_settings
 
 # Constants
 TEST_FILES_DIR: Path = Path("tests") / "files"
+TEST_DATALAKE_DIR: Path = TEST_FILES_DIR / "datalake"
 TEST_FILE_INFLATION: str = (
-    TEST_FILES_DIR / "datalake" / "bps" / "inflation.json"
+    TEST_DATALAKE_DIR / "webapi.bps.go.id" / "inflation.json"
 ).read_text()
 TEST_KEY: str = "123"
 
@@ -38,6 +39,7 @@ def fake_get_settings() -> Settings:
             aws_secret_access_key=TEST_KEY,
         ),
         cron_secret=TEST_KEY,
+        decodo_web_scraping_token=TEST_KEY,
     )
 
 
@@ -83,6 +85,32 @@ def mock_extract_inflation_bps(monkeypatch: MonkeyPatch) -> None:
     )
 
 
+@fixture
+def mock_extract_stock_summary_idx(monkeypatch: MonkeyPatch) -> None:
+    monkeypatch.setattr(
+        "voxrow.data.adapters.ports.boto3.client",
+        lambda *args, **kwargs: MagicMock(
+            put_object=MagicMock(return_value=None),
+        ),
+    )
+    monkeypatch.setattr(
+        "voxrow.core.adapters.ports.httpx.post",
+        lambda *args, **kwargs: MagicMock(
+            json=MagicMock(
+                return_value=dict(
+                    results=[
+                        dict(
+                            content=(
+                                TEST_DATALAKE_DIR / "idx.co.id" / "GetStockSummary.json"
+                            ).read_text()
+                        )
+                    ],
+                )
+            ),
+        ),
+    )
+
+
 # Tests
 def test_trigger_http_500() -> None:
     response: Response = client.get("/test")
@@ -92,6 +120,13 @@ def test_trigger_http_500() -> None:
     assert ContentType.html in response.headers["content-type"]
     assert "Internal Server Error" in text
     assert str(HTTPStatus.INTERNAL_SERVER_ERROR) in text
+
+
+def test_docs() -> None:
+    response: Response = client.get("/docs")
+
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert ContentType.html in response.headers["content-type"]
 
 
 def test_favicon() -> None:
@@ -117,6 +152,17 @@ def test_extract_inflation_bps(mock_extract_inflation_bps: Callable) -> None:
     response = client.get(
         "/bps/inflation",
         headers=dict(Authorization=f"Bearer {TEST_KEY}"),
+    )
+
+    assert response.status_code == HTTPStatus.NO_CONTENT
+    assert response.text == ""
+
+
+def test_extract_stock_summary_idx(mock_extract_stock_summary_idx: Callable) -> None:
+    response: Response = client.get(
+        "/idx/stock-summary",
+        headers=dict(Authorization=f"Bearer {TEST_KEY}"),
+        params=dict(date="2026-01-19"),
     )
 
     assert response.status_code == HTTPStatus.NO_CONTENT
