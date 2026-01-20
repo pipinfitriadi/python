@@ -8,6 +8,10 @@
         {
             "path": "/bps/inflation",
             "schedule": "0 0 15 * *"
+        },
+        {
+            "path": "/idx/stock-summary",
+            "schedule": "0 11 * * 1-5"
         }
     ]
 }

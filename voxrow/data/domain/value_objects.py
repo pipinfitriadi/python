@@ -6,12 +6,14 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 14 January 2026
 
+from zoneinfo import ZoneInfo
+
 from pydantic import HttpUrl, SecretStr
 from pydantic.dataclasses import dataclass
 
 # Constants
 ENCODING: str = "utf-8"
-TIME_ZONE: str = "Asia/Jakarta"
+TIME_ZONE: ZoneInfo = ZoneInfo("Asia/Jakarta")
 
 
 @dataclass
