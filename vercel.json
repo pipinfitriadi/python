@@ -11,7 +11,7 @@
         },
         {
             "path": "/idx/stock-summary",
-            "schedule": "0 11 * * MON-FRI"
+            "schedule": "0 11 * * 1-5"
         }
     ]
 }
