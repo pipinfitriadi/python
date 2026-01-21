@@ -15,6 +15,7 @@ from pydantic_core import CoreSchema, core_schema
 
 # Constants
 CONFIG_DICT = ConfigDict(arbitrary_types_allowed=True)
+ENCODING: str = "utf-8"
 
 ResourceLocation: TypeAlias = Path
 Row: TypeAlias = Dict[str, Any]
@@ -36,6 +37,10 @@ class Rows(Iterator[Row]):
 
 
 Data: TypeAlias = Union[Rows, Any]
+
+
+class ContentEncoding(StrEnum):
+    gzip = "gzip"
 
 
 class ContentType(StrEnum):

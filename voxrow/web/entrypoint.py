@@ -26,7 +26,7 @@ from pydantic import validate_call
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from ..core.adapters.ports import httpx
-from ..core.domain.value_objects import ContentType, Data
+from ..core.domain.value_objects import ENCODING, ContentEncoding, ContentType, Data
 from ..core.services import handlers, unit_of_work
 from ..data.adapters.ports import boto3
 from ..data.domain import domain_services, value_objects
@@ -38,6 +38,7 @@ from .domain.value_objects import (
 
 # Variables
 app: FastAPI = FastAPI(
+    openapi_url=None,
     docs_url=None,
     redoc_url=None,
 )
@@ -79,21 +80,21 @@ async def minify_middleware(request: Request, call_next: Callable) -> Response:
         async for chunk in response.body_iterator:
             response_body += chunk
 
-        response_body_decoded: str = response_body.decode(value_objects.ENCODING)
+        response_body_decoded: str = response_body.decode(ENCODING)
 
         if ContentType.html in content_type:
             minified_content = minify(
                 response_body_decoded,
                 minify_css=True,
                 minify_js=True,
-            ).encode(value_objects.ENCODING)
+            ).encode(ENCODING)
         elif any(ct in content_type for ct in SVG_OR_XML):
             minified_content = etree.tostring(
                 element_or_tree=etree.XML(
                     text=response_body_decoded,
                     parser=etree.XMLParser(remove_blank_text=True),
                 ),
-                encoding=value_objects.ENCODING,
+                encoding=ENCODING,
             )
 
         # Update the response body and content length
@@ -155,7 +156,7 @@ async def favicon() -> FileResponse:
     return FileResponse(STATIC_DIR / "favicon.svg")
 
 
-@app.get("/bps/inflation", include_in_schema=False)
+@app.get("/bps/inflation")
 async def extract_inflation_bps(
     settings: Settings = Depends(get_settings),  # noqa: B008
     token: Annotated = Depends(validate_token),  # noqa: B008
@@ -186,8 +187,9 @@ async def extract_inflation_bps(
         destination=boto3.Boto3DestinationPort(
             credential=settings.cloudflare_r2,
             bucket=BUCKET,
-            key=f"{WEB_DOMAIN}/inflation/{filename}.json",
+            key=f"{WEB_DOMAIN}/inflation/{filename}.json.gz",
             content_type=ContentType.json,
+            content_encoding=ContentEncoding.gzip,
         ),
     ) as uow:
         datalake_key: Path = handlers.etl(uow)
@@ -213,7 +215,7 @@ async def extract_inflation_bps(
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@app.get("/idx/stock-summary", include_in_schema=False)
+@app.get("/idx/stock-summary")
 async def extract_stock_summary_idx(
     settings: Settings = Depends(get_settings),  # noqa: B008
     token: Annotated = Depends(validate_token),  # noqa: B008
@@ -251,8 +253,9 @@ async def extract_stock_summary_idx(
                 destination=boto3.Boto3DestinationPort(
                     credential=settings.cloudflare_r2,
                     bucket="datalake",
-                    key=f"{WEB_DOMAIN}/GetStockSummary/{date}.json",
+                    key=f"{WEB_DOMAIN}/GetStockSummary/{date}.json.gz",
                     content_type=ContentType.json,
+                    content_encoding=ContentEncoding.gzip,
                 ),
             ) as uow:
                 handlers.etl(uow)

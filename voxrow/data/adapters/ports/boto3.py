@@ -7,6 +7,7 @@
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 14 January 2026
 
 from pathlib import Path
+from typing import Optional
 
 from boto3 import client
 from botocore.client import BaseClient
@@ -14,8 +15,14 @@ from pydantic import validate_call
 
 from ....core.adapters import ports
 from ....core.domain import domain_services
-from ....core.domain.value_objects import ContentType, Data, ResourceLocation
-from ...domain.value_objects import ENCODING, Boto3Credential
+from ....core.domain.value_objects import (
+    ENCODING,
+    ContentEncoding,
+    ContentType,
+    Data,
+    ResourceLocation,
+)
+from ...domain.value_objects import Boto3Credential
 
 
 # Abstracts
@@ -46,24 +53,22 @@ class AbstractBoto3:
 class Boto3SourcePort(AbstractBoto3, ports.AbstractSourcePort):
     @validate_call
     def extract(self) -> Data:
-        data: Data = (
-            self.client.get_object(
-                Bucket=self.bucket,
-                Key=str(self.key),
-            )["Body"]
-            .read()
-            .decode(ENCODING)
+        response: any = self.client.get_object(
+            Bucket=self.bucket,
+            Key=str(self.key),
+            ChecksumMode="DISABLED",
         )
+        data: bytes = response["Body"].read().decode(ENCODING)
 
         return (
             domain_services.loads_from_json(data)
-            if self.key.suffix
-            and f"application/{self.key.suffix[1:].lower()}" == ContentType.json
+            if response.get("ContentType") == ContentType.json
             else data
         )
 
 
 class Boto3DestinationPort(AbstractBoto3, ports.AbstractDestinationPort):
+    content_encoding: ContentEncoding
     content_type: ContentType
 
     @validate_call
@@ -73,20 +78,33 @@ class Boto3DestinationPort(AbstractBoto3, ports.AbstractDestinationPort):
         bucket: str,
         key: Path,
         content_type: ContentType,
+        content_encoding: Optional[ContentEncoding] = None,
     ) -> None:
         super().__init__(credential, bucket, key)
 
         self.content_type = content_type
+        self.content_encoding = content_encoding
 
     @validate_call
     def load(self, data: Data) -> ResourceLocation:
+        data = (
+            domain_services.dumps_to_json(data)
+            if self.content_type == ContentType.json
+            else data
+        )
+
         self.client.put_object(
             Bucket=self.bucket,
             Key=str(self.key),
             Body=(
-                domain_services.dumps_to_json(data)
-                if self.content_type == ContentType.json
+                domain_services.compress_to_gzip(data)
+                if self.content_encoding == ContentEncoding.gzip
                 else data
+            ),
+            **(
+                dict(ContentEncoding=self.content_encoding)
+                if self.content_encoding
+                else {}
             ),
             ContentType=self.content_type,
         )

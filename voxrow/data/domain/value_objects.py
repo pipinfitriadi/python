@@ -12,7 +12,6 @@ from pydantic import HttpUrl, SecretStr
 from pydantic.dataclasses import dataclass
 
 # Constants
-ENCODING: str = "utf-8"
 TIME_ZONE: ZoneInfo = ZoneInfo("Asia/Jakarta")
 
 
