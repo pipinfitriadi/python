@@ -42,6 +42,8 @@ code-quality = [
     'flake8-isort',
 ]
 dev = [
+    'duckdb',
+    'magic_duckdb',
     {include-group = "code-coverage"},
     {include-group = "code-quality"},
 ]
