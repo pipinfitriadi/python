@@ -6,7 +6,6 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 14 January 2026
 
-import json
 from pathlib import Path
 
 from boto3 import client
@@ -14,6 +13,7 @@ from botocore.client import BaseClient
 from pydantic import validate_call
 
 from ....core.adapters import ports
+from ....core.domain import domain_services
 from ....core.domain.value_objects import ContentType, Data, ResourceLocation
 from ...domain.value_objects import ENCODING, Boto3Credential
 
@@ -56,7 +56,7 @@ class Boto3SourcePort(AbstractBoto3, ports.AbstractSourcePort):
         )
 
         return (
-            json.loads(data)
+            domain_services.loads_from_json(data)
             if self.key.suffix
             and f"application/{self.key.suffix[1:].lower()}" == ContentType.json
             else data
@@ -84,7 +84,7 @@ class Boto3DestinationPort(AbstractBoto3, ports.AbstractDestinationPort):
             Bucket=self.bucket,
             Key=str(self.key),
             Body=(
-                json.dumps(data, default=str)
+                domain_services.dumps_to_json(data)
                 if self.content_type == ContentType.json
                 else data
             ),

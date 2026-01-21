@@ -6,12 +6,12 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 13 January 2026
 
-import json
 from pathlib import Path
 
 from pydantic import validate_call
 from pydantic.dataclasses import dataclass
 
+from ...domain import domain_services
 from ...domain.value_objects import Data, ResourceLocation
 from . import AbstractDestinationPort
 
@@ -22,6 +22,6 @@ class PathDestinationPort(AbstractDestinationPort):
 
     @validate_call
     def load(self, data: Data) -> ResourceLocation:
-        self.file.write_text(json.dumps(data, default=str))
+        self.file.write_text(domain_services.dumps_to_json(data))
 
         return self.file
