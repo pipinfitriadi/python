@@ -41,9 +41,15 @@ code-quality = [
     'flake8-bugbear',
     'flake8-isort',
 ]
+notebook = [
+    'ipykernel',
+    'duckdb',
+    'magic_duckdb',
+]
 dev = [
-    {include-group = "code-coverage"},
-    {include-group = "code-quality"},
+    {include-group = 'code-coverage'},
+    {include-group = 'code-quality'},
+    {include-group = 'notebook'},
 ]
 
 [tool.setuptools-git-versioning]
