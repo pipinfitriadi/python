@@ -69,6 +69,8 @@ code-quality = [
 dev = [
     'httpx[cli]',
     'matplotlib',
+    'duckdb',
+    'magic_duckdb',
     {include-group = "code-coverage"},
     {include-group = "code-quality"},
 ]
