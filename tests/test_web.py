@@ -67,12 +67,11 @@ def mock_extract_inflation_bps(monkeypatch: MonkeyPatch) -> None:
                     Body=MagicMock(
                         read=MagicMock(
                             return_value=MagicMock(
-                                decode=MagicMock(
-                                    return_value=TEST_FILE_INFLATION,
-                                )
+                                decode=MagicMock(return_value=TEST_FILE_INFLATION)
                             )
                         )
                     ),
+                    ContentType=ContentType.json,
                 )
             ),
         ),
@@ -122,8 +121,22 @@ def test_trigger_http_500() -> None:
     assert str(HTTPStatus.INTERNAL_SERVER_ERROR) in text
 
 
+def test_openapi_json() -> None:
+    response: Response = client.get("/openapi.json")
+
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert ContentType.html in response.headers["content-type"]
+
+
 def test_docs() -> None:
     response: Response = client.get("/docs")
+
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert ContentType.html in response.headers["content-type"]
+
+
+def test_redoc() -> None:
+    response: Response = client.get("/redoc")
 
     assert response.status_code == HTTPStatus.NOT_FOUND
     assert ContentType.html in response.headers["content-type"]
