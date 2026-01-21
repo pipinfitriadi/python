@@ -28,8 +28,6 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 19 January 2026 #}
         width: 100%;
     }
 
-    /** .page_404 img {width: 100%;} */
-
     .container {
         width: 100%;
         max-height: 100%;
@@ -41,27 +39,16 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 19 January 2026 #}
         height: 400px;
         background-position: center;
     }
-
-    /**
-    .four_zero_four_bg h1, .four_zero_four_bg p {
-        text-shadow:
-            #fff 0px 0px 2px,
-            #fff 0px 0px 2px,
-            #fff 0px 0px 2px,
-            #fff 0px 0px 2px,
-            #fff 0px 0px 2px,
-            #fff 0px 0px 2px;
-    }
-    */
- 
  
     .four_zero_four_bg h1 {
         font-size: 80px;
         line-height: 100%;
     }
 
-    /** .four_zero_four_bg h3 {font-size: 80px;} */
-            
+    .contant_box_404 {
+        margin-top: -50px;
+    }
+
     .link_404 {
         color: #fff !important;
         padding: 10px 20px;
@@ -94,10 +81,6 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 19 January 2026 #}
     .link_404:active img {
         filter: none;
     }
-
-    .contant_box_404 {
-        margin-top: -50px;
-    }
 </style>
 {% endblock %}
 {% block body %}
@@ -108,8 +91,8 @@ Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 19 January 2026 #}
                 <p class="text-center">{{ title }}</p>
             </div>
             <div class="contant_box_404 text-center">
-                <h3 class="h2">Look like you're lost</h3>
-                <p>the page you are looking for not avaible!</p>
+                <p>Look like you're lost</p>
+                <p>The page you are looking for not avaible!</p>
                 <a href="{{ url_for('root').path }}" class="link_404">
                     Go to {% include 'logo.html.j2' %}
                 </a>
