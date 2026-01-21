@@ -10,7 +10,6 @@ import html
 import json
 from calendar import monthrange
 from io import StringIO
-from typing import Tuple
 
 import lxml.html
 import numpy as np
@@ -21,7 +20,7 @@ from ...core.domain.value_objects import Data
 
 
 @validate_call
-def inflation_bps_to_datamart(*args: Data) -> Tuple[Data, ...]:
+def inflation_bps_to_datamart(*args: Data) -> Data:
     data: Data = args[0]["data"]
     title: str = lxml.html.fromstring(data["title"]).text.strip()
     df: pd.DataFrame = pd.read_html(
@@ -90,5 +89,5 @@ def inflation_bps_to_datamart(*args: Data) -> Tuple[Data, ...]:
 
 
 @validate_call
-def decodo_web_scraping_parsed(*args: Data) -> Tuple[Data, ...]:
+def decodo_web_scraping_parsed(*args: Data) -> Data:
     return json.loads(args[0]["results"][0]["content"])
