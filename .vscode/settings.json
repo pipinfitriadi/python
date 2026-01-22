@@ -24,6 +24,7 @@
             "args": ["--init-file", "${workspaceFolder}/.bashrc"]
         }
     },
+    "window.autoDetectColorScheme": false,
     "workbench.colorTheme": "Atom One Dark",
     "workbench.sideBar.location": "right"
 }
