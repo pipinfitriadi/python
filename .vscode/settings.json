@@ -34,6 +34,7 @@
             ]
         }
     },
+    "window.autoDetectColorScheme": false,
     "workbench.colorTheme": "Atom One Dark",
     "workbench.iconTheme": "a-file-icon-vscode",
     "workbench.sideBar.location": "right"
