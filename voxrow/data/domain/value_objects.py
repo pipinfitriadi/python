@@ -15,7 +15,7 @@ from pydantic.dataclasses import dataclass
 TIME_ZONE: ZoneInfo = ZoneInfo("Asia/Jakarta")
 
 
-@dataclass
+@dataclass(frozen=True)
 class Boto3Credential:
     endpoint_url: HttpUrl
     aws_access_key_id: SecretStr
