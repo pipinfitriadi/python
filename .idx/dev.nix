@@ -22,6 +22,7 @@
       "akamud.vscode-theme-onedark"
       "augustocdias.tasks-shell-input"
       "DavidAnson.vscode-markdownlint"
+      "detachhead.basedpyright"
       "eamodio.gitlens"
       "grapecity.gc-excelviewer"
       "mechatroner.rainbow-csv"
