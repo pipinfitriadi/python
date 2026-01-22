@@ -7,6 +7,7 @@
  */
 
 {
+    "basedpyright.analysis.typeCheckingMode": "off",
     "csv-preview.lineNumbers": "ordinal",
     "csv-preview.resizeColumns": "all",
     "editor.fontFamily": "'JetBrains Mono'",
@@ -17,7 +18,7 @@
     "notebook.output.scrolling": true,
     "notebook.output.fontFamily": "'Fira Code', 'Consolas', 'Courier New', monospace",
     "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
-    "python.languageServer": "Jedi",
+    "python.languageServer": "None",
     "python.terminal.activateEnvironment": false,
     "rainbow_csv.rbql_with_headers_by_default": true,
     "terminal.integrated.defaultProfile.linux": "bash",
