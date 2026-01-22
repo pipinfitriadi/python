@@ -39,4 +39,6 @@ class HttpxSourcePort(AbstractSourcePort):
             **(dict(timeout=self.timeout) if self.timeout is not None else {}),
         )
 
+        resp.raise_for_status()
+
         return resp.json()
