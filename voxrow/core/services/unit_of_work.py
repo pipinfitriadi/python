@@ -7,7 +7,7 @@
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 14 January 2026
 
 from types import TracebackType
-from typing import Optional, Self, Tuple, Union
+from typing import Self, Tuple
 
 from pydantic import validate_call
 from pydantic.dataclasses import dataclass
@@ -40,10 +40,10 @@ class AbstractUnitOfWork:  # pragma: no cover
     @validate_call(config=CONFIG_DICT)
     def __exit__(
         self,
-        exc_type: Optional[type[BaseException]] = None,
-        exc_value: Optional[BaseException] = None,
-        exc_traceback: Optional[TracebackType] = None,
-    ) -> Optional[bool]:
+        exc_type: type[BaseException] | None = None,
+        exc_value: BaseException | None = None,
+        exc_traceback: TracebackType | None = None,
+    ) -> bool | None:
         is_exc_suppresses: bool = False
 
         if exc_type:
@@ -59,6 +59,6 @@ class AbstractUnitOfWork:  # pragma: no cover
 # Implementations
 @dataclass(config=CONFIG_DICT, frozen=True)
 class EtlUnitOfWork(AbstractUnitOfWork):
-    sources: Tuple[Union[Data, ports.AbstractSourcePort], ...]
+    sources: Tuple[Data | ports.AbstractSourcePort, ...]
     destination: ports.AbstractDestinationPort
-    transform: Optional[Transform] = None
+    transform: Transform | None = None

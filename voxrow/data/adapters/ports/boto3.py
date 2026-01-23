@@ -7,7 +7,6 @@
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 14 January 2026
 
 from pathlib import Path
-from typing import Optional
 
 from boto3 import client
 from botocore.client import BaseClient
@@ -78,7 +77,7 @@ class Boto3DestinationPort(AbstractBoto3, ports.AbstractDestinationPort):
         bucket: str,
         key: Path,
         content_type: ContentType,
-        content_encoding: Optional[ContentEncoding] = None,
+        content_encoding: ContentEncoding | None = None,
     ) -> None:
         super().__init__(credential, bucket, key)
 
