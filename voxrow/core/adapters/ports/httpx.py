@@ -7,7 +7,6 @@
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 13 January 2026
 
 from http import HTTPMethod
-from typing import Optional, Union
 
 from httpx import Response, get, post
 from pydantic import HttpUrl, validate_call
@@ -21,9 +20,9 @@ from . import AbstractSourcePort
 class HttpxSourcePort(AbstractSourcePort):
     url: HttpUrl
     method: HTTPMethod = HTTPMethod.GET
-    headers: Optional[dict] = None
-    json: Optional[dict] = None
-    timeout: Optional[Union[float, int]] = None
+    headers: dict | None = None
+    json: dict | None = None
+    timeout: float | int | None = None
 
     @validate_call
     def extract(self) -> Data:

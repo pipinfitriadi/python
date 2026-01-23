@@ -8,7 +8,7 @@
 
 from enum import StrEnum
 from pathlib import Path
-from typing import Any, Dict, Iterator, TypeAlias, Union
+from typing import Any, Dict, Iterator, TypeAlias
 
 from pydantic import ConfigDict, GetCoreSchemaHandler
 from pydantic_core import CoreSchema, core_schema
@@ -36,7 +36,7 @@ class Rows(Iterator[Row]):
         )
 
 
-Data: TypeAlias = Union[Rows, Any]
+Data: TypeAlias = Rows | Any
 
 
 class ContentEncoding(StrEnum):
