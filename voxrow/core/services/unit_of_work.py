@@ -7,7 +7,7 @@
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 14 January 2026
 
 from types import TracebackType
-from typing import Self, Tuple
+from typing import Self
 
 from pydantic import validate_call
 from pydantic.dataclasses import dataclass
@@ -59,6 +59,6 @@ class AbstractUnitOfWork:  # pragma: no cover
 # Implementations
 @dataclass(config=CONFIG_DICT, frozen=True)
 class EtlUnitOfWork(AbstractUnitOfWork):
-    sources: Tuple[Data | ports.AbstractSourcePort, ...]
+    sources: tuple[Data | ports.AbstractSourcePort, ...]
     destination: ports.AbstractDestinationPort
     transform: Transform | None = None

@@ -8,7 +8,7 @@
 
 from enum import StrEnum
 from pathlib import Path
-from typing import Any, Dict, Iterator, TypeAlias
+from typing import Any, Iterator, TypeAlias
 
 from pydantic import ConfigDict, GetCoreSchemaHandler
 from pydantic_core import CoreSchema, core_schema
@@ -18,7 +18,7 @@ CONFIG_DICT = ConfigDict(arbitrary_types_allowed=True)
 ENCODING: str = "utf-8"
 
 ResourceLocation: TypeAlias = Path
-Row: TypeAlias = Dict[str, Any]
+Row: TypeAlias = dict[str, Any]
 
 
 class Rows(Iterator[Row]):
