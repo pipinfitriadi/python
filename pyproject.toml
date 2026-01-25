@@ -52,7 +52,7 @@ data = [
 ]
 
 [project.scripts]
-'voxrow.web' = 'voxrow.web.entrypoint:app'
+'voxrow.web' = 'voxrow.web.entrypoints.fastapi:app'
 
 [dependency-groups]
 code-coverage = [
