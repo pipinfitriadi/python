@@ -6,55 +6,35 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 14 January 2026
 
-from pathlib import Path
-
-from boto3 import client
 from botocore.client import BaseClient
 from pydantic import validate_call
+from pydantic.dataclasses import dataclass
 
 from ....core.adapters import ports
 from ....core.domain import domain_services
 from ....core.domain.value_objects import (
+    CONFIG_DICT,
     ENCODING,
     ContentEncoding,
     ContentType,
     Data,
     ResourceLocation,
 )
-from ...domain.value_objects import Boto3Credential
+from ...domain.value_objects import Boto3Destination, Boto3Source
 
 
-# Abstracts
+# Abstract
+@dataclass(config=CONFIG_DICT, frozen=True)
 class AbstractBoto3:
     client: BaseClient
-    bucket: str
-    key: Path
-
-    @validate_call
-    def __init__(
-        self,
-        credential: Boto3Credential,
-        bucket: str,
-        key: Path,
-    ) -> None:
-        self.client = client(
-            service_name=credential.service_name,
-            endpoint_url=str(credential.endpoint_url),
-            aws_access_key_id=credential.aws_access_key_id.get_secret_value(),
-            aws_secret_access_key=credential.aws_secret_access_key.get_secret_value(),
-            region_name=credential.region_name,
-        )
-        self.bucket = bucket
-        self.key = key
 
 
-# Implementations
 class Boto3SourcePort(AbstractBoto3, ports.AbstractSourcePort):
     @validate_call
-    def extract(self) -> Data:
+    def extract(self, *, source: Boto3Source) -> Data:
         response: any = self.client.get_object(
-            Bucket=self.bucket,
-            Key=str(self.key),
+            Bucket=source.bucket,
+            Key=str(source.key),
             ChecksumMode="DISABLED",
         )
         data: bytes = response["Body"].read().decode(ENCODING)
@@ -67,45 +47,28 @@ class Boto3SourcePort(AbstractBoto3, ports.AbstractSourcePort):
 
 
 class Boto3DestinationPort(AbstractBoto3, ports.AbstractDestinationPort):
-    content_encoding: ContentEncoding
-    content_type: ContentType
-
     @validate_call
-    def __init__(
-        self,
-        credential: Boto3Credential,
-        bucket: str,
-        key: Path,
-        content_type: ContentType,
-        content_encoding: ContentEncoding | None = None,
-    ) -> None:
-        super().__init__(credential, bucket, key)
-
-        self.content_type = content_type
-        self.content_encoding = content_encoding
-
-    @validate_call
-    def load(self, data: Data) -> ResourceLocation:
+    def load(self, data: Data, *, destination: Boto3Destination) -> ResourceLocation:
         data = (
             domain_services.dumps_to_json(data)
-            if self.content_type == ContentType.json
+            if destination.content_type == ContentType.json
             else data
         )
 
         self.client.put_object(
-            Bucket=self.bucket,
-            Key=str(self.key),
+            Bucket=destination.bucket,
+            Key=str(destination.key),
             Body=(
                 domain_services.compress_to_gzip(data)
-                if self.content_encoding == ContentEncoding.gzip
+                if destination.content_encoding == ContentEncoding.gzip
                 else data
             ),
             **(
-                dict(ContentEncoding=self.content_encoding)
-                if self.content_encoding
+                dict(ContentEncoding=destination.content_encoding)
+                if destination.content_encoding
                 else {}
             ),
-            ContentType=self.content_type,
+            ContentType=destination.content_type,
         )
 
-        return self.key
+        return destination.key

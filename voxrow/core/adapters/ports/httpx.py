@@ -9,33 +9,26 @@
 from http import HTTPMethod
 
 from httpx import Response, get, post
-from pydantic import HttpUrl, validate_call
+from pydantic import validate_call
 from pydantic.dataclasses import dataclass
 
-from ...domain.value_objects import Data
+from ...domain.value_objects import Data, HttpxSource
 from . import AbstractSourcePort
 
 
 @dataclass(frozen=True)
 class HttpxSourcePort(AbstractSourcePort):
-    url: HttpUrl
-    method: HTTPMethod = HTTPMethod.GET
-    headers: dict | None = None
-    json: dict | None = None
-    timeout: float | int | None = None
-
     @validate_call
-    def extract(self) -> Data:
+    def extract(self, *, source: HttpxSource) -> Data:
         methods: dict = {
             HTTPMethod.GET: get,
             HTTPMethod.POST: post,
         }
-
-        resp: Response = methods[self.method](
-            url=str(self.url),
-            **(dict(json=self.json) if self.method is HTTPMethod.POST else {}),
-            headers=self.headers,
-            **(dict(timeout=self.timeout) if self.timeout is not None else {}),
+        resp: Response = methods[source.method](
+            url=str(source.url),
+            **(dict(json=source.json) if source.method is HTTPMethod.POST else {}),
+            headers=source.headers,
+            **(dict(timeout=source.timeout) if source.timeout is not None else {}),
         )
 
         resp.raise_for_status()
