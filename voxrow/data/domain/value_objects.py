@@ -6,10 +6,18 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 14 January 2026
 
+from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from pydantic import HttpUrl, SecretStr
 from pydantic.dataclasses import dataclass
+
+from ...core.domain.value_objects import (
+    ContentEncoding,
+    ContentType,
+    Destination,
+    Source,
+)
 
 # Constants
 TIME_ZONE: ZoneInfo = ZoneInfo("Asia/Jakarta")
@@ -22,3 +30,15 @@ class Boto3Credential:
     aws_secret_access_key: SecretStr
     region_name: str = "auto"
     service_name: str = "s3"
+
+
+@dataclass(frozen=True)
+class Boto3Source(Source):
+    bucket: str
+    key: Path
+
+
+@dataclass(frozen=True)
+class Boto3Destination(Destination, Boto3Source):
+    content_type: ContentType
+    content_encoding: ContentEncoding | None = None

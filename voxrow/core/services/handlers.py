@@ -6,19 +6,44 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 14 January 2026
 
-from ..adapters import ports
-from ..domain.value_objects import Data, ResourceLocation
-from . import unit_of_work
+from pydantic import validate_call
+
+from ..domain.domain_services import Transform
+from ..domain.value_objects import (
+    CONFIG_DICT,
+    Data,
+    Destination,
+    ResourceLocation,
+    Source,
+)
+from .unit_of_work import AbstractDataUnitOfWork
 
 
-def etl(uow: unit_of_work.EtlUnitOfWork) -> ResourceLocation:
+@validate_call(config=CONFIG_DICT)
+def etl(
+    sources: tuple[Data | tuple[AbstractDataUnitOfWork, Source], ...],
+    destination: tuple[AbstractDataUnitOfWork, Destination],
+    transform: Transform | None = None,
+) -> ResourceLocation:
     "Extract, Transform, Load"
 
-    sources: tuple[Data, ...] = tuple(
-        source.extract() if isinstance(source, ports.AbstractSourcePort) else source
-        for source in uow.sources
-    )
+    data_sources: list[Data] = []
 
-    return uow.destination.load(
-        sources[0] if uow.transform is None else uow.transform(*sources)
-    )
+    for element in sources:
+        if (
+            isinstance(element, tuple)
+            and isinstance(element[0], AbstractDataUnitOfWork)
+            and isinstance(element[1], Source)
+        ):
+            with element[0] as uow:
+                data_sources.append(uow.source.extract(source=element[1]))
+        else:
+            data_sources.append(element)
+
+    with destination[0] as uow:
+        resource_location: ResourceLocation = uow.destination.load(
+            data_sources[0] if transform is None else transform(*data_sources),
+            destination=destination[1],
+        )
+
+    return resource_location

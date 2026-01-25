@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Callable
 from unittest.mock import MagicMock
 
+from botocore.client import BaseClient
 from fastapi.testclient import TestClient
 from httpx import Response
 from pytest import MonkeyPatch, fixture
@@ -60,8 +61,9 @@ client: TestClient = TestClient(app, raise_server_exceptions=False)
 @fixture
 def mock_extract_inflation_bps(monkeypatch: MonkeyPatch) -> None:
     monkeypatch.setattr(
-        "voxrow.data.adapters.ports.boto3.client",
+        "voxrow.data.services.unit_of_work.client",
         lambda *args, **kwargs: MagicMock(
+            spec=BaseClient,
             put_object=MagicMock(return_value=None),
             get_object=MagicMock(
                 return_value=dict(
@@ -88,8 +90,9 @@ def mock_extract_inflation_bps(monkeypatch: MonkeyPatch) -> None:
 @fixture
 def mock_extract_stock_summary_idx(monkeypatch: MonkeyPatch) -> None:
     monkeypatch.setattr(
-        "voxrow.data.adapters.ports.boto3.client",
+        "voxrow.data.services.unit_of_work.client",
         lambda *args, **kwargs: MagicMock(
+            spec=BaseClient,
             put_object=MagicMock(return_value=None),
         ),
     )

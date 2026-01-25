@@ -10,11 +10,10 @@ from types import TracebackType
 from typing import Self
 
 from pydantic import validate_call
-from pydantic.dataclasses import dataclass
 
 from ..adapters import ports
-from ..domain.domain_services import Transform
-from ..domain.value_objects import CONFIG_DICT, Data
+from ..adapters.ports import httpx, pathlib
+from ..domain.value_objects import CONFIG_DICT
 
 
 # Abstracts
@@ -56,9 +55,17 @@ class AbstractUnitOfWork:  # pragma: no cover
         return is_exc_suppresses
 
 
+class AbstractDataUnitOfWork(AbstractUnitOfWork):  # pragma: no cover
+    destination: ports.AbstractDestinationPort | None
+    source: ports.AbstractSourcePort | None
+
+
 # Implementations
-@dataclass(config=CONFIG_DICT, frozen=True)
-class EtlUnitOfWork(AbstractUnitOfWork):
-    sources: tuple[Data | ports.AbstractSourcePort, ...]
-    destination: ports.AbstractDestinationPort
-    transform: Transform | None = None
+class HttpxDataUnitOfWork(AbstractDataUnitOfWork):
+    def __init__(self) -> None:
+        self.source = httpx.HttpxSourcePort()
+
+
+class PathDataUnitOfWork(AbstractDataUnitOfWork):
+    def __init__(self) -> None:
+        self.destination = pathlib.PathDestinationPort()
