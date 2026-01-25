@@ -31,7 +31,7 @@ async def validate_token(
     if credentials.credentials != settings.cron_secret.get_secret_value():
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Ivalid or expired token",
+            detail="Invalid or expired token",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
