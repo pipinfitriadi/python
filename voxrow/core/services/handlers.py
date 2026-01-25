@@ -32,6 +32,7 @@ def etl(
     for element in sources:
         if (
             isinstance(element, tuple)
+            and len(element) == 2
             and isinstance(element[0], AbstractDataUnitOfWork)
             and isinstance(element[1], Source)
         ):
