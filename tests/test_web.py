@@ -160,7 +160,7 @@ def test_extract_inflation_bps(mock_extract_inflation_bps: Callable) -> None:
 
     assert response.status_code == HTTPStatus.UNAUTHORIZED
     assert ContentType.html in response.headers["content-type"]
-    assert "Ivalid or expired token" in text
+    assert "Invalid or expired token" in text
     assert str(HTTPStatus.UNAUTHORIZED) in text
 
     response = client.get(
