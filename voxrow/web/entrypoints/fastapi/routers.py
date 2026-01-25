@@ -73,7 +73,7 @@ async def extract_inflation_bps(
                         ID=915,
                     )
                 ),
-            )
+            ),
         ),
         destination=(
             uow_boto3,
