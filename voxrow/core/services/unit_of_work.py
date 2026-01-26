@@ -56,16 +56,16 @@ class AbstractUnitOfWork:  # pragma: no cover
 
 
 class AbstractDataUnitOfWork(AbstractUnitOfWork):  # pragma: no cover
-    destination: ports.AbstractDestinationPort | None
-    source: ports.AbstractSourcePort | None
+    destination_port: ports.AbstractDestinationPort | None
+    source_port: ports.AbstractSourcePort | None
 
 
 # Implementations
 class HttpxDataUnitOfWork(AbstractDataUnitOfWork):
     def __init__(self) -> None:
-        self.source = httpx.HttpxSourcePort()
+        self.source_port = httpx.HttpxSourcePort()
 
 
 class PathDataUnitOfWork(AbstractDataUnitOfWork):
     def __init__(self) -> None:
-        self.destination = pathlib.PathDestinationPort()
+        self.destination_port = pathlib.PathDestinationPort()

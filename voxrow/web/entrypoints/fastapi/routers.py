@@ -121,7 +121,7 @@ async def extract_stock_summary_idx(
 
         with unit_of_work.HttpxDataUnitOfWork() as uow:
             data: Data = domain_services.decodo_web_scraping_parsed(
-                uow.source.extract(
+                uow.source_port.extract(
                     source=HttpxSource(
                         url="https://scraper-api.decodo.com/v2/scrape",
                         method=HTTPMethod.POST,

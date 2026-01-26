@@ -27,5 +27,5 @@ class Boto3DataUnitOfWork(AbstractDataUnitOfWork):
             aws_secret_access_key=credential.aws_secret_access_key.get_secret_value(),
             region_name=credential.region_name,
         )
-        self.destination = boto3.Boto3DestinationPort(self.client)
-        self.source = boto3.Boto3SourcePort(self.client)
+        self.destination_port = boto3.Boto3DestinationPort(self.client)
+        self.source_port = boto3.Boto3SourcePort(self.client)
