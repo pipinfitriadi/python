@@ -7,13 +7,11 @@
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 13 January 2026
 
 from pydantic import validate_call
-from pydantic.dataclasses import dataclass
 
 from ...domain.value_objects import Data, PathDestination, ResourceLocation, Source
 from . import AbstractDataPort
 
 
-@dataclass(frozen=True)
 class PathDataPort(AbstractDataPort):
     @validate_call
     def extract(self, *, source: Source) -> Data:  # pragma: no cover

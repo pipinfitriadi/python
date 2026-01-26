@@ -44,12 +44,12 @@ async def extract_bps_inflation(settings: Settings) -> None:
                 source=value_objects.HttpxSource(
                     url="https://{WEB_DOMAIN}/v1/api/view/domain/{DOMAIN}/model/{MODEL}/lang/{LANG}/id/{ID}/key/{KEY}/".format(
                         WEB_DOMAIN=WEB_DOMAIN,
-                        KEY=settings.bps_key.get_secret_value(),
-                        LANG="ind",
                         DOMAIN="0000",  # Pusat
                         MODEL="statictable",  # Static Table
+                        LANG="ind",
                         # Tingkat Inflasi Harga Konsumen Nasional Tahunan (Y-on-Y)
                         ID=915,
+                        KEY=settings.bps_key.get_secret_value(),
                     )
                 )
             ),
