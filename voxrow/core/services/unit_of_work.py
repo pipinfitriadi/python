@@ -6,6 +6,7 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 14 January 2026
 
+from copy import deepcopy
 from types import TracebackType
 from typing import Self
 
@@ -13,7 +14,7 @@ from pydantic import validate_call
 
 from ..adapters import ports
 from ..adapters.ports import httpx, pathlib
-from ..domain.value_objects import CONFIG_DICT
+from ..domain.value_objects import CONFIG_DICT, Destination, Source
 
 
 # Abstracts
@@ -56,8 +57,40 @@ class AbstractUnitOfWork:  # pragma: no cover
 
 
 class AbstractDataUnitOfWork(AbstractUnitOfWork):  # pragma: no cover
-    destination_port: ports.AbstractDestinationPort | None
-    source_port: ports.AbstractSourcePort | None
+    destination_domain: Destination | None = None
+    destination_port: ports.AbstractDestinationPort | None = None
+    source_domain: Source | None = None
+    source_port: ports.AbstractSourcePort | None = None
+
+    @validate_call
+    def __call__(
+        self,
+        *,
+        source: Source | None = None,
+        destination: Destination | None = None,
+    ) -> Self:
+        self.source_domain = source
+        self.destination_domain = destination
+
+        return deepcopy(self)
+
+    def __enter__(self) -> Self:
+        if not any((self.source_domain, self.destination_domain)):
+            raise ValueError("destination_domain or source_domain must not be empty")
+
+        return super().__enter__()
+
+    @validate_call(config=CONFIG_DICT)
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None = None,
+        exc_value: BaseException | None = None,
+        exc_traceback: TracebackType | None = None,
+    ) -> bool | None:
+        self.source_domain = None
+        self.destination_domain = None
+
+        return super().__exit__(exc_type, exc_value, exc_traceback)
 
 
 # Implementations

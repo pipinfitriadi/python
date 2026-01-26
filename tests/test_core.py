@@ -38,13 +38,15 @@ def test_decompress_from_gzip(fake_gzip: bytes) -> None:
 # Unit of Work > Data > Path
 def test_path_data_unit_of_work() -> None:
     with (
-        unit_of_work.PathDataUnitOfWork() as uow,
         NamedTemporaryFile(mode="w+", suffix=".txt") as temp_file,
+        unit_of_work.PathDataUnitOfWork()(
+            destination=PathDestination(temp_file.name)
+        ) as uow,
     ):
         data: str = "Test"
         file_path: Path = uow.destination_port.load(
             data,
-            destination=PathDestination(temp_file.name),
+            destination=uow.destination_domain,
         )
 
         assert file_path.read_text() == data

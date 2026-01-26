@@ -43,7 +43,7 @@ async def favicon() -> FileResponse:
 
 
 @router.get("/bps/inflation")
-async def extract_inflation_bps(
+async def extract_bps_inflation(
     settings: AppSettings,
     token: Token,
 ) -> Response:
@@ -58,9 +58,8 @@ async def extract_inflation_bps(
     uow_boto3: Boto3DataUnitOfWork = Boto3DataUnitOfWork(settings.cloudflare_r2)
     datalake_key: Path = handlers.etl(
         sources=(
-            (
-                unit_of_work.HttpxDataUnitOfWork(),
-                HttpxSource(
+            unit_of_work.HttpxDataUnitOfWork()(
+                source=HttpxSource(
                     url="https://{WEB_DOMAIN}/v1/api/view/domain/{DOMAIN}/model/{MODEL}/lang/{LANG}/id/{ID}/key/{KEY}/".format(
                         WEB_DOMAIN=WEB_DOMAIN,
                         KEY=settings.bps_key.get_secret_value(),
@@ -70,37 +69,34 @@ async def extract_inflation_bps(
                         # Tingkat Inflasi Harga Konsumen Nasional Tahunan (Y-on-Y)
                         ID=915,
                     )
-                ),
+                )
             ),
         ),
-        destination=(
-            uow_boto3,
-            value_objects.Boto3Destination(
+        destination=uow_boto3(
+            destination=value_objects.Boto3Destination(
                 bucket=BUCKET,
                 key=f"{WEB_DOMAIN}/inflation/{filename}.json.gz",
                 content_type=ContentType.json,
                 content_encoding=ContentEncoding.gzip,
-            ),
+            )
         ),
     )
 
     handlers.etl(
         sources=(
-            (
-                uow_boto3,
-                value_objects.Boto3Source(
+            uow_boto3(
+                source=value_objects.Boto3Source(
                     bucket=BUCKET,
                     key=datalake_key,
-                ),
+                )
             ),
         ),
-        destination=(
-            uow_boto3,
-            value_objects.Boto3Destination(
+        destination=uow_boto3(
+            destination=value_objects.Boto3Destination(
                 bucket="web",
                 key="inflation.json",
                 content_type=ContentType.json,
-            ),
+            )
         ),
         transform=domain_services.inflation_bps_to_datamart,
     )
@@ -109,7 +105,7 @@ async def extract_inflation_bps(
 
 
 @router.get("/idx/stock-summary")
-async def extract_stock_summary_idx(
+async def extract_idx_stock_summary(
     settings: AppSettings,
     token: Token,
     date: date = None,
@@ -119,42 +115,41 @@ async def extract_stock_summary_idx(
     if date.strftime("%a") not in ("Sat", "Sun"):
         WEB_DOMAIN: str = "idx.co.id"
 
-        with unit_of_work.HttpxDataUnitOfWork() as uow:
-            data: Data = domain_services.decodo_web_scraping_parsed(
-                uow.source_port.extract(
-                    source=HttpxSource(
-                        url="https://scraper-api.decodo.com/v2/scrape",
-                        method=HTTPMethod.POST,
-                        headers={
-                            "Authorization": "Basic {decodo_token}".format(
-                                decodo_token=settings.decodo_web_scraping_token.get_secret_value()
-                            ),
-                            "Accept": ContentType.json,
-                            "Content-Type": ContentType.json,
-                        },
-                        json=dict(
-                            url="https://{WEB_DOMAIN}/primary/TradingSummary/GetStockSummary?date={DATE}".format(
-                                WEB_DOMAIN=WEB_DOMAIN,
-                                DATE=date.strftime("%Y%m%d"),
-                            ),
-                            successful_status_codes=[200],
-                        ),
-                        timeout=60,
+        with unit_of_work.HttpxDataUnitOfWork()(
+            source=HttpxSource(
+                url="https://scraper-api.decodo.com/v2/scrape",
+                method=HTTPMethod.POST,
+                headers={
+                    "Authorization": "Basic {decodo_token}".format(
+                        decodo_token=settings.decodo_web_scraping_token.get_secret_value()
                     ),
-                )
+                    "Accept": ContentType.json,
+                    "Content-Type": ContentType.json,
+                },
+                json=dict(
+                    url="https://{WEB_DOMAIN}/primary/TradingSummary/GetStockSummary?date={DATE}".format(
+                        WEB_DOMAIN=WEB_DOMAIN,
+                        DATE=date.strftime("%Y%m%d"),
+                    ),
+                    successful_status_codes=[200],
+                ),
+                timeout=60,
+            )
+        ) as uow:
+            data: Data = domain_services.decodo_web_scraping_parsed(
+                uow.source_port.extract(source=uow.source_domain)
             )
 
         if data["data"]:
             handlers.etl(
                 sources=(data,),
-                destination=(
-                    Boto3DataUnitOfWork(settings.cloudflare_r2),
-                    value_objects.Boto3Destination(
+                destination=Boto3DataUnitOfWork(settings.cloudflare_r2)(
+                    destination=value_objects.Boto3Destination(
                         bucket="datalake",
                         key=f"{WEB_DOMAIN}/GetStockSummary/{date}.json.gz",
                         content_type=ContentType.json,
                         content_encoding=ContentEncoding.gzip,
-                    ),
+                    )
                 ),
             )
 

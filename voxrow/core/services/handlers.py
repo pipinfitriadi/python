@@ -9,42 +9,31 @@
 from pydantic import validate_call
 
 from ..domain.domain_services import Transform
-from ..domain.value_objects import (
-    CONFIG_DICT,
-    Data,
-    Destination,
-    ResourceLocation,
-    Source,
-)
+from ..domain.value_objects import CONFIG_DICT, Data, ResourceLocation
 from .unit_of_work import AbstractDataUnitOfWork
 
 
 @validate_call(config=CONFIG_DICT)
 def etl(
-    sources: tuple[Data | tuple[AbstractDataUnitOfWork, Source], ...],
-    destination: tuple[AbstractDataUnitOfWork, Destination],
+    sources: tuple[Data | AbstractDataUnitOfWork, ...],
+    destination: AbstractDataUnitOfWork,
     transform: Transform | None = None,
 ) -> ResourceLocation:
     "Extract, Transform, Load"
 
     data_sources: list[Data] = []
 
-    for element in sources:
-        if (
-            isinstance(element, tuple)
-            and len(element) == 2
-            and isinstance(element[0], AbstractDataUnitOfWork)
-            and isinstance(element[1], Source)
-        ):
-            with element[0] as uow:
-                data_sources.append(uow.source_port.extract(source=element[1]))
+    for source in sources:
+        if isinstance(source, AbstractDataUnitOfWork):
+            with source as uow:
+                data_sources.append(uow.source_port.extract(source=uow.source_domain))
         else:
-            data_sources.append(element)
+            data_sources.append(source)
 
-    with destination[0] as uow:
+    with destination as uow:
         resource_location: ResourceLocation = uow.destination_port.load(
             data_sources[0] if transform is None else transform(*data_sources),
-            destination=destination[1],
+            destination=uow.destination_domain,
         )
 
     return resource_location
