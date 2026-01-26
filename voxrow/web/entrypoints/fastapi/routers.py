@@ -10,9 +10,8 @@ from calendar import monthrange
 from datetime import date, datetime
 from http import HTTPMethod
 from pathlib import Path
-from typing import Annotated
 
-from fastapi import APIRouter, Depends, Response, status
+from fastapi import APIRouter, Response, status
 from fastapi.responses import FileResponse
 from fastapi.templating import Jinja2Templates
 from fasthx.jinja import Jinja
@@ -29,9 +28,8 @@ from ....data.services.unit_of_work import Boto3DataUnitOfWork
 from ...domain.value_objects import (
     ROOT_DIR,
     STATIC_DIR,
-    Settings,
 )
-from .dependencies import get_settings, validate_token
+from .dependencies import AppSettings, Token
 
 # Variables
 router: APIRouter = APIRouter()
@@ -46,8 +44,8 @@ async def favicon() -> FileResponse:
 
 @router.get("/bps/inflation")
 async def extract_inflation_bps(
-    settings: Settings = Depends(get_settings),  # noqa: B008
-    token: Annotated = Depends(validate_token),  # noqa: B008
+    settings: AppSettings,
+    token: Token,
 ) -> Response:
     BUCKET: str = "datalake"
     WEB_DOMAIN: str = "webapi.bps.go.id"
@@ -112,8 +110,8 @@ async def extract_inflation_bps(
 
 @router.get("/idx/stock-summary")
 async def extract_stock_summary_idx(
-    settings: Settings = Depends(get_settings),  # noqa: B008
-    token: Annotated = Depends(validate_token),  # noqa: B008
+    settings: AppSettings,
+    token: Token,
     date: date = None,
 ) -> Response:
     date = date or datetime.now(tz=value_objects.TIME_ZONE).date()

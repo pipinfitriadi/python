@@ -6,27 +6,27 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 25 January 2026
 
-from functools import lru_cache
+from typing import Annotated, TypeAlias
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import validate_call
 
 from ...domain.value_objects import Settings
+from .. import get_settings
 
 # Variables
 bearer_scheme: HTTPBearer = HTTPBearer()
 
 
-@lru_cache()
-def get_settings() -> Settings:  # pragma: no cover
-    return Settings()
+AppSettings: TypeAlias = Annotated[Settings, Depends(get_settings)]
+Credentials: TypeAlias = Annotated[HTTPAuthorizationCredentials, Depends(bearer_scheme)]
 
 
 @validate_call
 async def validate_token(
-    settings: Settings = Depends(get_settings),  # noqa: B008
-    credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),  # noqa: B008
+    settings: AppSettings,
+    credentials: Credentials,
 ) -> str:
     if credentials.credentials != settings.cron_secret.get_secret_value():
         raise HTTPException(
@@ -36,3 +36,6 @@ async def validate_token(
         )
 
     return credentials.credentials
+
+
+Token: TypeAlias = Annotated[str, Depends(validate_token)]
