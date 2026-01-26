@@ -52,7 +52,7 @@ data = [
 ]
 
 [project.scripts]
-'voxrow.web' = 'voxrow.web.entrypoints.fastapi:app'
+'voxrow.web' = 'voxrow.web.entrypoints.typer:app'
 
 [dependency-groups]
 code-coverage = [
@@ -80,7 +80,7 @@ dev = [
 ]
 
 [project.urls]
-Homepage = 'https://github.com/pipinfitriadi/web'
+Homepage = 'https://voxrow.com'
 Repository = 'https://github.com/pipinfitriadi/web'
 
 [tool.setuptools.packages.find]
