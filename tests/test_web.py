@@ -59,7 +59,7 @@ client: TestClient = TestClient(app, raise_server_exceptions=False)
 
 # Mocks
 @fixture
-def mock_extract_inflation_bps(monkeypatch: MonkeyPatch) -> None:
+def mock_extract_bps_inflation(monkeypatch: MonkeyPatch) -> None:
     monkeypatch.setattr(
         "voxrow.data.services.unit_of_work.client",
         lambda *args, **kwargs: MagicMock(
@@ -88,7 +88,7 @@ def mock_extract_inflation_bps(monkeypatch: MonkeyPatch) -> None:
 
 
 @fixture
-def mock_extract_stock_summary_idx(monkeypatch: MonkeyPatch) -> None:
+def mock_extract_idx_stock_summary(monkeypatch: MonkeyPatch) -> None:
     monkeypatch.setattr(
         "voxrow.data.services.unit_of_work.client",
         lambda *args, **kwargs: MagicMock(
@@ -154,7 +154,7 @@ def test_favicon() -> None:
     assert response.text != ""
 
 
-def test_extract_inflation_bps(mock_extract_inflation_bps: Callable) -> None:
+def test_extract_bps_inflation(mock_extract_bps_inflation: Callable) -> None:
     response: Response = client.get(
         "/bps/inflation",
         headers=dict(Authorization="Bearer abc"),
@@ -175,7 +175,7 @@ def test_extract_inflation_bps(mock_extract_inflation_bps: Callable) -> None:
     assert response.text == ""
 
 
-def test_extract_stock_summary_idx(mock_extract_stock_summary_idx: Callable) -> None:
+def test_extract_idx_stock_summary(mock_extract_idx_stock_summary: Callable) -> None:
     response: Response = client.get(
         "/idx/stock-summary",
         headers=dict(Authorization=f"Bearer {TEST_KEY}"),
