@@ -44,9 +44,9 @@ def test_path_data_unit_of_work() -> None:
         ) as uow,
     ):
         data: str = "Test"
-        file_path: Path = uow.destination_port.load(
+        file_path: Path = uow.data.load(
             data,
-            destination=uow.destination_domain,
+            destination=uow.destination,
         )
 
         assert file_path.read_text() == data

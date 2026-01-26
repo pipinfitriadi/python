@@ -12,12 +12,12 @@ from httpx import Response, get, post
 from pydantic import validate_call
 from pydantic.dataclasses import dataclass
 
-from ...domain.value_objects import Data, HttpxSource
-from . import AbstractSourcePort
+from ...domain.value_objects import Data, Destination, HttpxSource, ResourceLocation
+from . import AbstractDataPort
 
 
 @dataclass(frozen=True)
-class HttpxSourcePort(AbstractSourcePort):
+class HttpxDataPort(AbstractDataPort):
     @validate_call
     def extract(self, *, source: HttpxSource) -> Data:
         methods: dict = {
@@ -34,3 +34,9 @@ class HttpxSourcePort(AbstractSourcePort):
         resp.raise_for_status()
 
         return resp.json()
+
+    @validate_call
+    def load(
+        self, data: Data, *, destination: Destination
+    ) -> ResourceLocation:  # pragma: no cover
+        pass

@@ -9,12 +9,16 @@
 from pydantic import validate_call
 from pydantic.dataclasses import dataclass
 
-from ...domain.value_objects import Data, PathDestination, ResourceLocation
-from . import AbstractDestinationPort
+from ...domain.value_objects import Data, PathDestination, ResourceLocation, Source
+from . import AbstractDataPort
 
 
 @dataclass(frozen=True)
-class PathDestinationPort(AbstractDestinationPort):
+class PathDataPort(AbstractDataPort):
+    @validate_call
+    def extract(self, *, source: Source) -> Data:  # pragma: no cover
+        pass
+
     @validate_call
     def load(self, data: Data, *, destination: PathDestination) -> ResourceLocation:
         destination.file.write_text(data)
