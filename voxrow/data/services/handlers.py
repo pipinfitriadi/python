@@ -20,7 +20,6 @@ from ..domain.value_objects import (
     TIME_ZONE,
     Boto3Destination,
     Boto3Source,
-    Date,
     Settings,
 )
 from .unit_of_work import Boto3DataUnitOfWork
@@ -84,8 +83,8 @@ async def extract_bps_inflation(settings: Settings) -> None:
 
 
 @validate_call
-async def extract_idx_stock_summary(settings: Settings, date: Date) -> None:
-    if date.strftime("%a") not in ("Sat", "Sun"):
+async def extract_idx_stock_summary(settings: Settings, start_date: date) -> None:
+    if start_date.strftime("%a") not in ("Sat", "Sun"):
         WEB_DOMAIN: str = "idx.co.id"
 
         with unit_of_work.HttpxDataUnitOfWork()(
@@ -102,7 +101,7 @@ async def extract_idx_stock_summary(settings: Settings, date: Date) -> None:
                 json=dict(
                     url="https://{WEB_DOMAIN}/primary/TradingSummary/GetStockSummary?date={DATE}".format(
                         WEB_DOMAIN=WEB_DOMAIN,
-                        DATE=date.strftime("%Y%m%d"),
+                        DATE=start_date.strftime("%Y%m%d"),
                     ),
                     successful_status_codes=[200],
                 ),
@@ -119,7 +118,7 @@ async def extract_idx_stock_summary(settings: Settings, date: Date) -> None:
                 destination=Boto3DataUnitOfWork(settings.cloudflare_r2)(
                     destination=Boto3Destination(
                         bucket="datalake",
-                        key=f"{WEB_DOMAIN}/GetStockSummary/{date}.json.gz",
+                        key=f"{WEB_DOMAIN}/GetStockSummary/{start_date}.json.gz",
                         content_type=value_objects.ContentType.json,
                         content_encoding=value_objects.ContentEncoding.gzip,
                     )

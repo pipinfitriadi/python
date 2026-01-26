@@ -6,7 +6,7 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 25 January 2026
 
-from typing import get_args
+from datetime import date, datetime
 
 from fastapi import APIRouter, Response, status
 from fastapi.responses import FileResponse
@@ -46,12 +46,9 @@ async def extract_bps_inflation(
 async def extract_idx_stock_summary(
     token: Token,
     settings: AppSettings,
-    date: value_objects.Date = None,
+    date: date = datetime.now(tz=value_objects.TIME_ZONE).date(),  # noqa: B008
 ) -> Response:
-    await handlers.extract_idx_stock_summary(
-        settings,
-        date=date or get_args(value_objects.Date)[1].default_factory()(),
-    )
+    await handlers.extract_idx_stock_summary(settings, date)
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
