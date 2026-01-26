@@ -9,7 +9,6 @@
 from pathlib import Path
 
 from pydantic import SecretStr
-from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from ...data.domain import value_objects
 
@@ -18,10 +17,5 @@ ROOT_DIR: Path = Path("voxrow") / "web"
 STATIC_DIR: Path = ROOT_DIR / "static"
 
 
-class Settings(BaseSettings):
-    model_config: SettingsConfigDict = SettingsConfigDict(env_nested_delimiter="__")
-
-    bps_key: SecretStr
-    cloudflare_r2: value_objects.Boto3Credential
+class Settings(value_objects.Settings):
     cron_secret: SecretStr
-    decodo_web_scraping_token: SecretStr
