@@ -6,12 +6,14 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 26 January 2026
 
+import asyncio
 from datetime import datetime
 from typing import Annotated
 
-from typer import Argument, Option, Typer
+from typer import Option, Typer
 
-from ..domain import value_objects
+from ...data.services import handlers
+from ..domain import domain_services, value_objects
 
 app: Typer = Typer(
     no_args_is_help=True,
@@ -27,15 +29,27 @@ app: Typer = Typer(
 
 @app.command()
 def extract_bps_inflation() -> None:
-    pass
+    asyncio.run(handlers.extract_bps_inflation(domain_services.get_typer_settings()))
 
 
 @app.command()
 def extract_idx_stock_summary(
-    start_date: Annotated[datetime, Argument(formats=[value_objects.DATE_FMT])],
+    start_date: Annotated[
+        datetime,
+        Option(
+            formats=[value_objects.DATE_FMT],
+            default_factory=lambda: domain_services.today().isoformat(),
+        ),
+    ],
     end_date: Annotated[
         datetime | None,
         Option(formats=[value_objects.DATE_FMT]),
     ] = None,
 ) -> None:
-    print(start_date.date(), end_date.date() if end_date else end_date)
+    asyncio.run(
+        handlers.extract_idx_stock_summary(
+            settings=domain_services.get_typer_settings(),
+            start_date=start_date,
+            end_date=end_date,
+        )
+    )

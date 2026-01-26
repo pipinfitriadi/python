@@ -6,15 +6,15 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 25 January 2026
 
-from datetime import date, datetime
+from datetime import date
 
 from fastapi import APIRouter, Response, status
 from fastapi.responses import FileResponse
 from fastapi.templating import Jinja2Templates
 from fasthx.jinja import Jinja
 
-from ....data.domain import value_objects
 from ....data.services import handlers
+from ...domain import domain_services
 from ...domain.value_objects import (
     ROOT_DIR,
     STATIC_DIR,
@@ -46,7 +46,7 @@ async def extract_bps_inflation(
 async def extract_idx_stock_summary(
     token: Token,
     settings: AppSettings,
-    date: date = datetime.now(tz=value_objects.TIME_ZONE).date(),  # noqa: B008
+    date: date = domain_services.today(),  # noqa: B008
 ) -> Response:
     await handlers.extract_idx_stock_summary(settings, date)
 
