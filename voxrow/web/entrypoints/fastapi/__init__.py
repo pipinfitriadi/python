@@ -12,7 +12,7 @@ from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from ...domain.value_objects import STATIC_DIR
+from ...domain import value_objects
 from . import exception_handlers, middleware, routers
 
 # Variables
@@ -20,13 +20,21 @@ app: FastAPI = FastAPI(
     openapi_url=None,
     docs_url=None,
     redoc_url=None,
+    title=value_objects.TITLE,
+    version=value_objects.VERSION,
+    license_info=dict(name=value_objects.LICENSE),
+    contact=dict(
+        name=value_objects.AUTHOR,
+        email=value_objects.EMAIL,
+        url=value_objects.URL,
+    ),
 )
 
 app.add_middleware(BaseHTTPMiddleware, dispatch=middleware.minify_middleware)
 app.add_middleware(GZipMiddleware)
 app.mount(
     "/static",
-    StaticFiles(directory=STATIC_DIR),
+    StaticFiles(directory=value_objects.STATIC_DIR),
     name="static",
 )
 app.add_exception_handler(HTTPException, exception_handlers.http_exception_handler)
