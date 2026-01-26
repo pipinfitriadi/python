@@ -37,12 +37,12 @@ def etl(
             and isinstance(element[1], Source)
         ):
             with element[0] as uow:
-                data_sources.append(uow.source.extract(source=element[1]))
+                data_sources.append(uow.source_port.extract(source=element[1]))
         else:
             data_sources.append(element)
 
     with destination[0] as uow:
-        resource_location: ResourceLocation = uow.destination.load(
+        resource_location: ResourceLocation = uow.destination_port.load(
             data_sources[0] if transform is None else transform(*data_sources),
             destination=destination[1],
         )

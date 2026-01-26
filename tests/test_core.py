@@ -42,7 +42,7 @@ def test_path_data_unit_of_work() -> None:
         NamedTemporaryFile(mode="w+", suffix=".txt") as temp_file,
     ):
         data: str = "Test"
-        file_path: Path = uow.destination.load(
+        file_path: Path = uow.destination_port.load(
             data,
             destination=PathDestination(temp_file.name),
         )
