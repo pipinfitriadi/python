@@ -6,7 +6,7 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 14 January 2026
 
-from copy import deepcopy
+from copy import copy
 from types import TracebackType
 from typing import Self
 
@@ -72,7 +72,7 @@ class AbstractDataUnitOfWork(AbstractUnitOfWork):  # pragma: no cover
         self.source_domain = source
         self.destination_domain = destination
 
-        return deepcopy(self)
+        return copy(self)
 
     def __enter__(self) -> Self:
         if not any((self.source_domain, self.destination_domain)):
