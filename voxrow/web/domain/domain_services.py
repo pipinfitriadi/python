@@ -6,11 +6,21 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 26 January 2026
 
+from datetime import date, datetime
 from functools import lru_cache
 
+from ...data.domain import value_objects
 from .value_objects import Settings
 
 
 @lru_cache
-def get_settings() -> Settings:  # pragma: no cover
+def get_fastapi_settings() -> Settings:  # pragma: no cover
     return Settings()
+
+
+def get_typer_settings() -> Settings:  # pragma: no cover
+    return Settings(_env=".env")
+
+
+def today() -> date:
+    return datetime.now(tz=value_objects.TIME_ZONE).date()

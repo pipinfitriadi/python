@@ -12,14 +12,14 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import validate_call
 
-from ...domain.domain_services import get_settings
+from ...domain.domain_services import get_fastapi_settings
 from ...domain.value_objects import Settings
 
 # Variables
 bearer_scheme: HTTPBearer = HTTPBearer()
 
 
-AppSettings: TypeAlias = Annotated[Settings, Depends(get_settings)]
+AppSettings: TypeAlias = Annotated[Settings, Depends(get_fastapi_settings)]
 Credentials: TypeAlias = Annotated[HTTPAuthorizationCredentials, Depends(bearer_scheme)]
 
 
