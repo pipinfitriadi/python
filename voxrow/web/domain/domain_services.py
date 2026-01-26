@@ -19,7 +19,7 @@ def get_fastapi_settings() -> Settings:  # pragma: no cover
 
 
 def get_typer_settings() -> Settings:  # pragma: no cover
-    return Settings(_env=".env")
+    return Settings(_env_file=".env")
 
 
 def today() -> date:
