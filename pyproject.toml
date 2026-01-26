@@ -9,7 +9,7 @@ requires = ['setuptools>=61.0', 'setuptools-git-versioning<2']
 build-backend = 'setuptools.build_meta'
 
 [project]
-name = 'voxrow.web'
+name = 'voxrow-web'
 description = "VOXROW's Web"
 readme = 'README.md'
 requires-python = '>=3.12, <3.13'
@@ -52,7 +52,7 @@ data = [
 ]
 
 [project.scripts]
-'voxrow.web' = 'voxrow.web.entrypoints.typer:app'
+'voxrow-web' = 'voxrow.web.entrypoints.typer:app'
 
 [dependency-groups]
 code-coverage = [

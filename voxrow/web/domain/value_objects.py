@@ -14,8 +14,9 @@ from pydantic import EmailStr, HttpUrl, SecretStr
 from ...data.domain import value_objects
 
 # Constants
+DATE_FMT: str = "%Y-%m-%d"
 TITLE: str = "VOXROW"
-DISTRIBUTION_NAME: str = "voxrow.web"
+DISTRIBUTION_NAME: str = "voxrow-web"
 VERSION: str = version(DISTRIBUTION_NAME)
 METADATA: PackageMetadata = metadata(DISTRIBUTION_NAME)
 LICENSE: str = METADATA.get("license")

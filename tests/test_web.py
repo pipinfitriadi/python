@@ -19,8 +19,8 @@ from pytest import MonkeyPatch, fixture
 
 from voxrow.core.domain.value_objects import ContentType
 from voxrow.data.domain.value_objects import Boto3Credential
+from voxrow.web.domain.domain_services import get_settings
 from voxrow.web.domain.value_objects import Settings
-from voxrow.web.entrypoints import get_settings
 from voxrow.web.entrypoints.fastapi import app
 
 # Constants
