@@ -12,8 +12,8 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import validate_call
 
+from ...domain.domain_services import get_settings
 from ...domain.value_objects import Settings
-from .. import get_settings
 
 # Variables
 bearer_scheme: HTTPBearer = HTTPBearer()

@@ -6,10 +6,12 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 26 January 2026
 
+import random
 from calendar import monthrange
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from http import HTTPMethod
 from pathlib import Path
+from time import sleep
 
 from pydantic import validate_call
 
@@ -83,44 +85,69 @@ async def extract_bps_inflation(settings: Settings) -> None:
 
 
 @validate_call
-async def extract_idx_stock_summary(settings: Settings, start_date: date) -> None:
-    if start_date.strftime("%a") not in ("Sat", "Sun"):
-        WEB_DOMAIN: str = "idx.co.id"
+async def extract_idx_stock_summary(
+    settings: Settings,
+    start_date: date,
+    end_date: date | None = None,
+) -> None:
+    if end_date is None:
+        if start_date.strftime("%a") not in ("Sat", "Sun"):
+            WEB_DOMAIN: str = "idx.co.id"
 
-        with unit_of_work.HttpxDataUnitOfWork()(
-            source=value_objects.HttpxSource(
-                url="https://scraper-api.decodo.com/v2/scrape",
-                method=HTTPMethod.POST,
-                headers={
-                    "Authorization": "Basic {decodo_token}".format(
-                        decodo_token=settings.decodo_web_scraping_token.get_secret_value()
+            with unit_of_work.HttpxDataUnitOfWork()(
+                source=value_objects.HttpxSource(
+                    url="https://scraper-api.decodo.com/v2/scrape",
+                    method=HTTPMethod.POST,
+                    headers={
+                        "Authorization": "Basic {decodo_token}".format(
+                            decodo_token=settings.decodo_web_scraping_token.get_secret_value()
+                        ),
+                        "Accept": value_objects.ContentType.json,
+                        "Content-Type": value_objects.ContentType.json,
+                    },
+                    json=dict(
+                        url="https://{WEB_DOMAIN}/primary/TradingSummary/GetStockSummary?date={DATE}".format(
+                            WEB_DOMAIN=WEB_DOMAIN,
+                            DATE=start_date.strftime("%Y%m%d"),
+                        ),
+                        successful_status_codes=[200],
                     ),
-                    "Accept": value_objects.ContentType.json,
-                    "Content-Type": value_objects.ContentType.json,
-                },
-                json=dict(
-                    url="https://{WEB_DOMAIN}/primary/TradingSummary/GetStockSummary?date={DATE}".format(
-                        WEB_DOMAIN=WEB_DOMAIN,
-                        DATE=start_date.strftime("%Y%m%d"),
-                    ),
-                    successful_status_codes=[200],
-                ),
-                timeout=60,
-            )
-        ) as uow:
-            data: value_objects.Data = domain_services.decodo_web_scraping_parsed(
-                uow.source_port.extract(source=uow.source_domain)
-            )
+                    timeout=60,
+                )
+            ) as uow:
+                data: value_objects.Data = domain_services.decodo_web_scraping_parsed(
+                    uow.source_port.extract(source=uow.source_domain)
+                )
 
-        if data["data"]:
-            handlers.etl(
-                sources=(data,),
-                destination=Boto3DataUnitOfWork(settings.cloudflare_r2)(
-                    destination=Boto3Destination(
-                        bucket="datalake",
-                        key=f"{WEB_DOMAIN}/GetStockSummary/{start_date}.json.gz",
-                        content_type=value_objects.ContentType.json,
-                        content_encoding=value_objects.ContentEncoding.gzip,
-                    )
-                ),
+            if data["data"]:
+                handlers.etl(
+                    sources=(data,),
+                    destination=Boto3DataUnitOfWork(settings.cloudflare_r2)(
+                        destination=Boto3Destination(
+                            bucket="datalake",
+                            key=f"{WEB_DOMAIN}/GetStockSummary/{start_date}.json.gz",
+                            content_type=value_objects.ContentType.json,
+                            content_encoding=value_objects.ContentEncoding.gzip,
+                        )
+                    ),
+                )
+    elif start_date == end_date:
+        await extract_idx_stock_summary(
+            settings=settings,
+            start_date=start_date,
+            end_date=None,
+        )
+    elif start_date > end_date:
+        await extract_idx_stock_summary(
+            settings=settings,
+            start_date=end_date,
+            end_date=start_date,
+        )
+    else:
+        for day in range((end_date - start_date).days + 1):
+            await extract_idx_stock_summary(
+                settings=settings,
+                start_date=start_date + timedelta(days=day),
+                end_date=None,
             )
+            sleep(random.uniform(3.0, 5.0))  # noqa: S311
