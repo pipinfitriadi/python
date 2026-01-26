@@ -12,20 +12,16 @@ from typing import Iterator
 from pydantic import validate_call
 
 
-class AbstractAddRepository(ABC):
+class AbstractRepository(ABC):
     @abstractmethod
     @validate_call
     def add(self, value: any) -> None:
         pass
 
-
-class AbstractAllRepository(ABC):
     @abstractmethod
     def all(self) -> Iterator[any]:
         pass
 
-
-class AbstractGetRepository(ABC):
     @abstractmethod
     @validate_call
     def get(self, id: any) -> any:

@@ -57,10 +57,9 @@ class AbstractUnitOfWork:  # pragma: no cover
 
 
 class AbstractDataUnitOfWork(AbstractUnitOfWork):  # pragma: no cover
-    destination_domain: Destination | None = None
-    destination_port: ports.AbstractDestinationPort | None = None
-    source_domain: Source | None = None
-    source_port: ports.AbstractSourcePort | None = None
+    data: ports.AbstractDataPort | None = None
+    destination: Destination | None = None
+    source: Source | None = None
 
     @validate_call
     def __call__(
@@ -69,14 +68,14 @@ class AbstractDataUnitOfWork(AbstractUnitOfWork):  # pragma: no cover
         source: Source | None = None,
         destination: Destination | None = None,
     ) -> Self:
-        self.source_domain = source
-        self.destination_domain = destination
+        self.source = source
+        self.destination = destination
 
         return copy(self)
 
     def __enter__(self) -> Self:
-        if not any((self.source_domain, self.destination_domain)):
-            raise ValueError("destination_domain or source_domain must not be empty")
+        if not any((self.source, self.destination)):
+            raise ValueError("destination or source must not be empty")
 
         return super().__enter__()
 
@@ -87,8 +86,8 @@ class AbstractDataUnitOfWork(AbstractUnitOfWork):  # pragma: no cover
         exc_value: BaseException | None = None,
         exc_traceback: TracebackType | None = None,
     ) -> bool | None:
-        self.source_domain = None
-        self.destination_domain = None
+        self.source = None
+        self.destination = None
 
         return super().__exit__(exc_type, exc_value, exc_traceback)
 
@@ -96,9 +95,9 @@ class AbstractDataUnitOfWork(AbstractUnitOfWork):  # pragma: no cover
 # Implementations
 class HttpxDataUnitOfWork(AbstractDataUnitOfWork):
     def __init__(self) -> None:
-        self.source_port = httpx.HttpxSourcePort()
+        self.data = httpx.HttpxDataPort()
 
 
 class PathDataUnitOfWork(AbstractDataUnitOfWork):
     def __init__(self) -> None:
-        self.destination_port = pathlib.PathDestinationPort()
+        self.data = pathlib.PathDataPort()

@@ -23,13 +23,10 @@ from ....core.domain.value_objects import (
 from ...domain.value_objects import Boto3Destination, Boto3Source
 
 
-# Abstract
 @dataclass(config=CONFIG_DICT, frozen=True)
-class AbstractBoto3:
+class Boto3DataPort(ports.AbstractDataPort):
     client: BaseClient
 
-
-class Boto3SourcePort(AbstractBoto3, ports.AbstractSourcePort):
     @validate_call
     def extract(self, *, source: Boto3Source) -> Data:
         response: any = self.client.get_object(
@@ -45,8 +42,6 @@ class Boto3SourcePort(AbstractBoto3, ports.AbstractSourcePort):
             else data
         )
 
-
-class Boto3DestinationPort(AbstractBoto3, ports.AbstractDestinationPort):
     @validate_call
     def load(self, data: Data, *, destination: Boto3Destination) -> ResourceLocation:
         data = (

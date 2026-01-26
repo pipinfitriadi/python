@@ -116,7 +116,7 @@ async def extract_idx_stock_summary(
                 )
             ) as uow:
                 data: value_objects.Data = domain_services.decodo_web_scraping_parsed(
-                    uow.source_port.extract(source=uow.source_domain)
+                    uow.data.extract(source=uow.source)
                 )
 
             if data["data"]:

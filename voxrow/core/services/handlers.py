@@ -26,14 +26,14 @@ def etl(
     for source in sources:
         if isinstance(source, AbstractDataUnitOfWork):
             with source as uow:
-                data_sources.append(uow.source_port.extract(source=uow.source_domain))
+                data_sources.append(uow.data.extract(source=uow.source))
         else:
             data_sources.append(source)
 
     with destination as uow:
-        resource_location: ResourceLocation = uow.destination_port.load(
+        resource_location: ResourceLocation = uow.data.load(
             data_sources[0] if transform is None else transform(*data_sources),
-            destination=uow.destination_domain,
+            destination=uow.destination,
         )
 
     return resource_location
