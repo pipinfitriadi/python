@@ -10,7 +10,7 @@ import gzip
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
-from pytest import fixture, mark
+from pytest import fixture, mark, raises
 
 from voxrow.core.domain import domain_services
 from voxrow.core.domain.value_objects import ENCODING, PathDestination
@@ -52,3 +52,9 @@ async def test_path_data_unit_of_work() -> None:
 
         assert file_path.read_text() == data
         assert file_path == Path(temp_file.name)
+
+    with (
+        raises(ValueError, match="destination or source must not be empty"),
+        unit_of_work.PathDataUnitOfWork(),
+    ):
+        pass  # pragma: no cover

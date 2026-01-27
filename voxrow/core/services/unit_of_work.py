@@ -56,7 +56,7 @@ class AbstractUnitOfWork:  # pragma: no cover
         return is_exc_suppresses
 
 
-class AbstractDataUnitOfWork(AbstractUnitOfWork):  # pragma: no cover
+class AbstractDataUnitOfWork(AbstractUnitOfWork):
     data: ports.AbstractDataPort | None = None
     destination: Destination | None = None
     source: Source | None = None
