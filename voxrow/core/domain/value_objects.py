@@ -9,6 +9,7 @@
 from enum import StrEnum
 from http import HTTPMethod
 from pathlib import Path
+from ssl import SSLContext
 from typing import Any, Iterator, TypeAlias
 
 from pydantic import ConfigDict, GetCoreSchemaHandler, HttpUrl
@@ -65,10 +66,11 @@ class PathDestination(Destination):
     file: Path
 
 
-@dataclass(frozen=True)
+@dataclass(config=CONFIG_DICT, frozen=True)
 class HttpxSource(Source):
     url: HttpUrl
     method: HTTPMethod = HTTPMethod.GET
     headers: dict | None = None
-    json: dict | None = None
-    timeout: float | int | None = None
+    json: Any | None = None
+    timeout: float | None = None
+    verify: SSLContext | str | bool = True

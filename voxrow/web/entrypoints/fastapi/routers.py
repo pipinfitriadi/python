@@ -27,11 +27,19 @@ templates: Jinja2Templates = Jinja2Templates(directory=ROOT_DIR / "templates")
 jinja: Jinja = Jinja(templates)
 
 
+# Pages and Files
 @router.get("/favicon.ico", include_in_schema=False)
 async def favicon() -> FileResponse:
     return FileResponse(STATIC_DIR / "favicon.svg")
 
 
+@router.get("/", include_in_schema=False)
+@jinja.page("inflation.html.j2")
+async def root() -> dict:
+    return dict(title="Inflasi")
+
+
+# API
 @router.get("/bps/inflation")
 async def extract_bps_inflation(
     token: Token,
@@ -51,9 +59,3 @@ async def extract_idx_stock_summary(
     await handlers.extract_idx_stock_summary(settings, date)
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
-
-
-@router.get("/", include_in_schema=False)
-@jinja.page("inflation.html.j2")
-async def root() -> dict:
-    return dict(title="Inflasi")

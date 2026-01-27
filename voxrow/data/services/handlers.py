@@ -50,7 +50,8 @@ async def extract_bps_inflation(settings: Settings) -> None:
                         # Tingkat Inflasi Harga Konsumen Nasional Tahunan (Y-on-Y)
                         ID=915,
                         KEY=settings.bps_key.get_secret_value(),
-                    )
+                    ),
+                    verify=False,
                 )
             ),
         ),

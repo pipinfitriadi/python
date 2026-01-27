@@ -24,10 +24,10 @@ class HttpxDataPort(AbstractDataPort):
         }
         resp: Response = methods[source.method](
             url=str(source.url),
-            **(dict(json=source.json) if source.method is HTTPMethod.POST else {}),
+            verify=source.verify,
             headers=source.headers,
             **(dict(timeout=source.timeout) if source.timeout is not None else {}),
-            verify=False,
+            **(dict(json=source.json) if source.method is HTTPMethod.POST else {}),
         )
 
         resp.raise_for_status()
