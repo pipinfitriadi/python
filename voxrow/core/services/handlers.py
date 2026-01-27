@@ -14,7 +14,7 @@ from .unit_of_work import AbstractDataUnitOfWork
 
 
 @validate_call(config=CONFIG_DICT)
-def etl(
+async def etl(
     sources: tuple[Data | AbstractDataUnitOfWork, ...],
     destination: AbstractDataUnitOfWork,
     transform: Transform | None = None,
@@ -26,12 +26,12 @@ def etl(
     for source in sources:
         if isinstance(source, AbstractDataUnitOfWork):
             with source as uow:
-                data_sources.append(uow.data.extract(source=uow.source))
+                data_sources.append(await uow.data.extract(source=uow.source))
         else:
             data_sources.append(source)
 
     with destination as uow:
-        resource_location: ResourceLocation = uow.data.load(
+        resource_location: ResourceLocation = await uow.data.load(
             data_sources[0] if transform is None else transform(*data_sources),
             destination=uow.destination,
         )

@@ -14,11 +14,13 @@ from . import AbstractDataPort
 
 class PathDataPort(AbstractDataPort):
     @validate_call
-    def extract(self, *, source: Source) -> Data:  # pragma: no cover
+    async def extract(self, *, source: Source) -> Data:  # pragma: no cover
         pass
 
     @validate_call
-    def load(self, data: Data, *, destination: PathDestination) -> ResourceLocation:
+    async def load(
+        self, data: Data, *, destination: PathDestination
+    ) -> ResourceLocation:
         destination.file.write_text(data)
 
         return destination.file

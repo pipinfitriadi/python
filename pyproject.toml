@@ -58,6 +58,7 @@ data = [
 code-coverage = [
     'coverage',
     'pytest',
+    'pytest-asyncio',
     'toml',
 ]
 code-quality = [
