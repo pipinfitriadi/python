@@ -16,10 +16,10 @@ from ...domain.value_objects import Data, Destination, ResourceLocation, Source
 class AbstractDataPort(ABC):  # pragma: no cover
     @abstractmethod
     @validate_call
-    def extract(self, *, source: Source) -> Data:
+    async def extract(self, *, source: Source) -> Data:
         pass
 
     @abstractmethod
     @validate_call
-    def load(self, data: Data, *, destination: Destination) -> ResourceLocation:
+    async def load(self, data: Data, *, destination: Destination) -> ResourceLocation:
         pass

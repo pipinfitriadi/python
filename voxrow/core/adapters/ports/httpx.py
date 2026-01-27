@@ -17,7 +17,7 @@ from . import AbstractDataPort
 
 class HttpxDataPort(AbstractDataPort):
     @validate_call
-    def extract(self, *, source: HttpxSource) -> Data:
+    async def extract(self, *, source: HttpxSource) -> Data:
         methods: dict = {
             HTTPMethod.GET: get,
             HTTPMethod.POST: post,
@@ -35,7 +35,7 @@ class HttpxDataPort(AbstractDataPort):
         return resp.json()
 
     @validate_call
-    def load(
+    async def load(
         self, data: Data, *, destination: Destination
     ) -> ResourceLocation:  # pragma: no cover
         pass

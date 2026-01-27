@@ -28,7 +28,7 @@ class Boto3DataPort(ports.AbstractDataPort):
     client: BaseClient
 
     @validate_call
-    def extract(self, *, source: Boto3Source) -> Data:
+    async def extract(self, *, source: Boto3Source) -> Data:
         response: any = self.client.get_object(
             Bucket=source.bucket,
             Key=str(source.key),
@@ -43,7 +43,9 @@ class Boto3DataPort(ports.AbstractDataPort):
         )
 
     @validate_call
-    def load(self, data: Data, *, destination: Boto3Destination) -> ResourceLocation:
+    async def load(
+        self, data: Data, *, destination: Boto3Destination
+    ) -> ResourceLocation:
         data = (
             domain_services.dumps_to_json(data)
             if destination.content_type == ContentType.json

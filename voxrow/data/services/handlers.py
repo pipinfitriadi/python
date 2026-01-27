@@ -38,7 +38,7 @@ async def extract_bps_inflation(settings: Settings) -> None:
         day=monthrange(now.year, now.month)[1],
     )
     uow_boto3: Boto3DataUnitOfWork = Boto3DataUnitOfWork(settings.cloudflare_r2)
-    datalake_key: Path = handlers.etl(
+    datalake_key: Path = await handlers.etl(
         sources=(
             unit_of_work.HttpxDataUnitOfWork()(
                 source=value_objects.HttpxSource(
@@ -64,7 +64,7 @@ async def extract_bps_inflation(settings: Settings) -> None:
         ),
     )
 
-    handlers.etl(
+    await handlers.etl(
         sources=(
             uow_boto3(
                 source=Boto3Source(
@@ -116,11 +116,11 @@ async def extract_idx_stock_summary(
                 )
             ) as uow:
                 data: value_objects.Data = domain_services.decodo_web_scraping_parsed(
-                    uow.data.extract(source=uow.source)
+                    await uow.data.extract(source=uow.source)
                 )
 
             if data["data"]:
-                handlers.etl(
+                await handlers.etl(
                     sources=(data,),
                     destination=Boto3DataUnitOfWork(settings.cloudflare_r2)(
                         destination=Boto3Destination(

@@ -10,7 +10,7 @@ import gzip
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
-from pytest import fixture
+from pytest import fixture, mark
 
 from voxrow.core.domain import domain_services
 from voxrow.core.domain.value_objects import ENCODING, PathDestination
@@ -36,7 +36,8 @@ def test_decompress_from_gzip(fake_gzip: bytes) -> None:
 
 
 # Unit of Work > Data > Path
-def test_path_data_unit_of_work() -> None:
+@mark.asyncio
+async def test_path_data_unit_of_work() -> None:
     with (
         NamedTemporaryFile(mode="w+", suffix=".txt") as temp_file,
         unit_of_work.PathDataUnitOfWork()(
@@ -44,7 +45,7 @@ def test_path_data_unit_of_work() -> None:
         ) as uow,
     ):
         data: str = "Test"
-        file_path: Path = uow.data.load(
+        file_path: Path = await uow.data.load(
             data,
             destination=uow.destination,
         )
