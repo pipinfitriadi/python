@@ -21,7 +21,8 @@ app: Typer = Typer(
         (
             f"{value_objects.TITLE} ({value_objects.VERSION})",
             f"{value_objects.AUTHOR} <{value_objects.EMAIL}>",
-            str(value_objects.URL),
+            f"Website: {value_objects.URL}",
+            f"{value_objects.LICENSE} License: {value_objects.LICENSE_URL}",
         )
     ),
 )
