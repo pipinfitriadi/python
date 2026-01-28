@@ -37,6 +37,12 @@ app.mount(
     StaticFiles(directory=value_objects.STATIC_DIR),
     name="static",
 )
-app.add_exception_handler(HTTPException, exception_handlers.http_exception_handler)
-app.add_exception_handler(Exception, exception_handlers.internal_server_error_handler)
+app.add_exception_handler(
+    HTTPException,
+    exception_handlers.http_exception_handler,
+)
+app.add_exception_handler(
+    Exception,
+    exception_handlers.internal_server_error_handler,
+)
 app.include_router(routers.router)

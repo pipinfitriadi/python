@@ -7,7 +7,7 @@
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 13 January 2026
 
 from abc import ABC, abstractmethod
-from typing import Iterator
+from collections.abc import Iterator
 
 from pydantic import validate_call
 
@@ -24,5 +24,5 @@ class AbstractRepository(ABC):
 
     @abstractmethod
     @validate_call
-    def get(self, id: any) -> any:
+    def get(self, identity: any) -> any:
         pass

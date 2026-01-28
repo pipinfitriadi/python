@@ -21,7 +21,7 @@ VERSION: str = version(DISTRIBUTION_NAME)
 METADATA: PackageMetadata = metadata(DISTRIBUTION_NAME)
 LICENSE: str = METADATA.get("license")
 LICENSE_URL: HttpUrl = HttpUrl(
-    "https://github.com/pipinfitriadi/workspace/raw/refs/heads/main/LICENSE"
+    "https://github.com/pipinfitriadi/workspace/raw/refs/heads/main/LICENSE",
 )
 AUTHOR: str = METADATA.get("Author")
 EMAIL: EmailStr = METADATA.get("Author-email")

@@ -21,5 +21,10 @@ class AbstractDataPort(ABC):  # pragma: no cover
 
     @abstractmethod
     @validate_call
-    async def load(self, data: Data, *, destination: Destination) -> ResourceLocation:
+    async def load(
+        self,
+        data: Data,
+        *,
+        destination: Destination,
+    ) -> ResourceLocation:
         pass

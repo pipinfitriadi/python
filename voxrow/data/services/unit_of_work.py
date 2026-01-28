@@ -24,5 +24,5 @@ class Boto3DataUnitOfWork(AbstractDataUnitOfWork):
                 aws_access_key_id=credential.aws_access_key_id.get_secret_value(),
                 aws_secret_access_key=credential.aws_secret_access_key.get_secret_value(),
                 region_name=credential.region_name,
-            )
+            ),
         )

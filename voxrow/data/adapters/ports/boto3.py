@@ -44,7 +44,10 @@ class Boto3DataPort(ports.AbstractDataPort):
 
     @validate_call
     async def load(
-        self, data: Data, *, destination: Boto3Destination
+        self,
+        data: Data,
+        *,
+        destination: Boto3Destination,
     ) -> ResourceLocation:
         data = (
             domain_services.dumps_to_json(data)

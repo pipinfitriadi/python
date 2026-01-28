@@ -43,7 +43,7 @@ jobs:
       - name: Install dependencies
         run: pip install --editable '.[core, data]' --group code-quality
       - name: Test
-        run: flake8
+        run: ruff check
   code-coverage:
     name: Code Coverage
     if:

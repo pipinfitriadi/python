@@ -11,7 +11,12 @@ from http import HTTPMethod
 from httpx import Response, get, post
 from pydantic import validate_call
 
-from ...domain.value_objects import Data, Destination, HttpxSource, ResourceLocation
+from ...domain.value_objects import (
+    Data,
+    Destination,
+    HttpxSource,
+    ResourceLocation,
+)
 from . import AbstractDataPort
 
 
@@ -36,6 +41,9 @@ class HttpxDataPort(AbstractDataPort):
 
     @validate_call
     async def load(
-        self, data: Data, *, destination: Destination
+        self,
+        data: Data,
+        *,
+        destination: Destination,
     ) -> ResourceLocation:  # pragma: no cover
         pass

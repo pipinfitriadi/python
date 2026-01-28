@@ -42,7 +42,7 @@ async def root() -> dict:
 # API
 @router.get("/bps/inflation")
 async def extract_bps_inflation(
-    token: Token,
+    token: Token,  # noqa: ARG001
     settings: AppSettings,
 ) -> Response:
     await handlers.extract_bps_inflation(settings)
@@ -52,7 +52,7 @@ async def extract_bps_inflation(
 
 @router.get("/idx/stock-summary")
 async def extract_idx_stock_summary(
-    token: Token,
+    token: Token,  # noqa: ARG001
     settings: AppSettings,
     date: date = domain_services.today(),  # noqa: B008
 ) -> Response:
