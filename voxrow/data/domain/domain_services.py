@@ -58,7 +58,7 @@ def inflation_bps_to_datamart(*args: Data) -> Data:
                         "Oktober": 10,
                         "November": 11,
                         "Desember": 12,
-                    }
+                    },
                 ),
             ],
             axis=1,
@@ -69,7 +69,7 @@ def inflation_bps_to_datamart(*args: Data) -> Data:
                     year=row["Tahun"],
                     month=row["Bulan"],
                     day=monthrange(row["Tahun"], row["Bulan"])[1],
-                )
+                ),
             ),
             axis=1,
         )
@@ -80,11 +80,11 @@ def inflation_bps_to_datamart(*args: Data) -> Data:
     del df_flat_table["Bulan"]
     del df_flat_table["Tahun"]
 
-    df_flat_table.set_index("date", inplace=True)
+    df_flat_table.set_index("date", inplace=True)  # noqa: PD002
 
     return dict(
         title=title,
-        data=df_flat_table.replace({np.nan: None}).reset_index().to_dict("records"),
+        data=(df_flat_table.replace({np.nan: None}).reset_index().to_dict("records")),
     )
 
 

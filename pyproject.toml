@@ -9,7 +9,7 @@ requires = ['setuptools>=61.0', 'setuptools-git-versioning<2']
 build-backend = 'setuptools.build_meta'
 
 [project]
-name = 'voxrow.web'
+name = 'voxrow-web'
 description = "VOXROW's Web"
 readme = 'README.md'
 requires-python = '>=3.12, <3.13'
@@ -52,19 +52,17 @@ data = [
 ]
 
 [project.scripts]
-'voxrow.web' = 'voxrow.web.entrypoint:app'
+'voxrow-web' = 'voxrow.web.entrypoints.typer:app'
 
 [dependency-groups]
 code-coverage = [
     'coverage',
     'pytest',
+    'pytest-asyncio',
     'toml',
 ]
 code-quality = [
-    'flake8-bandit',
-    'flake8-black',
-    'flake8-bugbear',
-    'flake8-isort',
+    'ruff',
 ]
 notebook = [
     'ipykernel',
@@ -80,8 +78,29 @@ dev = [
 ]
 
 [project.urls]
-Homepage = 'https://github.com/pipinfitriadi/web'
+Homepage = 'https://voxrow.com'
 Repository = 'https://github.com/pipinfitriadi/web'
+
+[tool.ruff.lint]
+select = ['ALL']
+ignore = [
+    'C408',
+    'COM812',
+    'D100',
+    'D101',
+    'D102',
+    'D103',
+    'D104',
+    'D105',
+    'D107',
+    'D203',
+    'D212',
+    'EXE001',
+    'TID252',
+]
+
+[tool.ruff.lint.per-file-ignores]
+'tests/*.py' = ['S101']
 
 [tool.setuptools.packages.find]
 include = [

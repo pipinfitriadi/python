@@ -4,6 +4,4 @@
 
 # Unauthorized copying of this file, via any medium is strictly prohibited
 # Proprietary and confidential
-# Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 30 December 2025
-
-from voxrow.web.entrypoints.fastapi import app  # noqa: F401
+# Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 25 January 2026

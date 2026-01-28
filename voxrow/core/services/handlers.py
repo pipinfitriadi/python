@@ -6,19 +6,33 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 14 January 2026
 
-from ..adapters import ports
-from ..domain.value_objects import Data, ResourceLocation
-from . import unit_of_work
+from pydantic import validate_call
+
+from ..domain.domain_services import Transform
+from ..domain.value_objects import CONFIG_DICT, Data, ResourceLocation
+from .unit_of_work import AbstractDataUnitOfWork
 
 
-def etl(uow: unit_of_work.EtlUnitOfWork) -> ResourceLocation:
-    "Extract, Transform, Load"
+@validate_call(config=CONFIG_DICT)
+async def etl(
+    sources: tuple[Data | AbstractDataUnitOfWork, ...],
+    destination: AbstractDataUnitOfWork,
+    transform: Transform | None = None,
+) -> ResourceLocation:
+    """Extract, Transform, Load."""
+    data_sources: list[Data] = []
 
-    sources: tuple[Data, ...] = tuple(
-        source.extract() if isinstance(source, ports.AbstractSourcePort) else source
-        for source in uow.sources
-    )
+    for source in sources:
+        if isinstance(source, AbstractDataUnitOfWork):
+            with source as uow:
+                data_sources.append(await uow.data.extract(source=uow.source))
+        else:
+            data_sources.append(source)
 
-    return uow.destination.load(
-        sources[0] if uow.transform is None else uow.transform(*sources)
-    )
+    with destination as uow:
+        resource_location: ResourceLocation = await uow.data.load(
+            data_sources[0] if transform is None else transform(*data_sources),
+            destination=uow.destination,
+        )
+
+    return resource_location
