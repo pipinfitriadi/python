@@ -7,10 +7,13 @@
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 13 January 2026
 
 from enum import StrEnum
+from http import HTTPMethod
 from pathlib import Path
-from typing import Any, Dict, Iterator, TypeAlias, Union
+from ssl import SSLContext
+from typing import Any, Iterator, TypeAlias
 
-from pydantic import ConfigDict, GetCoreSchemaHandler
+from pydantic import ConfigDict, GetCoreSchemaHandler, HttpUrl
+from pydantic.dataclasses import dataclass
 from pydantic_core import CoreSchema, core_schema
 
 # Constants
@@ -18,7 +21,7 @@ CONFIG_DICT = ConfigDict(arbitrary_types_allowed=True)
 ENCODING: str = "utf-8"
 
 ResourceLocation: TypeAlias = Path
-Row: TypeAlias = Dict[str, Any]
+Row: TypeAlias = dict[str, Any]
 
 
 class Rows(Iterator[Row]):
@@ -36,7 +39,7 @@ class Rows(Iterator[Row]):
         )
 
 
-Data: TypeAlias = Union[Rows, Any]
+Data: TypeAlias = Rows | Any
 
 
 class ContentEncoding(StrEnum):
@@ -48,3 +51,26 @@ class ContentType(StrEnum):
     json = "application/json"
     svg = "image/svg+xml"
     xml = "application/xml"
+
+
+@dataclass(frozen=True)
+class Destination: ...
+
+
+@dataclass(frozen=True)
+class Source: ...
+
+
+@dataclass(frozen=True)
+class PathDestination(Destination):
+    file: Path
+
+
+@dataclass(config=CONFIG_DICT, frozen=True)
+class HttpxSource(Source):
+    url: HttpUrl
+    method: HTTPMethod = HTTPMethod.GET
+    headers: dict | None = None
+    json: Any | None = None
+    timeout: float | None = None
+    verify: SSLContext | str | bool = True

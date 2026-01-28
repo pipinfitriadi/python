@@ -1,0 +1,42 @@
+#!/usr/bin/env python3
+
+# Copyright (C) Pipin Fitriadi - All Rights Reserved
+
+# Unauthorized copying of this file, via any medium is strictly prohibited
+# Proprietary and confidential
+# Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 25 January 2026
+
+from fastapi import FastAPI
+from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.staticfiles import StaticFiles
+from starlette.exceptions import HTTPException
+from starlette.middleware.base import BaseHTTPMiddleware
+
+from ...domain import value_objects
+from . import exception_handlers, middleware, routers
+
+# Variables
+app: FastAPI = FastAPI(
+    openapi_url=None,
+    docs_url=None,
+    redoc_url=None,
+    title=value_objects.TITLE,
+    version=value_objects.VERSION,
+    license_info=dict(name=value_objects.LICENSE),
+    contact=dict(
+        name=value_objects.AUTHOR,
+        email=value_objects.EMAIL,
+        url=value_objects.URL,
+    ),
+)
+
+app.add_middleware(BaseHTTPMiddleware, dispatch=middleware.minify_middleware)
+app.add_middleware(GZipMiddleware)
+app.mount(
+    "/static",
+    StaticFiles(directory=value_objects.STATIC_DIR),
+    name="static",
+)
+app.add_exception_handler(HTTPException, exception_handlers.http_exception_handler)
+app.add_exception_handler(Exception, exception_handlers.internal_server_error_handler)
+app.include_router(routers.router)
