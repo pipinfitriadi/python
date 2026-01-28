@@ -6,22 +6,29 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 31 December 2025
 
+from importlib.metadata import PackageMetadata, metadata, version
 from pathlib import Path
 
-from pydantic import SecretStr
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import EmailStr, HttpUrl, SecretStr
 
 from ...data.domain import value_objects
 
 # Constants
+DATE_FMT: str = "%Y-%m-%d"
+TITLE: str = "VOXROW"
+DISTRIBUTION_NAME: str = "voxrow-web"
+VERSION: str = version(DISTRIBUTION_NAME)
+METADATA: PackageMetadata = metadata(DISTRIBUTION_NAME)
+LICENSE: str = METADATA.get("license")
+LICENSE_URL: HttpUrl = HttpUrl(
+    "https://github.com/pipinfitriadi/workspace/raw/refs/heads/main/LICENSE"
+)
+AUTHOR: str = METADATA.get("Author")
+EMAIL: EmailStr = METADATA.get("Author-email")
+URL: HttpUrl = HttpUrl(METADATA.get_all("Project-URL")[0].split(", ")[1])
 ROOT_DIR: Path = Path("voxrow") / "web"
 STATIC_DIR: Path = ROOT_DIR / "static"
 
 
-class Settings(BaseSettings):
-    model_config: SettingsConfigDict = SettingsConfigDict(env_nested_delimiter="__")
-
-    bps_key: SecretStr
-    cloudflare_r2: value_objects.Boto3Credential
+class Settings(value_objects.Settings):
     cron_secret: SecretStr
-    decodo_web_scraping_token: SecretStr

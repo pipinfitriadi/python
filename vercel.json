@@ -1,5 +1,5 @@
 {
-    "devCommand": ".venv/bin/fastapi dev --entrypoint voxrow.web.entrypoint:app",
+    "devCommand": ".venv/bin/fastapi dev --entrypoint voxrow.web.entrypoints.fastapi:app",
     "installCommand": "pip install '.[core, data]'",
     "github": {
         "enabled": false
