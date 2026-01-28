@@ -14,13 +14,13 @@
       "label": "CI/CD: Code Quality",
       "type": "shell",
       "command": "${PYTHON_INTERPRETER_PATH}",
-      "args": ["-m", "flake8"]
+      "args": ["-m", "ruff", "check"]
     },
     {
       "problemMatcher": [],
       "label": "CI/CD: Code Quality - Fixing",
       "type": "shell",
-      "command": "${PYTHON_INTERPRETER_PATH} -m black . && ${PYTHON_INTERPRETER_PATH} -m isort ."
+      "command": "${PYTHON_INTERPRETER_PATH} -m ruff check --fix && ${PYTHON_INTERPRETER_PATH} -m ruff format"
     },
     {
       "problemMatcher": [],
