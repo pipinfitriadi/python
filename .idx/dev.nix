@@ -12,6 +12,7 @@
   # Use https://search.nixos.org/packages to find packages
   packages = with pkgs; [
     gitflow
+    git-lfs
     oh-my-posh
     python313
   ];
@@ -21,6 +22,7 @@
       "adpyke.codesnap"
       "akamud.vscode-theme-onedark"
       "augustocdias.tasks-shell-input"
+      "charliermarsh.ruff"
       "DavidAnson.vscode-markdownlint"
       "detachhead.basedpyright"
       "eamodio.gitlens"
@@ -28,7 +30,6 @@
       "mechatroner.rainbow-csv"
       "mermaidchart.vscode-mermaid-chart"
       "mhutchie.git-graph"
-      "ms-python.flake8"
       "ms-python.python"
       "ms-toolsai.jupyter"
       "waderyan.gitblame"
