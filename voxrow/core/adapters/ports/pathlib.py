@@ -6,22 +6,29 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 13 January 2026
 
-from pathlib import Path
-
 from pydantic import validate_call
-from pydantic.dataclasses import dataclass
 
-from ...domain import domain_services
-from ...domain.value_objects import Data, ResourceLocation
-from . import AbstractDestinationPort
+from ...domain.value_objects import (
+    Data,
+    PathDestination,
+    ResourceLocation,
+    Source,
+)
+from . import AbstractDataPort
 
 
-@dataclass(frozen=True)
-class PathDestinationPort(AbstractDestinationPort):
-    file: Path
+class PathDataPort(AbstractDataPort):
+    @validate_call
+    async def extract(self, *, source: Source) -> Data:  # pragma: no cover
+        pass
 
     @validate_call
-    def load(self, data: Data) -> ResourceLocation:
-        self.file.write_text(domain_services.dumps_to_json(data))
+    async def load(
+        self,
+        data: Data,
+        *,
+        destination: PathDestination,
+    ) -> ResourceLocation:
+        destination.file.write_text(data)
 
-        return self.file
+        return destination.file

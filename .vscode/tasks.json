@@ -14,20 +14,20 @@
       "label": "CI/CD: Code Quality",
       "type": "shell",
       "command": "${PYTHON_INTERPRETER_PATH}",
-      "args": ["-m", "flake8"]
+      "args": ["-m", "ruff", "check"]
     },
     {
       "problemMatcher": [],
       "label": "CI/CD: Code Quality - Fixing",
       "type": "shell",
-      "command": "${PYTHON_INTERPRETER_PATH} -m black . && ${PYTHON_INTERPRETER_PATH} -m isort ."
+      "command": "${PYTHON_INTERPRETER_PATH} -m ruff check --fix && ${PYTHON_INTERPRETER_PATH} -m ruff format"
     },
     {
       "problemMatcher": [],
       "label": "CI/CD: Test",
       "type": "shell",
       "command": "${PYTHON_INTERPRETER_PATH}",
-      "args": ["-m", "coverage", "run", "-m", "pytest", "-rfEP", "-q", "--junit-xml=code-coverage.xml", "-o", "junit_family=legacy"]
+      "args": ["-m", "coverage", "run", "-m", "pytest", "-rfEP", "-q", "--junit-xml=code-coverage.xml"]
     },
     {
       "problemMatcher": [],

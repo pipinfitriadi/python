@@ -10,18 +10,21 @@ from abc import ABC, abstractmethod
 
 from pydantic import validate_call
 
-from ...domain.value_objects import Data, ResourceLocation
+from ...domain.value_objects import Data, Destination, ResourceLocation, Source
 
 
-class AbstractSourcePort(ABC):  # pragma: no cover
+class AbstractDataPort(ABC):  # pragma: no cover
     @abstractmethod
     @validate_call
-    def extract(self) -> Data:
+    async def extract(self, *, source: Source) -> Data:
         pass
 
-
-class AbstractDestinationPort(ABC):  # pragma: no cover
     @abstractmethod
     @validate_call
-    def load(self, data: Data) -> ResourceLocation:
+    async def load(
+        self,
+        data: Data,
+        *,
+        destination: Destination,
+    ) -> ResourceLocation:
         pass

@@ -7,36 +7,43 @@
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 13 January 2026
 
 from http import HTTPMethod
-from typing import Optional, Union
 
 from httpx import Response, get, post
-from pydantic import HttpUrl, validate_call
-from pydantic.dataclasses import dataclass
+from pydantic import validate_call
 
-from ...domain.value_objects import Data
-from . import AbstractSourcePort
+from ...domain.value_objects import (
+    Data,
+    Destination,
+    HttpxSource,
+    ResourceLocation,
+)
+from . import AbstractDataPort
 
 
-@dataclass(frozen=True)
-class HttpxSourcePort(AbstractSourcePort):
-    url: HttpUrl
-    method: HTTPMethod = HTTPMethod.GET
-    headers: Optional[dict] = None
-    json: Optional[dict] = None
-    timeout: Optional[Union[float, int]] = None
-
+class HttpxDataPort(AbstractDataPort):
     @validate_call
-    def extract(self) -> Data:
+    async def extract(self, *, source: HttpxSource) -> Data:
         methods: dict = {
             HTTPMethod.GET: get,
             HTTPMethod.POST: post,
         }
-
-        resp: Response = methods[self.method](
-            url=str(self.url),
-            **(dict(json=self.json) if self.method is HTTPMethod.POST else {}),
-            headers=self.headers,
-            **(dict(timeout=self.timeout) if self.timeout is not None else {}),
+        resp: Response = methods[source.method](
+            url=str(source.url),
+            verify=source.verify,
+            headers=source.headers,
+            **(dict(timeout=source.timeout) if source.timeout is not None else {}),
+            **(dict(json=source.json) if source.method is HTTPMethod.POST else {}),
         )
 
+        resp.raise_for_status()
+
         return resp.json()
+
+    @validate_call
+    async def load(
+        self,
+        data: Data,
+        *,
+        destination: Destination,
+    ) -> ResourceLocation:  # pragma: no cover
+        pass
