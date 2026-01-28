@@ -19,4 +19,5 @@ build/
 code-coverage.xml
 
 !.oh-my-posh/**/*
+!tests/files/**/*
 !template.env
