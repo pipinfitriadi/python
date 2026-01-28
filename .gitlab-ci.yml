@@ -27,7 +27,7 @@ Code Quality:
   before_script:
     - pip install --editable . --group code-quality
   script:
-    - flake8
+    - ruff check
 Code Coverage:
   stage: Test
   extends: .pip-variables
