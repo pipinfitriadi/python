@@ -7,15 +7,15 @@
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 9 December 2025
 
 import json
+from collections.abc import Callable
 from http import HTTPStatus
 from pathlib import Path
-from typing import Callable
+from typing import TYPE_CHECKING
 from unittest.mock import MagicMock
 
+import pytest
 from botocore.client import BaseClient
 from fastapi.testclient import TestClient
-from httpx import Response
-from pytest import MonkeyPatch, fixture
 from typer.testing import CliRunner, Result
 
 from voxrow.core.domain.value_objects import ContentType
@@ -23,6 +23,9 @@ from voxrow.data.domain.value_objects import Boto3Credential
 from voxrow.web.domain.domain_services import get_fastapi_settings
 from voxrow.web.domain.value_objects import Settings
 from voxrow.web.entrypoints import fastapi, typer
+
+if TYPE_CHECKING:
+    from httpx import Response
 
 # Constants
 TEST_FILES_DIR: Path = Path("tests") / "files"
@@ -35,9 +38,9 @@ TEST_DATE: str = "2026-01-19"
 
 
 def fake_get_settings() -> Settings:
-    return Settings(  # noqa: S106
+    return Settings(
         bps_key=TEST_KEY,
-        cloudflare_r2=Boto3Credential(  # noqa: S106
+        cloudflare_r2=Boto3Credential(
             endpoint_url=f"https://{TEST_KEY}.r2.cloudflarestorage.com",
             aws_access_key_id=TEST_KEY,
             aws_secret_access_key=TEST_KEY,
@@ -48,11 +51,11 @@ def fake_get_settings() -> Settings:
 
 
 # Mocks
-@fixture
-def mock_extract_bps_inflation(monkeypatch: MonkeyPatch) -> None:
+@pytest.fixture
+def mock_extract_bps_inflation(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(
         "voxrow.data.services.unit_of_work.client",
-        lambda *args, **kwargs: MagicMock(
+        lambda *args, **kwargs: MagicMock(  # noqa: ARG005
             spec=BaseClient,
             put_object=MagicMock(return_value=None),
             get_object=MagicMock(
@@ -60,49 +63,49 @@ def mock_extract_bps_inflation(monkeypatch: MonkeyPatch) -> None:
                     Body=MagicMock(
                         read=MagicMock(
                             return_value=MagicMock(
-                                decode=MagicMock(return_value=TEST_FILE_INFLATION)
-                            )
-                        )
+                                decode=MagicMock(return_value=TEST_FILE_INFLATION),
+                            ),
+                        ),
                     ),
                     ContentType=ContentType.json,
-                )
+                ),
             ),
         ),
     )
     monkeypatch.setattr(
         "voxrow.core.adapters.ports.httpx.get",
-        lambda *args, **kwargs: MagicMock(
+        lambda *args, **kwargs: MagicMock(  # noqa: ARG005
             json=MagicMock(return_value=json.loads(TEST_FILE_INFLATION)),
         ),
     )
 
 
-@fixture
-def mock_extract_idx_stock_summary(monkeypatch: MonkeyPatch) -> None:
+@pytest.fixture
+def mock_extract_idx_stock_summary(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(
         "voxrow.data.services.handlers.sleep",
         MagicMock(),
     )
     monkeypatch.setattr(
         "voxrow.data.services.unit_of_work.client",
-        lambda *args, **kwargs: MagicMock(
+        lambda *args, **kwargs: MagicMock(  # noqa: ARG005
             spec=BaseClient,
             put_object=MagicMock(return_value=None),
         ),
     )
     monkeypatch.setattr(
         "voxrow.core.adapters.ports.httpx.post",
-        lambda *args, **kwargs: MagicMock(
+        lambda *args, **kwargs: MagicMock(  # noqa: ARG005
             json=MagicMock(
                 return_value=dict(
                     results=[
                         dict(
                             content=(
                                 TEST_DATALAKE_DIR / "idx.co.id" / "GetStockSummary.json"
-                            ).read_text()
-                        )
+                            ).read_text(),
+                        ),
                     ],
-                )
+                ),
             ),
         ),
     )
@@ -112,7 +115,7 @@ def mock_extract_idx_stock_summary(monkeypatch: MonkeyPatch) -> None:
 class TestFastAPI:
     client: TestClient
 
-    @fixture(autouse=True)
+    @pytest.fixture(autouse=True)
     def setup(self) -> None:
         fastapi.app.dependency_overrides[get_fastapi_settings] = fake_get_settings
 
@@ -156,7 +159,10 @@ class TestFastAPI:
         assert response.headers["content-type"] == ContentType.svg
         assert response.text != ""
 
-    def test_extract_bps_inflation(self, mock_extract_bps_inflation: Callable) -> None:
+    def test_extract_bps_inflation(
+        self,
+        mock_extract_bps_inflation: Callable,  # noqa: ARG002
+    ) -> None:
         response: Response = self.client.get(
             "/bps/inflation",
             headers=dict(Authorization="Bearer abc"),
@@ -177,7 +183,8 @@ class TestFastAPI:
         assert response.text == ""
 
     def test_extract_idx_stock_summary(
-        self, mock_extract_idx_stock_summary: Callable
+        self,
+        mock_extract_idx_stock_summary: Callable,  # noqa: ARG002
     ) -> None:
         response: Response = self.client.get(
             "/idx/stock-summary",
@@ -199,12 +206,12 @@ class TestFastAPI:
 class TestTyper:
     runner: CliRunner
 
-    @fixture(autouse=True)
+    @pytest.fixture(autouse=True)
     def setup(self) -> None:
         self.runner = CliRunner()
 
-    @fixture
-    def mock_get_typer_settings(self, monkeypatch: MonkeyPatch) -> None:
+    @pytest.fixture
+    def mock_get_typer_settings(self, monkeypatch: pytest.MonkeyPatch) -> None:
         monkeypatch.setattr(
             "voxrow.web.domain.domain_services.get_typer_settings",
             fake_get_settings,
@@ -212,17 +219,20 @@ class TestTyper:
 
     def test_extract_bps_inflation(
         self,
-        mock_get_typer_settings: Callable,
-        mock_extract_bps_inflation: Callable,
+        mock_get_typer_settings: Callable,  # noqa: ARG002
+        mock_extract_bps_inflation: Callable,  # noqa: ARG002
     ) -> None:
-        result: Result = self.runner.invoke(typer.app, ["extract-bps-inflation"])
+        result: Result = self.runner.invoke(
+            typer.app,
+            ["extract-bps-inflation"],
+        )
 
         assert result.exit_code == 0
 
     def test_extract_idx_stock_summary(
         self,
-        mock_get_typer_settings: Callable,
-        mock_extract_idx_stock_summary: Callable,
+        mock_get_typer_settings: Callable,  # noqa: ARG002
+        mock_extract_idx_stock_summary: Callable,  # noqa: ARG002
     ) -> None:
         result: Result = self.runner.invoke(
             typer.app,

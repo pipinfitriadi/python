@@ -19,8 +19,7 @@ async def etl(
     destination: AbstractDataUnitOfWork,
     transform: Transform | None = None,
 ) -> ResourceLocation:
-    "Extract, Transform, Load"
-
+    """Extract, Transform, Load."""
     data_sources: list[Data] = []
 
     for source in sources:

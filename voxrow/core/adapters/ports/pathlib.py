@@ -8,7 +8,12 @@
 
 from pydantic import validate_call
 
-from ...domain.value_objects import Data, PathDestination, ResourceLocation, Source
+from ...domain.value_objects import (
+    Data,
+    PathDestination,
+    ResourceLocation,
+    Source,
+)
 from . import AbstractDataPort
 
 
@@ -19,7 +24,10 @@ class PathDataPort(AbstractDataPort):
 
     @validate_call
     async def load(
-        self, data: Data, *, destination: PathDestination
+        self,
+        data: Data,
+        *,
+        destination: PathDestination,
     ) -> ResourceLocation:
         destination.file.write_text(data)
 

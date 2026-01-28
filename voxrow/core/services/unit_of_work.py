@@ -25,9 +25,9 @@ class AbstractUnitOfWork:  # pragma: no cover
     @validate_call(config=CONFIG_DICT)
     def exc_handle(
         self,
-        exc_type: type[BaseException],
-        exc_value: BaseException,
-        exc_traceback: TracebackType,
+        exc_type: type[BaseException],  # noqa: ARG002
+        exc_value: BaseException,  # noqa: ARG002
+        exc_traceback: TracebackType,  # noqa: ARG002
     ) -> bool:
         return False
 
@@ -49,7 +49,11 @@ class AbstractUnitOfWork:  # pragma: no cover
         if exc_type:
             self.rollback()
 
-            is_exc_suppresses = self.exc_handle(exc_type, exc_value, exc_traceback)
+            is_exc_suppresses = self.exc_handle(
+                exc_type,
+                exc_value,
+                exc_traceback,
+            )
         else:
             self.commit()
 
@@ -75,7 +79,9 @@ class AbstractDataUnitOfWork(AbstractUnitOfWork):
 
     def __enter__(self) -> Self:
         if not any((self.source, self.destination)):
-            raise ValueError("destination or source must not be empty")
+            error_info: str = "destination or source must not be empty"
+
+            raise ValueError(error_info)
 
         return super().__enter__()
 

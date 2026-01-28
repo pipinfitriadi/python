@@ -6,11 +6,12 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 13 January 2026
 
+from collections.abc import Iterator
 from enum import StrEnum
 from http import HTTPMethod
 from pathlib import Path
 from ssl import SSLContext
-from typing import Any, Iterator, TypeAlias
+from typing import Any
 
 from pydantic import ConfigDict, GetCoreSchemaHandler, HttpUrl
 from pydantic.dataclasses import dataclass
@@ -20,8 +21,8 @@ from pydantic_core import CoreSchema, core_schema
 CONFIG_DICT = ConfigDict(arbitrary_types_allowed=True)
 ENCODING: str = "utf-8"
 
-ResourceLocation: TypeAlias = Path
-Row: TypeAlias = dict[str, Any]
+type ResourceLocation = Path
+type Row = dict[str, Any]
 
 
 class Rows(Iterator[Row]):
@@ -35,11 +36,11 @@ class Rows(Iterator[Row]):
             [
                 core_schema.is_instance_schema(Iterator),
                 core_schema.generator_schema(handler.generate_schema(Row)),
-            ]
+            ],
         )
 
 
-Data: TypeAlias = Rows | Any
+type Data = Rows | Any
 
 
 class ContentEncoding(StrEnum):

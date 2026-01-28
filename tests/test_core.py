@@ -10,7 +10,7 @@ import gzip
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
-from pytest import fixture, mark, raises
+import pytest
 
 from voxrow.core.domain import domain_services
 from voxrow.core.domain.value_objects import ENCODING, PathDestination
@@ -21,7 +21,7 @@ TEST_DATA_FOR_GZIP: tuple = (1, 2, 3)
 TEST_DATA_FOR_GZIP_BYTES: bytes = str(TEST_DATA_FOR_GZIP).encode(ENCODING)
 
 
-@fixture
+@pytest.fixture
 def fake_gzip() -> bytes:
     return gzip.compress(TEST_DATA_FOR_GZIP_BYTES, compresslevel=9)
 
@@ -32,16 +32,21 @@ def test_compress_to_gzip(fake_gzip: bytes) -> None:
 
 
 def test_decompress_from_gzip(fake_gzip: bytes) -> None:
-    assert domain_services.decompress_from_gzip(fake_gzip) == TEST_DATA_FOR_GZIP_BYTES
+    assert (
+        domain_services.decompress_from_gzip(
+            fake_gzip,
+        )
+        == TEST_DATA_FOR_GZIP_BYTES
+    )
 
 
 # Unit of Work > Data > Path
-@mark.asyncio
+@pytest.mark.asyncio
 async def test_path_data_unit_of_work() -> None:
     with (
         NamedTemporaryFile(mode="w+", suffix=".txt") as temp_file,
         unit_of_work.PathDataUnitOfWork()(
-            destination=PathDestination(temp_file.name)
+            destination=PathDestination(temp_file.name),
         ) as uow,
     ):
         data: str = "Test"
@@ -54,7 +59,10 @@ async def test_path_data_unit_of_work() -> None:
         assert file_path == Path(temp_file.name)
 
     with (
-        raises(ValueError, match="destination or source must not be empty"),
+        pytest.raises(
+            ValueError,
+            match="destination or source must not be empty",
+        ),
         unit_of_work.PathDataUnitOfWork(),
     ):
         pass  # pragma: no cover

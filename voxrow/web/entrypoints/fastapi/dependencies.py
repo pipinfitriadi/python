@@ -19,8 +19,11 @@ from ...domain.value_objects import Settings
 bearer_scheme: HTTPBearer = HTTPBearer()
 
 
-AppSettings: TypeAlias = Annotated[Settings, Depends(get_fastapi_settings)]
-Credentials: TypeAlias = Annotated[HTTPAuthorizationCredentials, Depends(bearer_scheme)]
+AppSettings: TypeAlias = Annotated[Settings, Depends(get_fastapi_settings)]  # noqa: UP040
+Credentials: TypeAlias = Annotated[  # noqa: UP040
+    HTTPAuthorizationCredentials,
+    Depends(bearer_scheme),
+]
 
 
 @validate_call
@@ -38,4 +41,4 @@ async def validate_token(
     return credentials.credentials
 
 
-Token: TypeAlias = Annotated[str, Depends(validate_token)]
+Token: TypeAlias = Annotated[str, Depends(validate_token)]  # noqa: UP040

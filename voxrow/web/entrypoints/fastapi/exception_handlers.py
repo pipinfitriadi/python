@@ -30,7 +30,7 @@ async def http_exception_handler(
 
 async def internal_server_error_handler(
     request: Request,
-    exc: Exception,
+    exc: Exception,  # noqa: ARG001
 ) -> HTMLResponse:
     status_code: int = status.HTTP_500_INTERNAL_SERVER_ERROR
 

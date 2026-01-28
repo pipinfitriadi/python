@@ -23,7 +23,7 @@ app: Typer = Typer(
             f"{value_objects.AUTHOR} <{value_objects.EMAIL}>",
             f"Website: {value_objects.URL}",
             f"{value_objects.LICENSE} License: {value_objects.LICENSE_URL}",
-        )
+        ),
     ),
 )
 
@@ -52,5 +52,5 @@ def extract_idx_stock_summary(
             settings=domain_services.get_typer_settings(),
             start_date=start_date,
             end_date=end_date,
-        )
+        ),
     )
