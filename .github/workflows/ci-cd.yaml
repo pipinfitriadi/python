@@ -42,7 +42,9 @@ jobs:
       - name: Install dependencies
         run: pip install --editable . --group code-quality
       - name: Test
-        run: ruff check
+        run: |
+          ruff check --preview --select E,E305
+          ruff check
   code-coverage:
     name: Code Coverage
     if:
