@@ -25,7 +25,6 @@
       "charliermarsh.ruff"
       "DavidAnson.vscode-markdownlint"
       "detachhead.basedpyright"
-      "eamodio.gitlens"
       "grapecity.gc-excelviewer"
       "mechatroner.rainbow-csv"
       "mermaidchart.vscode-mermaid-chart"
