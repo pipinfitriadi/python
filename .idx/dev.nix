@@ -21,7 +21,6 @@
       "akamud.vscode-theme-onedark"
       "augustocdias.tasks-shell-input"
       "DavidAnson.vscode-markdownlint"
-      "eamodio.gitlens"
       "grapecity.gc-excelviewer"
       "mechatroner.rainbow-csv"
       "mermaidchart.vscode-mermaid-chart"
