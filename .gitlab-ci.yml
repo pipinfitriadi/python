@@ -10,6 +10,8 @@ stages: [Test, Release]
     PIP_ROOT_USER_ACTION: ignore
     PIP_DISABLE_PIP_VERSION_CHECK: 1
 .python-paths: &python-paths
+  - '**/*.ipynb'
+  - '**/*.py'
   - tests/**/*
   - pyproject.toml
 .pypi-rule: &pypi-rule
@@ -22,7 +24,9 @@ Code Quality:
   stage: Test
   extends: .pip-variables
   rules:
-    - changes: ['**/*.py']
+    - changes:
+      - '**/*.ipynb'
+      - '**/*.py'
   image: python:3.13-slim-bookworm
   before_script:
     - pip install --editable . --group code-quality
