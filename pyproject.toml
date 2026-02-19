@@ -44,6 +44,7 @@ notebook = [
     'magic_duckdb',
 ]
 dev = [
+    'git-filter-repo',
     {include-group = 'code-coverage'},
     {include-group = 'code-quality'},
     {include-group = 'notebook'},
