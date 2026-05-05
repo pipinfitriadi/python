@@ -39,6 +39,5 @@ Follow these steps the first time you use VS Code after cloning this git reposit
 ## CI/CD
 
 If you encounter a Code Quality error during the CI/CD process,
-use the command <kbd>f1</kbd>,
-select `Tasks: Run Task`, choose `CI/CD: Code Quality - Fixing`,
-and then run `git commit` and `git push`.
+use the command <kbd>f1</kbd>, select `Tasks: Run Task`,
+choose `CI/CD: Code Quality - Fixing`, and then run `git commit` and `git push`.
