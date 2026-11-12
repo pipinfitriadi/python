@@ -31,6 +31,7 @@
       "mhutchie.git-graph"
       "ms-python.python"
       "ms-toolsai.jupyter"
+      "samuelcolvin.jinjahtml"
       "waderyan.gitblame"
       "yzhang.markdown-all-in-one"
     ];

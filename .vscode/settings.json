@@ -7,12 +7,14 @@
  */
 
 {
+    "basedpyright.analysis.diagnosticMode": "workspace",
     "basedpyright.analysis.typeCheckingMode": "off",
     "csv-preview.lineNumbers": "ordinal",
     "csv-preview.resizeColumns": "all",
     "editor.fontFamily": "'JetBrains Mono'",
     "editor.fontLigatures": true,
     "editor.minimap.enabled": false,
+    "git.blame.editorDecoration.enabled": true,
     "IDX.aI.enableInlineCompletion": true,
     "IDX.aI.enableCodebaseIndexing": true,
     "notebook.output.scrolling": true,
@@ -20,6 +22,7 @@
     "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
     "python.languageServer": "None",
     "python.terminal.activateEnvironment": false,
+    "python-envs.pythonProjects": [],
     "rainbow_csv.rbql_with_headers_by_default": true,
     "terminal.integrated.defaultProfile.linux": "bash",
     "terminal.integrated.profiles.linux": {
