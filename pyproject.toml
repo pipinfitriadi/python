@@ -12,14 +12,14 @@ build-backend = 'setuptools.build_meta'
 name = 'template'
 readme = 'README.md'
 requires-python = '>=3.13'
-license = {text = 'Proprietary'}
-authors = [{name = 'Pipin Fitriadi'}, {email = 'pipinfitriadi@gmail.com'}]
+license = 'LicenseRef-Proprietary'
+license-files = ['LICENSE']
+authors = [{name = 'Pipin Fitriadi', email = 'pipinfitriadi@gmail.com'}]
 maintainers = [{name = 'Pipin Fitriadi', email = 'pipinfitriadi@gmail.com'}]
 classifiers = [
     'Development Status :: 2 - Pre-Alpha',
     'Intended Audience :: Developers',
     'Intended Audience :: Information Technology',
-    'License :: Other/Proprietary License',
     'Natural Language :: English',
     'Natural Language :: Indonesian',
     'Operating System :: OS Independent',
@@ -33,6 +33,7 @@ dynamic = ['version']
 code-coverage = [
     'coverage',
     'pytest',
+    'pytest-asyncio',
     'toml',
 ]
 code-quality = [
@@ -44,11 +45,15 @@ notebook = [
     'magic_duckdb',
 ]
 dev = [
+    'build',
     'git-filter-repo',
     {include-group = 'code-coverage'},
     {include-group = 'code-quality'},
     {include-group = 'notebook'},
 ]
+
+[project.urls]
+Repository = 'https://github.com/pipinfitriadi/python.git'
 
 [tool.ruff.lint]
 select = ['ALL']
@@ -68,8 +73,15 @@ ignore = [
     'TID252',
 ]
 
+[tool.ruff.lint.flake8-copyright]
+notice-rgx = "(?i)Copyright \\(C\\)"
+
 [tool.ruff.lint.per-file-ignores]
 'tests/*.py' = ['S101']
+'*.ipynb' = ['CPY001']
+
+[tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = 'function'
 
 [tool.setuptools-git-versioning]
 enabled = true
