@@ -55,6 +55,14 @@ dev = [
 [project.urls]
 Repository = 'https://github.com/pipinfitriadi/python.git'
 
+[tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = 'function'
+
+[tool.ruff]
+extend-exclude = [
+    'tests/files/**/*.py',
+]
+
 [tool.ruff.lint]
 select = ['ALL']
 ignore = [
@@ -70,6 +78,8 @@ ignore = [
     'D203',
     'D212',
     'EXE001',
+    'FA100',
+    'UP',
     'TID252',
 ]
 
@@ -79,9 +89,6 @@ notice-rgx = "(?i)Copyright \\(C\\)"
 [tool.ruff.lint.per-file-ignores]
 'tests/*.py' = ['S101']
 '*.ipynb' = ['CPY001']
-
-[tool.pytest.ini_options]
-asyncio_default_fixture_loop_scope = 'function'
 
 [tool.setuptools-git-versioning]
 enabled = true
