@@ -19,7 +19,8 @@ stages: [Test, Release]
   exists: *python-paths
 default:
   tags:
-    - gitlab-runner-docker
+    # - gitlab-runner-docker
+    - saas-linux-small-amd64
 Code Quality:
   stage: Test
   extends: .pip-variables
@@ -29,6 +30,7 @@ Code Quality:
       - '**/*.py'
   image: python:3.13-slim-bookworm
   before_script:
+    - pip install --upgrade pip
     - pip install --editable . --group code-quality
   script:
     - ruff check --preview --select E,E305
@@ -45,6 +47,7 @@ Code Coverage:
     - <<: *pypi-rule
   image: python:3.13-slim-bookworm
   before_script:
+    - pip install --upgrade pip
     - pip install --editable . --group code-coverage
   script:
     - coverage run -m pytest -rfEP -q --junit-xml=code-coverage.xml
