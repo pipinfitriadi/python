@@ -12,7 +12,7 @@ build/
 dist/
 
 .coverage
-*.env
+.env*
 *.csv
 *.json
 *.log
@@ -20,7 +20,7 @@ dist/
 *.xlsx
 code-coverage.xml
 
+!.env.template
 !.oh-my-posh/**/*
 !.vscode/**/*
 !tests/files/**/*
-!template.env
