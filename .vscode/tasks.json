@@ -121,8 +121,7 @@
           "--require-virtualenv",
           "--editable",
           "${workspaceFolder}",
-          "--group",
-          "dev"
+          "--group", "dev"
       ]
     },
     {
@@ -133,8 +132,7 @@
           "Python: Create VEnv",
           "Python: Upgrade PIP",
           "Python: Environment dependencies"
-      ],
-      "type": "shell"
+      ]
     },
   ],
   "inputs": [
