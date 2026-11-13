@@ -25,5 +25,5 @@ across projects or teams.
 Follow these steps the first time you use VS Code after cloning this git repository:
 
 1. Change `name` value in [pyproject.toml](pyproject.toml) to your project name
-2. Create a _`.env`_ file based on [_`template.env`_](template.env)
+2. Create a _`.env`_ file based on [_`.env.template`_](.env.template)
    and set your environment values
