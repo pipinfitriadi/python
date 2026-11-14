@@ -58,11 +58,6 @@ Repository = 'https://github.com/pipinfitriadi/python.git'
 [tool.pytest.ini_options]
 asyncio_default_fixture_loop_scope = 'function'
 
-[tool.ruff]
-extend-exclude = [
-    'tests/files/**/*.py',
-]
-
 [tool.ruff.lint]
 select = ['ALL']
 ignore = [
