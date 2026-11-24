@@ -15,6 +15,7 @@ on:
     paths:
       - '**/*.ipynb'
       - '**/*.py'
+      - .github/workflows/*.yaml
       - tests/**/*
       - pyproject.toml
   workflow_dispatch:
@@ -70,7 +71,7 @@ jobs:
       - name: Install dependencies
         run: pip install --editable . --group code-coverage
       - name: Test
-        run: coverage run -m pytest -rfEP -q --junit-xml=code-coverage.xml
+        run: coverage run -m pytest -rfEP -q -o verbosity_assertions=2 --junit-xml=code-coverage.xml
       - name: Display coverage
         run: coverage report -m
       - name: Publish coverage report
@@ -80,7 +81,7 @@ jobs:
           report_paths: code-coverage.xml
           annotate_only: true
       - name: Percentage passed
-        run: if [ $(printf '%.0f' $(coverage report | awk '$1 == "TOTAL" {print $NF+0}')) -ge ${{ github.event.inputs.codecoverage-percentage-passed || 100 }} ]; then exit; else exit 1; fi
+        run: coverage report -m --fail-under=${{ github.event.inputs.codecoverage-percentage-passed || 100 }}
   release:
     name: Release
     needs: [code-quality, code-coverage]
