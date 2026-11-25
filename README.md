@@ -23,6 +23,34 @@ across projects or teams.
 
 ## Setup
 
+Follow these steps *only if* your WSL have trouble to connect same network
+with Windows:
+
+> **Enable Mirrored Networking mode (WSL 2 Global Fix)**
+>
+> If you want WSL and Windows to completely share the same network ports
+> (meaning `localhost` on Windows is exactly the same as `localhost` on WSL),
+> you can turn on **Mirrored Networking**.
+>
+> After that, any port forwarding you run normally in PowerShell will
+> automatically be available at `localhost` inside WSL.
+
+1. In Windows, press <kbd>Win</kbd> + <kbd>r</kbd>, type `%USERPROFILE%`,
+   and press <kbd>enter</kbd>
+2. Create or open a file named _`.wslconfig`_ (make sure it doesn't end in _`.txt`_)
+3. Paste the following configuration inside it:
+
+    ```ini
+    [wsl2]
+    networkingMode=mirrored
+    ```
+
+4. Open **PowerShell** and restart WSL to apply the changes
+
+    ```powershell
+    wsl --shutdown
+    ```
+
 Follow these steps the first time you use VS Code after cloning this git repository:
 
 1. Change `name` value in [pyproject.toml](pyproject.toml) to your project name
