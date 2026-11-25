@@ -4,6 +4,13 @@
 # Proprietary and confidential
 # Written by Pipin Fitriadi <pipinfitriadi@gmail.com>, 22 May 2025
 
+spec:
+  inputs:
+    codecoverage-percentage-passed:
+      description: Percentage as an integer for passing code coverage
+      type: number
+      default: 100
+---
 stages: [Test, Release]
 .pip-variables:
   variables:
@@ -50,8 +57,8 @@ Code Coverage:
     - pip install --upgrade pip
     - pip install --editable . --group code-coverage
   script:
-    - coverage run -m pytest -rfEP -q --junit-xml=code-coverage.xml
-    - coverage report -m
+    - coverage run -m pytest -rfEP -q -o verbosity_assertions=2 --junit-xml=code-coverage.xml
+    - coverage report -m --fail-under=$[[ inputs.codecoverage-percentage-passed ]]
   coverage: /TOTAL.*\s+(\d+%)/
   artifacts:
     when: always
